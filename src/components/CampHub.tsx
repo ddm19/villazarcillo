@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { MapContainer, ImageOverlay, Marker, Tooltip, useMap } from 'react-leaflet'
-import L, { CRS } from 'leaflet'
+import L, { CRS, type LeafletKeyboardEvent } from 'leaflet'
 import classNames from 'classnames'
 import type { HubElement, Panel, Scene } from '../lib/types'
 import type { HubConfig } from '../lib/types'
@@ -110,7 +110,7 @@ function SceneCanvas({
                     click: () => {
                       onElementFocus(element)
                     },
-                    keydown: (event) => {
+                    keydown: (event: LeafletKeyboardEvent) => {
                       if (event.originalEvent.key === 'Enter') {
                         onElementFocus(element)
                       }
