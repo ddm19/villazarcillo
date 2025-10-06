@@ -5,17 +5,35 @@
       "type": "markdown",
       "title": "Marco el Mensajero",
       "portrait": "portraits/marco.svg",
-      "content": "Corre entre villas con rumores. **Contacto fiable.**"
+      "content": [
+        { "type": "paragraph", "text": "Corre entre villas con rumores." },
+        {
+          "type": "list",
+          "items": [
+            "**Contacto fiable.**",
+            { "type": "paragraph", "text": "Entrega misivas discretas desde Hispania." },
+            { "type": "paragraph", "text": "Prefiere pagos en plata." }
+          ]
+        }
+      ]
     },
     {
       "id": "panel:shop_bristleback",
       "type": "table",
       "title": "Almacén Bristleback",
-      "subtitle": "Inventario básico",
+      "subtitle": "**Inventario básico** — repone cada luna llena.",
       "columns": ["Objeto", "Precio", "Notas"],
       "rows": [
-        [{ "text": "Raciones (1 día)", "href": "/items/rations" }, "0.5 gp", ""],
-        [{ "text": "Cuerda 50 ft", "href": "/items/rope50" }, "1 gp", "Resistente"]
+        [
+          { "text": "Raciones (1 día)", "href": "/items/rations" },
+          "0.5 gp",
+          { "markdown": "Suficientes para una jornada completa." }
+        ],
+        [
+          { "text": "Cuerda 50 ft", "href": "/items/rope50" },
+          "1 gp",
+          { "markdown": "Ideal para exploraciones bajo tierra." }
+        ]
       ]
     },
     {

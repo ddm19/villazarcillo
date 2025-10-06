@@ -62,20 +62,51 @@ export type HubElement = {
   }
 }
 
+export type MarkdownBlock =
+  | {
+      type: 'paragraph'
+      text: MarkdownContent
+    }
+  | {
+      type: 'heading'
+      level?: 1 | 2 | 3 | 4 | 5 | 6
+      text: MarkdownContent
+    }
+  | {
+      type: 'list'
+      ordered?: boolean
+      items: MarkdownContent[]
+    }
+  | {
+      type: 'quote'
+      items: MarkdownContent[]
+    }
+  | {
+      type: 'code'
+      value: string
+      language?: string
+    }
+
+export type MarkdownContent = string | MarkdownBlock | MarkdownContent[]
+
 export type MarkdownPanel = {
   id: string
   type: 'markdown'
   title: string
   portrait?: string
-  content: string
+  content: MarkdownContent
 }
 
-export type TableCell =
-  | string
-  | {
-      text: string
-      href?: string
-    }
+export type TableLinkCell = {
+  text: string
+  href?: string
+}
+
+export type TableMarkdownCell = {
+  markdown: MarkdownContent
+}
+
+export type TableCell = string | TableLinkCell | TableMarkdownCell
 
 export type TablePanel = {
   id: string
