@@ -1,0 +1,1 @@
+The folder names used under 2-World are hard-coded into almost every template. Only change these is you have an understanding of how they work as you will break the templates instantly if the names are changed. 
