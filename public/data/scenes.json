@@ -3,9 +3,9 @@
     {
       "id": "hispania",
       "name": "Hispania",
-      "background": "maps/hispania.svg",
-      "size": { "width": 2048, "height": 1536 },
-      "initialView": { "center": [1024, 768], "zoom": 0 },
+      "background": "maps/villazarcillo.png",
+      "size": { "width": 2048, "height": 2048 },
+      "initialView": { "center": [2048, 2048], "zoom": -1 },
       "minZoom": -2,
       "maxZoom": 2,
       "layers": [

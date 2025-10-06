@@ -1,4 +1,5 @@
-:root {
+:root
+{
   --color-bg: #0b0d10;
   --color-surface: #14181f;
   --color-text: #e6e6e6;
@@ -21,11 +22,13 @@
   --fs-4: 24px;
 }
 
-* {
+*
+{
   box-sizing: border-box;
 }
 
-body {
+body
+{
   margin: 0;
   font-family: var(--font-base);
   background: var(--color-bg);
@@ -33,11 +36,13 @@ body {
   min-height: 100vh;
 }
 
-#root {
+#root
+{
   min-height: 100vh;
 }
 
-.camp-hub {
+.camp-hub
+{
   position: relative;
   display: flex;
   flex-direction: column;
@@ -45,7 +50,8 @@ body {
   background: var(--color-bg);
 }
 
-.camp-hub__toolbar {
+.camp-hub__toolbar
+{
   display: flex;
   align-items: center;
   gap: var(--space-3);
@@ -57,21 +63,24 @@ body {
   z-index: 5;
 }
 
-.camp-hub__title {
+.camp-hub__title
+{
   font-size: var(--fs-3);
   font-weight: 600;
   margin: 0;
   flex: 1;
 }
 
-.camp-hub__scenes {
+.camp-hub__scenes
+{
   display: flex;
   align-items: center;
   gap: var(--space-2);
   flex-wrap: wrap;
 }
 
-.camp-hub__scene-chip {
+.camp-hub__scene-chip
+{
   border: 1px solid transparent;
   border-radius: 999px;
   padding: var(--space-1) var(--space-3);
@@ -82,19 +91,22 @@ body {
   transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-.camp-hub__scene-chip--active {
+.camp-hub__scene-chip--active
+{
   border-color: var(--color-accent);
   background: rgba(245, 196, 83, 0.24);
 }
 
-.camp-hub__layers {
+.camp-hub__layers
+{
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--space-2);
 }
 
-.camp-hub__layer-chip {
+.camp-hub__layer-chip
+{
   border: 1px solid transparent;
   border-radius: 999px;
   padding: var(--space-1) var(--space-3);
@@ -105,19 +117,22 @@ body {
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.camp-hub__layer-chip--active {
+.camp-hub__layer-chip--active
+{
   border-color: var(--color-primary);
   background: rgba(122, 162, 255, 0.2);
 }
 
-.camp-hub__canvas {
+.camp-hub__canvas
+{
   position: relative;
   flex: 1;
   min-height: 400px;
   overflow: hidden;
 }
 
-.camp-hub__map {
+.camp-hub__map
+{
   position: absolute !important;
   inset: 0;
   height: 100%;
@@ -126,13 +141,15 @@ body {
 }
 
 .camp-hub__pin-icon,
-.camp-hub__sprite-icon {
+.camp-hub__sprite-icon
+{
   background: none !important;
   border: none !important;
 }
 
 .camp-hub__pin,
-.camp-hub__sprite {
+.camp-hub__sprite
+{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,14 +160,16 @@ body {
   border: 2px solid rgba(0, 0, 0, 0.3);
 }
 
-.camp-hub__pin {
+.camp-hub__pin
+{
   width: 32px;
   height: 32px;
   background: var(--pin-color, var(--pin-generic));
   transform: translate(-16px, -16px);
 }
 
-.camp-hub__pin::after {
+.camp-hub__pin::after
+{
   content: '';
   position: absolute;
   width: 10px;
@@ -159,7 +178,8 @@ body {
   background: rgba(255, 255, 255, 0.35);
 }
 
-.camp-hub__sprite {
+.camp-hub__sprite
+{
   transform-origin: center;
   transform: translate(-50%, -50%) rotate(var(--sprite-rotation, 0deg));
   border-radius: var(--radius-1);
@@ -167,25 +187,29 @@ body {
   border-width: 3px;
 }
 
-.camp-hub__pin--disabled {
+.camp-hub__pin--disabled
+{
   border-style: dashed;
   border-color: rgba(248, 113, 113, 0.6);
 }
 
-.camp-hub__sprite--disabled {
+.camp-hub__sprite--disabled
+{
   border-style: dashed;
   border-color: rgba(248, 113, 113, 0.6);
   filter: grayscale(0.2);
 }
 
-.camp-hub__sprite img {
+.camp-hub__sprite img
+{
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.camp-hub__drawer {
+.camp-hub__drawer
+{
   position: fixed;
   top: 0;
   right: 0;
@@ -196,16 +220,18 @@ body {
   box-shadow: -24px 0 48px rgba(0, 0, 0, 0.45);
   transform: translateX(100%);
   transition: transform 0.3s ease;
-  z-index: 10;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
 }
 
-.camp-hub__drawer--open {
+.camp-hub__drawer--open
+{
   transform: translateX(0);
 }
 
-.camp-hub__drawer-header {
+.camp-hub__drawer-header
+{
   padding: var(--space-4);
   border-bottom: 1px solid #1f2734;
   display: flex;
@@ -213,12 +239,14 @@ body {
   gap: var(--space-3);
 }
 
-.camp-hub__drawer-title {
+.camp-hub__drawer-title
+{
   margin: 0;
   font-size: var(--fs-3);
 }
 
-.camp-hub__drawer-close {
+.camp-hub__drawer-close
+{
   margin-left: auto;
   background: none;
   border: 1px solid #283140;
@@ -229,7 +257,8 @@ body {
   cursor: pointer;
 }
 
-.camp-hub__panel-content {
+.camp-hub__panel-content
+{
   padding: var(--space-4);
   overflow-y: auto;
   flex: 1;
@@ -238,87 +267,102 @@ body {
   gap: var(--space-4);
 }
 
-.camp-hub__panel-portrait {
+.camp-hub__panel-portrait
+{
   width: 100%;
   border-radius: var(--radius-1);
   overflow: hidden;
   border: 1px solid #232c3b;
 }
 
-.camp-hub__panel-portrait img {
+.camp-hub__panel-portrait img
+{
   width: 100%;
   display: block;
 }
 
-.camp-hub__panel-text {
+.camp-hub__panel-text
+{
   font-size: var(--fs-2);
   line-height: 1.5;
 }
 
-.camp-hub__markdown {
+.camp-hub__markdown
+{
   display: grid;
   gap: var(--space-2);
   font-size: inherit;
   line-height: 1.5;
 }
 
-.camp-hub__markdown p {
+.camp-hub__markdown p
+{
   margin: 0;
 }
 
 .camp-hub__markdown ul,
-.camp-hub__markdown ol {
+.camp-hub__markdown ol
+{
   margin: 0;
   padding-left: var(--space-4);
   display: grid;
   gap: var(--space-1);
 }
 
-.camp-hub__markdown li {
+.camp-hub__markdown li
+{
   margin: 0;
 }
 
-.camp-hub__markdown strong {
+.camp-hub__markdown strong
+{
   color: var(--color-accent);
 }
 
-.camp-hub__markdown a {
+.camp-hub__markdown a
+{
   color: var(--color-primary);
 }
 
-.camp-hub__markdown blockquote {
+.camp-hub__markdown blockquote
+{
   margin: 0;
   padding-left: var(--space-3);
   border-left: 2px solid rgba(122, 162, 255, 0.3);
   color: #b8c1d9;
 }
 
-.camp-hub__table {
+.camp-hub__table
+{
   width: 100%;
   border-collapse: collapse;
   font-size: var(--fs-1);
 }
 
 .camp-hub__table th,
-.camp-hub__table td {
+.camp-hub__table td
+{
   text-align: left;
   padding: var(--space-2) var(--space-3);
   border-bottom: 1px solid #232c3b;
 }
 
-.camp-hub__panel-image {
+.camp-hub__panel-image
+{
   width: 100%;
   border-radius: var(--radius-1);
   overflow: hidden;
   border: 1px solid #232c3b;
 }
 
-.camp-hub__panel-image img {
+.camp-hub__panel-image img
+{
   width: 100%;
   display: block;
 }
 
-.camp-hub__badge {
+.camp-hub__badge
+{
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
@@ -330,18 +374,21 @@ body {
   text-decoration: none;
 }
 
-.camp-hub__empty-state {
+.camp-hub__empty-state
+{
   margin: auto;
   text-align: center;
   padding: var(--space-6);
   color: #76839c;
 }
 
-.leaflet-container {
+.leaflet-container
+{
   background: transparent !important;
 }
 
-.leaflet-tooltip.camp-hub__tooltip {
+.leaflet-tooltip.camp-hub__tooltip
+{
   background: rgba(20, 24, 31, 0.9);
   color: var(--color-text);
   border-radius: var(--radius-1);
@@ -351,18 +398,22 @@ body {
   font-size: var(--fs-1);
 }
 
-.leaflet-tooltip.camp-hub__tooltip::before {
+.leaflet-tooltip.camp-hub__tooltip::before
+{
   border-top-color: rgba(20, 24, 31, 0.9);
 }
 
-@media (max-width: 768px) {
-  .camp-hub__toolbar {
+@media (max-width: 768px)
+{
+  .camp-hub__toolbar
+  {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-2);
   }
 
-  .camp-hub__layers {
+  .camp-hub__layers
+  {
     width: 100%;
     gap: var(--space-1);
   }
