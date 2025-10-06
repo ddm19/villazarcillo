@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 880">
+  <rect width="640" height="880" fill="#f8f2dd" stroke="#b49b6b" stroke-width="8" rx="24" />
+  <text x="50%" y="120" text-anchor="middle" font-family="Inter, system-ui" font-size="48" fill="#3e2d18">Campamento bandido</text>
+  <text x="80" y="220" font-family="Inter, system-ui" font-size="28" fill="#3e2d18">• Informes de escaramuzas al norte.</text>
+  <text x="80" y="280" font-family="Inter, system-ui" font-size="28" fill="#3e2d18">• Recompensa prometida por el senado local.</text>
+  <text x="80" y="340" font-family="Inter, system-ui" font-size="28" fill="#3e2d18">• Urgente revisar rutas comerciales.</text>
+</svg>

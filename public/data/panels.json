@@ -1,0 +1,29 @@
+{
+  "panels": [
+    {
+      "id": "panel:npc_marco",
+      "type": "markdown",
+      "title": "Marco el Mensajero",
+      "portrait": "portraits/marco.svg",
+      "content": "Corre entre villas con rumores. **Contacto fiable.**"
+    },
+    {
+      "id": "panel:shop_bristleback",
+      "type": "table",
+      "title": "Almacén Bristleback",
+      "subtitle": "Inventario básico",
+      "columns": ["Objeto", "Precio", "Notas"],
+      "rows": [
+        [{ "text": "Raciones (1 día)", "href": "/items/rations" }, "0.5 gp", ""],
+        [{ "text": "Cuerda 50 ft", "href": "/items/rope50" }, "1 gp", "Resistente"]
+      ]
+    },
+    {
+      "id": "panel:quest_bandits",
+      "type": "image",
+      "title": "Campamento bandido",
+      "image": "boards/notes/bandits_fullcard.svg",
+      "cta": { "label": "Ver detalle", "href": "/quests/bandit-camp" }
+    }
+  ]
+}

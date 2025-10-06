@@ -1,0 +1,34 @@
+{
+  "elements": [
+    {
+      "id": "npc:marco",
+      "sceneId": "hispania",
+      "layerId": "poi",
+      "type": "npc",
+      "name": "Marco el Mensajero",
+      "position": [960, 720],
+      "icon": { "kind": "pin", "colorVar": "--pin-npc" },
+      "panelId": "panel:npc_marco"
+    },
+    {
+      "id": "shop:bristleback",
+      "sceneId": "hispania",
+      "layerId": "poi",
+      "type": "shop",
+      "name": "Almacén Bristleback",
+      "position": [1120, 820],
+      "icon": { "kind": "pin", "colorVar": "--pin-shop" },
+      "panelId": "panel:shop_bristleback"
+    },
+    {
+      "id": "quest:bandits_note",
+      "sceneId": "tablon",
+      "layerId": "posts",
+      "type": "image",
+      "name": "Aviso Bandidos",
+      "position": [760, 540],
+      "sprite": { "src": "boards/notes/bandits.svg", "width": 360, "height": 240, "rotation": -6 },
+      "panelId": "panel:quest_bandits"
+    }
+  ]
+}
