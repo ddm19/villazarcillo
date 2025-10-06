@@ -81,6 +81,7 @@ function SceneCanvas({
           [scene.size.height, scene.size.width],
         ]}
       />
+      <SizeInvalidator width={scene.size.width} height={scene.size.height} />
       <FocusController focusElementId={focusElementId} elements={filtered} />
       {filtered.map((element) => {
         const panel = element.panelId ? panelsMap.get(element.panelId) : undefined
@@ -151,6 +152,34 @@ function FocusController({ focusElementId, elements }: FocusControllerProps) {
       map.flyTo(point, Math.max(map.getZoom(), 0))
     }
   }, [focusElementId, elements, map])
+
+  return null
+}
+
+
+type SizeInvalidatorProps = {
+  width: number
+  height: number
+}
+
+function SizeInvalidator({ width, height }: SizeInvalidatorProps) {
+  const map = useMap()
+
+  useEffect(() => {
+    map.whenReady(() => {
+      map.invalidateSize()
+    })
+  }, [map, width, height])
+
+  useEffect(() => {
+    const handleResize = () => {
+      map.invalidateSize()
+    }
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [map])
 
   return null
 }

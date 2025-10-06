@@ -114,9 +114,12 @@ body {
   position: relative;
   flex: 1;
   min-height: 400px;
+  overflow: hidden;
 }
 
 .camp-hub__map {
+  position: absolute !important;
+  inset: 0;
   height: 100%;
   width: 100%;
   background: #040507;
