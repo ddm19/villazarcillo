@@ -2,9 +2,9 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { MapContainer, ImageOverlay, Marker, Tooltip, useMap } from 'react-leaflet'
 import L, { CRS, type LeafletKeyboardEvent } from 'leaflet'
 import classNames from 'classnames'
-import type { HubElement, Panel, Scene } from '../lib/types'
-import type { HubConfig } from '../lib/types'
-import { updateQuery } from '../lib/queryParams'
+import ReactMarkdown from 'react-markdown'
+import type { HubConfig, HubElement, Panel, Scene, TableCell } from '../lib/types'
+import { markdownContentToString } from '../lib/markdown'
 import { useFocusTrap } from '../lib/useFocusTrap'
 import 'leaflet/dist/leaflet.css'
 
@@ -13,9 +13,12 @@ type CampHubProps = {
   scenes: Scene[]
   elements: HubElement[]
   panels: Panel[]
-  initialSceneId: string
-  initialLayers: string[]
-  initialFocus?: string
+  sceneId: string
+  activeLayers: Set<string>
+  focusElementId?: string
+  onSceneChange: (sceneId: string) => void
+  onLayerChange: (layers: Set<string>) => void
+  onFocusChange: (elementId?: string) => void
 }
 
 type ActivePanel = {
@@ -156,7 +159,6 @@ function FocusController({ focusElementId, elements }: FocusControllerProps) {
   return null
 }
 
-
 type SizeInvalidatorProps = {
   width: number
   height: number
@@ -189,28 +191,18 @@ export function CampHub({
   scenes,
   elements,
   panels,
-  initialSceneId,
-  initialLayers,
-  initialFocus,
+  sceneId,
+  activeLayers,
+  focusElementId,
+  onSceneChange,
+  onLayerChange,
+  onFocusChange,
 }: CampHubProps) {
-  const [activeSceneId, setActiveSceneId] = useState(initialSceneId)
-  const [activeLayers, setActiveLayers] = useState<Set<string>>(new Set(initialLayers))
   const [activePanel, setActivePanel] = useState<ActivePanel | null>(null)
-  const [focusedElementId, setFocusedElementId] = useState<string | undefined>(initialFocus)
   const drawerRef = useRef<HTMLElement | null>(null)
   const missingPanelsLogged = useRef(new Set<string>())
   const missingScenesLogged = useRef(new Set<string>())
   useFocusTrap(Boolean(activePanel), drawerRef)
-
-  useEffect(() => {
-    updateQuery({ scene: activeSceneId, layer: Array.from(activeLayers) })
-  }, [activeSceneId, activeLayers])
-
-  useEffect(() => {
-    setActivePanel(null)
-    setFocusedElementId(undefined)
-    updateQuery({ focus: undefined })
-  }, [activeSceneId])
 
   const scenesMap = useMemo(() => new Map(scenes.map((scene) => [scene.id, scene])), [scenes])
   const panelsMap = useMemo(() => new Map(panels.map((panel) => [panel.id, panel])), [panels])
@@ -226,7 +218,7 @@ export function CampHub({
     })
   }, [elements, scenesMap])
 
-  const activeScene = scenesMap.get(activeSceneId) ?? scenes[0]
+  const activeScene = scenesMap.get(sceneId) ?? scenes[0]
   const resolvedScene = activeScene
     ? {
         ...activeScene,
@@ -257,54 +249,38 @@ export function CampHub({
     })
   }, [sceneElements, config.assetsBaseUrl, panelsMap])
 
-  useEffect(() => {
-    if (!activeScene) {
-      return
-    }
-    const defaultLayers = activeScene.layers.filter((layer) => layer.visible).map((layer) => layer.id)
-    setActiveLayers((current) => {
-      if (current.size === 0 || Array.from(current).every((layerId) => !defaultLayers.includes(layerId))) {
-        return new Set(defaultLayers)
-      }
-      return current
-    })
-  }, [activeScene])
+  const focusElement = useMemo(() => {
+    return focusElementId ? resolvedSceneElements.find((element) => element.id === focusElementId) : undefined
+  }, [focusElementId, resolvedSceneElements])
 
   useEffect(() => {
-    if (!initialFocus) {
+    if (!focusElement) {
+      setActivePanel(null)
       return
     }
-    const target = sceneElements.find((element) => element.id === initialFocus)
-    if (target) {
-      const panel = target.panelId ? panelsMap.get(target.panelId) : undefined
-      setActivePanel({ element: target, panel })
-      setFocusedElementId(target.id)
-    }
-  }, [initialFocus, sceneElements, panelsMap])
+    const panel = focusElement.panelId ? panelsMap.get(focusElement.panelId) : undefined
+    setActivePanel({ element: focusElement, panel })
+  }, [focusElement, panelsMap])
 
   const toggleLayer = (layerId: string) => {
-    setActiveLayers((prev) => {
-      const next = new Set(prev)
-      if (next.has(layerId)) {
-        next.delete(layerId)
-      } else {
-        next.add(layerId)
-      }
-      return next
-    })
+    const next = new Set(activeLayers)
+    if (next.has(layerId)) {
+      next.delete(layerId)
+    } else {
+      next.add(layerId)
+    }
+    onLayerChange(next)
   }
 
   const handleElementFocus = (element: HubElement) => {
     const panel = element.panelId ? panelsMap.get(element.panelId) : undefined
     setActivePanel({ element, panel })
-    setFocusedElementId(element.id)
-    updateQuery({ focus: element.id })
+    onFocusChange(element.id)
   }
 
   const closeDrawer = () => {
     setActivePanel(null)
-    setFocusedElementId(undefined)
-    updateQuery({ focus: undefined })
+    onFocusChange(undefined)
   }
 
   if (!activeScene) {
@@ -321,11 +297,12 @@ export function CampHub({
               key={scene.id}
               type="button"
               className={classNames('camp-hub__scene-chip', {
-                'camp-hub__scene-chip--active': scene.id === activeSceneId,
+                'camp-hub__scene-chip--active': scene.id === activeScene.id,
               })}
               onClick={() => {
-                setActiveSceneId(scene.id)
-                updateQuery({ scene: scene.id })
+                setActivePanel(null)
+                onFocusChange(undefined)
+                onSceneChange(scene.id)
               }}
             >
               {scene.name}
@@ -355,7 +332,7 @@ export function CampHub({
             elements={resolvedSceneElements}
             panelsMap={panelsMap}
             activeLayers={activeLayers}
-            focusElementId={focusedElementId}
+            focusElementId={focusElementId}
             onElementFocus={handleElementFocus}
           />
         )}
@@ -402,6 +379,7 @@ function PanelContent({ config, panel }: PanelContentProps) {
 
   if (panel.type === 'markdown') {
     const portraitUrl = panel.portrait ? resolveAsset(config.assetsBaseUrl, panel.portrait) : undefined
+    const markdown = markdownContentToString(panel.content)
     return (
       <div className="camp-hub__panel-content">
         {portraitUrl && (
@@ -409,7 +387,9 @@ function PanelContent({ config, panel }: PanelContentProps) {
             <img src={portraitUrl} alt="" />
           </div>
         )}
-        <div className="camp-hub__panel-text" dangerouslySetInnerHTML={{ __html: markdownToHtml(panel.content) }} />
+        <div className="camp-hub__panel-text camp-hub__markdown">
+          <ReactMarkdown>{markdown}</ReactMarkdown>
+        </div>
       </div>
     )
   }
@@ -419,7 +399,11 @@ function PanelContent({ config, panel }: PanelContentProps) {
       <div className="camp-hub__panel-content">
         <header>
           <h3>{panel.title}</h3>
-          {panel.subtitle && <p>{panel.subtitle}</p>}
+          {panel.subtitle && (
+            <div className="camp-hub__markdown">
+              <ReactMarkdown>{panel.subtitle}</ReactMarkdown>
+            </div>
+          )}
         </header>
         <table className="camp-hub__table">
           <thead>
@@ -465,10 +449,20 @@ function PanelContent({ config, panel }: PanelContentProps) {
   return null
 }
 
-function renderCell(cell: import('../lib/types').TableCell) {
+function renderCell(cell: TableCell) {
   if (typeof cell === 'string') {
     return cell
   }
+
+  if ('markdown' in cell) {
+    const content = markdownContentToString(cell.markdown)
+    return (
+      <div className="camp-hub__markdown">
+        <ReactMarkdown>{content}</ReactMarkdown>
+      </div>
+    )
+  }
+
   if (cell.href) {
     return (
       <a href={cell.href} target="_blank" rel="noreferrer">
@@ -476,13 +470,8 @@ function renderCell(cell: import('../lib/types').TableCell) {
       </a>
     )
   }
+
   return cell.text
-}
-
-const boldRegex = /\*\*(.*?)\*\*/g
-
-function markdownToHtml(input: string) {
-  return input.replace(boldRegex, '<strong>$1</strong>')
 }
 
 function resolveAsset(base: string, assetPath?: string) {
