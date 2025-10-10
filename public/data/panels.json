@@ -4,7 +4,7 @@
       "id": "panel:npc_marco",
       "type": "markdown",
       "title": "Marco el Mensajero",
-      "portrait": "portraits/marco.svg",
+      "portrait": "portraits/tavernero.gif",
       "content": [
         { "type": "paragraph", "text": "Corre entre villas con rumores." },
         {
