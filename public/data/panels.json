@@ -1,0 +1,47 @@
+{
+  "panels": [
+    {
+      "id": "panel:npc_marco",
+      "type": "markdown",
+      "title": "Marco el Mensajero",
+      "portrait": "portraits/tavernero.gif",
+      "content": [
+        { "type": "paragraph", "text": "Corre entre villas con rumores." },
+        {
+          "type": "list",
+          "items": [
+            "**Contacto fiable.**",
+            { "type": "paragraph", "text": "Entrega misivas discretas desde Hispania." },
+            { "type": "paragraph", "text": "Prefiere pagos en plata." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "panel:shop_bristleback",
+      "type": "table",
+      "title": "Almacén Bristleback",
+      "subtitle": "**Inventario básico** — repone cada luna llena.",
+      "columns": ["Objeto", "Precio", "Notas"],
+      "rows": [
+        [
+          { "text": "Raciones (1 día)", "href": "/items/rations" },
+          "0.5 gp",
+          { "markdown": "Suficientes para una jornada completa." }
+        ],
+        [
+          { "text": "Cuerda 50 ft", "href": "/items/rope50" },
+          "1 gp",
+          { "markdown": "Ideal para exploraciones bajo tierra." }
+        ]
+      ]
+    },
+    {
+      "id": "panel:quest_bandits",
+      "type": "image",
+      "title": "Campamento bandido",
+      "image": "boards/notes/bandits_fullcard.svg",
+      "cta": { "label": "Ver detalle", "href": "/quests/bandit-camp" }
+    }
+  ]
+}

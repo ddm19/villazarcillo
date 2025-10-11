@@ -1,0 +1,420 @@
+:root
+{
+  --color-bg: #0b0d10;
+  --color-surface: #14181f;
+  --color-text: #e6e6e6;
+  --color-primary: #7aa2ff;
+  --color-accent: #f5c453;
+  --pin-npc: #7aa2ff;
+  --pin-quest: #f5c453;
+  --pin-shop: #83e377;
+  --pin-generic: #f87171;
+  --radius-1: 12px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --font-base: Inter, system-ui;
+  --fs-1: 14px;
+  --fs-2: 16px;
+  --fs-3: 20px;
+  --fs-4: 24px;
+}
+
+*
+{
+  box-sizing: border-box;
+}
+
+body
+{
+  margin: 0;
+  font-family: var(--font-base);
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+#root
+{
+  min-height: 100vh;
+}
+
+.camp-hub
+{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.camp-hub__toolbar
+{
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: linear-gradient(180deg, #141821, #0f131b);
+  border-bottom: 1px solid #1f2734;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 5;
+}
+
+.camp-hub__title
+{
+  font-size: var(--fs-3);
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+
+.camp-hub__scenes
+{
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.camp-hub__scene-chip
+{
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-3);
+  background: rgba(245, 196, 83, 0.12);
+  color: var(--color-text);
+  font-size: var(--fs-1);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.camp-hub__scene-chip--active
+{
+  border-color: var(--color-accent);
+  background: rgba(245, 196, 83, 0.24);
+}
+
+.camp-hub__layers
+{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.camp-hub__layer-chip
+{
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-3);
+  background: rgba(122, 162, 255, 0.08);
+  color: var(--color-text);
+  font-size: var(--fs-1);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.camp-hub__layer-chip--active
+{
+  border-color: var(--color-primary);
+  background: rgba(122, 162, 255, 0.2);
+}
+
+.camp-hub__canvas
+{
+  position: relative;
+  flex: 1;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+.camp-hub__map
+{
+  position: absolute !important;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  background: #040507;
+}
+
+.camp-hub__pin-icon,
+.camp-hub__sprite-icon
+{
+  background: none !important;
+  border: none !important;
+}
+
+.camp-hub__pin,
+.camp-hub__sprite
+{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #10141c;
+  font-weight: 600;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.camp-hub__pin
+{
+  width: 32px;
+  height: 32px;
+  background: var(--pin-color, var(--pin-generic));
+  transform: translate(-16px, -16px);
+}
+
+.camp-hub__pin::after
+{
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.camp-hub__sprite
+{
+  transform-origin: center;
+  transform: translate(-50%, -50%) rotate(var(--sprite-rotation, 0deg));
+  border-radius: var(--radius-1);
+  overflow: hidden;
+  border-width: 3px;
+}
+
+.camp-hub__pin--disabled
+{
+  border-style: dashed;
+  border-color: rgba(248, 113, 113, 0.6);
+}
+
+.camp-hub__sprite--disabled
+{
+  border-style: dashed;
+  border-color: rgba(248, 113, 113, 0.6);
+  filter: grayscale(0.2);
+}
+
+.camp-hub__sprite img
+{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camp-hub__drawer
+{
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(420px, 100%);
+  background: var(--color-surface);
+  border-left: 1px solid #1f2734;
+  box-shadow: -24px 0 48px rgba(0, 0, 0, 0.45);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.camp-hub__drawer--open
+{
+  transform: translateX(0);
+}
+
+.camp-hub__drawer-header
+{
+  padding: var(--space-4);
+  border-bottom: 1px solid #1f2734;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.camp-hub__drawer-title
+{
+  margin: 0;
+  font-size: var(--fs-3);
+}
+
+.camp-hub__drawer-close
+{
+  margin-left: auto;
+  background: none;
+  border: 1px solid #283140;
+  color: var(--color-text);
+  border-radius: var(--radius-1);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--fs-1);
+  cursor: pointer;
+}
+
+.camp-hub__panel-content
+{
+  padding: var(--space-4);
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.camp-hub__panel-portrait
+{
+  width: 100%;
+  border-radius: var(--radius-1);
+  overflow: hidden;
+  border: 1px solid #232c3b;
+}
+
+.camp-hub__panel-portrait img
+{
+  width: 100%;
+  display: block;
+}
+
+.camp-hub__panel-text
+{
+  font-size: var(--fs-2);
+  line-height: 1.5;
+}
+
+.camp-hub__markdown
+{
+  display: grid;
+  gap: var(--space-2);
+  font-size: inherit;
+  line-height: 1.5;
+}
+
+.camp-hub__markdown p
+{
+  margin: 0;
+}
+
+.camp-hub__markdown ul,
+.camp-hub__markdown ol
+{
+  margin: 0;
+  padding-left: var(--space-4);
+  display: grid;
+  gap: var(--space-1);
+}
+
+.camp-hub__markdown li
+{
+  margin: 0;
+}
+
+.camp-hub__markdown strong
+{
+  color: var(--color-accent);
+}
+
+.camp-hub__markdown a
+{
+  color: var(--color-primary);
+}
+
+.camp-hub__markdown blockquote
+{
+  margin: 0;
+  padding-left: var(--space-3);
+  border-left: 2px solid rgba(122, 162, 255, 0.3);
+  color: #b8c1d9;
+}
+
+.camp-hub__table
+{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-1);
+}
+
+.camp-hub__table th,
+.camp-hub__table td
+{
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid #232c3b;
+}
+
+.camp-hub__panel-image
+{
+  width: 100%;
+  border-radius: var(--radius-1);
+  overflow: hidden;
+  border: 1px solid #232c3b;
+}
+
+.camp-hub__panel-image img
+{
+  width: 100%;
+  display: block;
+}
+
+.camp-hub__badge
+{
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background: rgba(131, 227, 119, 0.18);
+  color: #b6ffb2;
+  border-radius: var(--radius-1);
+  font-size: var(--fs-1);
+  text-decoration: none;
+}
+
+.camp-hub__empty-state
+{
+  margin: auto;
+  text-align: center;
+  padding: var(--space-6);
+  color: #76839c;
+}
+
+.leaflet-container
+{
+  background: transparent !important;
+}
+
+.leaflet-tooltip.camp-hub__tooltip
+{
+  background: rgba(20, 24, 31, 0.9);
+  color: var(--color-text);
+  border-radius: var(--radius-1);
+  border: 1px solid #1f2734;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--fs-1);
+}
+
+.leaflet-tooltip.camp-hub__tooltip::before
+{
+  border-top-color: rgba(20, 24, 31, 0.9);
+}
+
+@media (max-width: 768px)
+{
+  .camp-hub__toolbar
+  {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .camp-hub__layers
+  {
+    width: 100%;
+    gap: var(--space-1);
+  }
+}

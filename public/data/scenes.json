@@ -1,0 +1,29 @@
+{
+  "scenes": [
+    {
+      "id": "hispania",
+      "name": "Hispania",
+      "background": "maps/villazarcillo.png",
+      "size": { "width": 2048, "height": 2048 },
+      "initialView": { "center": [2048, 2048], "zoom": -1 },
+      "minZoom": -2,
+      "maxZoom": 2,
+      "layers": [
+        { "id": "poi", "name": "Puntos", "visible": true },
+        { "id": "routes", "name": "Rutas", "visible": false }
+      ]
+    },
+    {
+      "id": "tablon",
+      "name": "Tablón",
+      "background": "boards/base.svg",
+      "size": { "width": 1600, "height": 1100 },
+      "initialView": { "center": [800, 550], "zoom": 0 },
+      "minZoom": -1,
+      "maxZoom": 1,
+      "layers": [
+        { "id": "posts", "name": "Anuncios", "visible": true }
+      ]
+    }
+  ]
+}
