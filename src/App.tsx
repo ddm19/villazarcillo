@@ -265,7 +265,7 @@ function buildSearch(scene: Scene, layerState: LayerState, focusId?: string) {
 }
 
 function buildPath(sceneId: string, search: string) {
-  const base = `scene/${encodeURIComponent(sceneId)}`
+  const base = `/scene/${encodeURIComponent(sceneId)}`
   return search ? `${base}?${search}` : base
 }
 
