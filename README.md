@@ -1,73 +1,46 @@
-# React + TypeScript + Vite
+# Hispania Camp Hub (lite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Microfrontend React diseñado para gestionar escenas, mapas y tablones interactivos de campañas West Marches. El proyecto se ejecuta con Vite y usa Leaflet en modo `CRS.Simple` para permitir zoom y desplazamiento sobre ilustraciones estáticas.
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js 20+
+- npm 10+
 
-## React Compiler
+## Scripts disponibles
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Comando | Descripción |
+|---------|-------------|
+| `npm run dev` | Inicia el servidor de desarrollo en `http://localhost:5173/hub/`. |
+| `npm run build` | Compila TypeScript y genera los artefactos estáticos en `dist/`. |
+| `npm run preview` | Sirve la build producida en local. |
+| `npm run lint` | Ejecuta ESLint sobre todo el código del proyecto. |
 
-## Expanding the ESLint configuration
+## Estructura relevante
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+public/
+  assets/           # Mapas, retratos, tablones y sprites.
+  data/
+    config.json     # Configuración global del hub.
+    scenes.json     # Escenas disponibles y sus capas.
+    elements.json   # Elementos interactivos sobre cada escena.
+    panels.json     # Paneles laterales (markdown, tablas o imágenes).
+src/
+  components/       # CampHub y componentes auxiliares.
+  lib/              # Carga de datos, utilidades de markdown y hooks.
+  styles/           # Estilos globales SCSS.
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Autoría de contenido
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Consulta la [Guía de creación de contenido](docs/content-authoring.md) para añadir escenas, elementos, paneles y recursos sin tocar el código fuente. El hub lee automáticamente los JSON y actualizará la URL con los parámetros `scene`, `focus` y `layer` para que puedas compartir vistas específicas.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Despliegue
+
+1. Ejecuta `npm run build`.
+2. Publica el contenido de `dist/` en tu plataforma estática (por ejemplo, Vercel) bajo la ruta `/hub/`.
+3. Embebe el resultado mediante iframe:
+   ```html
+   <iframe src="https://tudominio/hub/?scene=hispania" width="100%" height="860"></iframe>
+   ```

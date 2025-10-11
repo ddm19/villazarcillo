@@ -1,0 +1,6 @@
+{
+  "title": "Campamento West Marches",
+  "defaultScene": "hispania",
+  "assetsBaseUrl": "assets/",
+  "featureFlags": { "miniMap": false }
+}
