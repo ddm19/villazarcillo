@@ -3,22 +3,27 @@ import { MapContainer, ImageOverlay, Marker, Tooltip, useMap } from 'react-leafl
 import L, { CRS, type LeafletKeyboardEvent } from 'leaflet'
 import classNames from 'classnames'
 import ReactMarkdown from 'react-markdown'
-import type { HubConfig, HubElement, Panel, Scene, TableCell } from '../lib/types'
+import type {
+  HubConfig,
+  HubElement,
+  HubNavigationTarget,
+  Panel,
+  Scene,
+  TableCell,
+} from '../lib/types'
 import { markdownContentToString } from '../lib/markdown'
 import { useFocusTrap } from '../lib/useFocusTrap'
 import 'leaflet/dist/leaflet.css'
 
 type CampHubProps = {
   config: HubConfig
-  scenes: Scene[]
+  scene: Scene
   elements: HubElement[]
   panels: Panel[]
-  sceneId: string
   activeLayers: Set<string>
   focusElementId?: string
-  onSceneChange: (sceneId: string) => void
-  onLayerChange: (layers: Set<string>) => void
   onFocusChange: (elementId?: string) => void
+  onNavigate: (target: HubNavigationTarget) => void
 }
 
 type ActivePanel = {
@@ -48,7 +53,7 @@ type SceneCanvasProps = {
   panelsMap: Map<string, Panel>
   activeLayers: Set<string>
   focusElementId?: string
-  onElementFocus: (element: HubElement) => void
+  onElementActivate: (element: HubElement) => void
 }
 
 function SceneCanvas({
@@ -57,7 +62,7 @@ function SceneCanvas({
   panelsMap,
   activeLayers,
   focusElementId,
-  onElementFocus,
+  onElementActivate,
 }: SceneCanvasProps) {
   const filtered = useMemo(() => {
     return elements.filter((element) => activeLayers.has(element.layerId))
@@ -88,19 +93,23 @@ function SceneCanvas({
       <FocusController focusElementId={focusElementId} elements={filtered} />
       {filtered.map((element) => {
         const panel = element.panelId ? panelsMap.get(element.panelId) : undefined
-        const isClickable = Boolean(panel)
+        const hasNavigation = Boolean(element.navigation)
+        const isInteractive = Boolean(panel || hasNavigation)
         const isPin = element.icon?.kind === 'pin'
         const icon = isPin
-          ? pinIcon(element.icon?.colorVar ? `var(${element.icon.colorVar})` : undefined, !isClickable)
+          ? pinIcon(
+              element.icon?.colorVar ? `var(${element.icon.colorVar})` : undefined,
+              !isInteractive,
+            )
           : element.sprite
             ? spriteIcon(
                 element.sprite.src,
                 element.sprite.width,
                 element.sprite.height,
                 element.sprite.rotation,
-                !isClickable,
+                !isInteractive,
               )
-            : pinIcon(undefined, !isClickable)
+            : pinIcon(undefined, !isInteractive)
         const tooltip = element.name
 
         return (
@@ -109,21 +118,21 @@ function SceneCanvas({
             position={[element.position[1], element.position[0]]}
             icon={icon}
             eventHandlers={
-              isClickable
+              isInteractive
                 ? {
                     click: () => {
-                      onElementFocus(element)
+                      onElementActivate(element)
                     },
                     keydown: (event: LeafletKeyboardEvent) => {
                       if (event.originalEvent.key === 'Enter') {
-                        onElementFocus(element)
+                        onElementActivate(element)
                       }
                     },
                   }
                 : undefined
             }
-            keyboard={isClickable}
-            opacity={isClickable ? 1 : 0.6}
+            keyboard={isInteractive}
+            opacity={isInteractive ? 1 : 0.6}
             title={tooltip}
             aria-label={tooltip}
           >
@@ -188,66 +197,47 @@ function SizeInvalidator({ width, height }: SizeInvalidatorProps) {
 
 export function CampHub({
   config,
-  scenes,
+  scene,
   elements,
   panels,
-  sceneId,
   activeLayers,
   focusElementId,
-  onSceneChange,
-  onLayerChange,
   onFocusChange,
+  onNavigate,
 }: CampHubProps) {
   const [activePanel, setActivePanel] = useState<ActivePanel | null>(null)
   const drawerRef = useRef<HTMLElement | null>(null)
   const missingPanelsLogged = useRef(new Set<string>())
-  const missingScenesLogged = useRef(new Set<string>())
   useFocusTrap(Boolean(activePanel), drawerRef)
 
-  const scenesMap = useMemo(() => new Map(scenes.map((scene) => [scene.id, scene])), [scenes])
   const panelsMap = useMemo(() => new Map(panels.map((panel) => [panel.id, panel])), [panels])
 
-  const validElements = useMemo(() => {
-    return elements.filter((element) => {
-      const hasScene = scenesMap.has(element.sceneId)
-      if (!hasScene && !missingScenesLogged.current.has(element.id)) {
-        console.warn(`Elemento "${element.id}" ignorado: escena "${element.sceneId}" no existe`)
-        missingScenesLogged.current.add(element.id)
-      }
-      return hasScene
-    })
-  }, [elements, scenesMap])
-
-  const activeScene = scenesMap.get(sceneId) ?? scenes[0]
-  const resolvedScene = activeScene
-    ? {
-        ...activeScene,
-        background: resolveAsset(config.assetsBaseUrl, activeScene.background),
-      }
-    : undefined
-
-  const sceneElements = useMemo(
-    () => validElements.filter((element) => element.sceneId === activeScene?.id),
-    [validElements, activeScene?.id],
-  )
+  const resolvedScene = useMemo(() => {
+    return {
+      ...scene,
+      background: resolveAsset(config.assetsBaseUrl, scene.background),
+    }
+  }, [scene, config.assetsBaseUrl])
 
   const resolvedSceneElements = useMemo(() => {
-    return sceneElements.map((element) => {
-      if (element.panelId && !panelsMap.has(element.panelId) && !missingPanelsLogged.current.has(element.panelId)) {
-        console.warn(`Panel "${element.panelId}" no existe para el elemento "${element.id}"`)
-        missingPanelsLogged.current.add(element.panelId)
-      }
-      return {
-        ...element,
-        sprite: element.sprite
-          ? {
-              ...element.sprite,
-              src: resolveAsset(config.assetsBaseUrl, element.sprite.src),
-            }
-          : undefined,
-      }
-    })
-  }, [sceneElements, config.assetsBaseUrl, panelsMap])
+    return elements
+      .filter((element) => element.sceneId === scene.id)
+      .map((element) => {
+        if (element.panelId && !panelsMap.has(element.panelId) && !missingPanelsLogged.current.has(element.panelId)) {
+          console.warn(`Panel "${element.panelId}" no existe para el elemento "${element.id}"`)
+          missingPanelsLogged.current.add(element.panelId)
+        }
+        return {
+          ...element,
+          sprite: element.sprite
+            ? {
+                ...element.sprite,
+                src: resolveAsset(config.assetsBaseUrl, element.sprite.src),
+              }
+            : undefined,
+        }
+      })
+  }, [elements, scene.id, config.assetsBaseUrl, panelsMap])
 
   const focusElement = useMemo(() => {
     return focusElementId ? resolvedSceneElements.find((element) => element.id === focusElementId) : undefined
@@ -259,21 +249,25 @@ export function CampHub({
       return
     }
     const panel = focusElement.panelId ? panelsMap.get(focusElement.panelId) : undefined
+    if (!panel) {
+      setActivePanel(null)
+      return
+    }
     setActivePanel({ element: focusElement, panel })
   }, [focusElement, panelsMap])
 
-  const toggleLayer = (layerId: string) => {
-    const next = new Set(activeLayers)
-    if (next.has(layerId)) {
-      next.delete(layerId)
-    } else {
-      next.add(layerId)
+  const handleElementActivate = (element: HubElement) => {
+    if (element.navigation) {
+      setActivePanel(null)
+      onNavigate(element.navigation)
+      return
     }
-    onLayerChange(next)
-  }
 
-  const handleElementFocus = (element: HubElement) => {
     const panel = element.panelId ? panelsMap.get(element.panelId) : undefined
+    if (!panel) {
+      return
+    }
+
     setActivePanel({ element, panel })
     onFocusChange(element.id)
   }
@@ -283,59 +277,18 @@ export function CampHub({
     onFocusChange(undefined)
   }
 
-  if (!activeScene) {
-    return <div className="camp-hub__empty-state">No hay escenas disponibles.</div>
-  }
-
   return (
     <div className="camp-hub">
-      <header className="camp-hub__toolbar">
-        <h1 className="camp-hub__title">{config.title}</h1>
-        <nav className="camp-hub__scenes" aria-label="Escenas">
-          {scenes.map((scene) => (
-            <button
-              key={scene.id}
-              type="button"
-              className={classNames('camp-hub__scene-chip', {
-                'camp-hub__scene-chip--active': scene.id === activeScene.id,
-              })}
-              onClick={() => {
-                setActivePanel(null)
-                onFocusChange(undefined)
-                onSceneChange(scene.id)
-              }}
-            >
-              {scene.name}
-            </button>
-          ))}
-        </nav>
-        <nav className="camp-hub__layers" aria-label="Capas">
-          {activeScene.layers.map((layer) => (
-            <button
-              key={layer.id}
-              type="button"
-              className={classNames('camp-hub__layer-chip', {
-                'camp-hub__layer-chip--active': activeLayers.has(layer.id),
-              })}
-              onClick={() => toggleLayer(layer.id)}
-            >
-              {layer.name}
-            </button>
-          ))}
-        </nav>
-      </header>
       <main className="camp-hub__canvas">
-        {resolvedScene && (
-          <SceneCanvas
-            key={resolvedScene.id}
-            scene={resolvedScene}
-            elements={resolvedSceneElements}
-            panelsMap={panelsMap}
-            activeLayers={activeLayers}
-            focusElementId={focusElementId}
-            onElementFocus={handleElementFocus}
-          />
-        )}
+        <SceneCanvas
+          key={resolvedScene.id}
+          scene={resolvedScene}
+          elements={resolvedSceneElements}
+          panelsMap={panelsMap}
+          activeLayers={activeLayers}
+          focusElementId={focusElementId}
+          onElementActivate={handleElementActivate}
+        />
       </main>
       <aside
         className={classNames('camp-hub__drawer', { 'camp-hub__drawer--open': Boolean(activePanel) })}
