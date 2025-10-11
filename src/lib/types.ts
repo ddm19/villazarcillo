@@ -47,6 +47,12 @@ export type SpriteIcon = {
 
 export type ElementIcon = PinIcon | SpriteIcon
 
+export type HubNavigationTarget = {
+  sceneId: string
+  focusId?: string
+  layers?: string[] | null
+}
+
 export type HubElement = {
   id: string
   sceneId: string
@@ -60,6 +66,7 @@ export type HubElement = {
   badge?: {
     label: string
   }
+  navigation?: HubNavigationTarget
 }
 
 export type MarkdownBlock =
