@@ -338,7 +338,11 @@ function getLegacySegment(remainder: string | undefined, key: string) {
 }
 
 function HubExperienceWrapper() {
-  return <HubExperience />
+  const history = useNavigate();
+  return <>
+    <button className='buttonBack' onClick={() => history(-1)}>←</button>
+    <HubExperience />
+  </>
 }
 
 function App() {
