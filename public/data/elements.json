@@ -1,36 +1,40 @@
 {
   "elements": [
     {
-      "id": "npc:marco",
+      "id": "npc:khaart",
       "sceneId": "hispania",
       "layerId": "poi",
       "type": "npc",
-      "name": "Marco el Mensajero",
+      "name": "Teniente Khaart",
       "position": [
-        960,
-        720
+        630,
+        1350
       ],
-      "icon": {
-        "kind": "pin",
-        "colorVar": "--pin-npc"
+      "sprite": {
+        "src": "pins/npc.png",
+        "width": 60,
+        "height": 60,
+        "rotation": 0
       },
-      "panelId": "panel:npc_marco"
+      "panelId": "panel:npc_khaart"
     },
     {
-      "id": "shop:bristleback",
+      "id": "shop:regina",
       "sceneId": "hispania",
       "layerId": "poi",
       "type": "shop",
-      "name": "Almacén Bristleback",
+      "name": "Regina, la Comerciante",
       "position": [
-        1120,
-        820
+        530,
+        1050
       ],
-      "icon": {
-        "kind": "pin",
-        "colorVar": "--pin-shop"
+      "sprite": {
+        "src": "pins/shop.png",
+        "width": 60,
+        "height": 60,
+        "rotation": 0
       },
-      "panelId": "panel:shop_bristleback"
+      "panelId": "panel:shop_regina"
     },
     {
       "id": "portal:tablon",

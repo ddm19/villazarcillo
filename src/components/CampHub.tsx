@@ -14,6 +14,7 @@ import type {
 import { markdownContentToString } from '../lib/markdown'
 import { useFocusTrap } from '../lib/useFocusTrap'
 import 'leaflet/dist/leaflet.css'
+import rehypeRaw from 'rehype-raw'
 
 type CampHubProps = {
   config: HubConfig
@@ -46,6 +47,8 @@ const spriteIcon = (src: string, width: number, height: number, rotation?: numbe
     iconSize: [width, height],
     iconAnchor: [width / 2, height / 2],
   })
+
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
 type SceneCanvasProps = {
   scene: Scene
@@ -98,17 +101,17 @@ function SceneCanvas({
         const isPin = element.icon?.kind === 'pin'
         const icon = isPin
           ? pinIcon(
-              element.icon?.colorVar ? `var(${element.icon.colorVar})` : undefined,
-              !isInteractive,
-            )
+            element.icon?.colorVar ? `var(${element.icon.colorVar})` : undefined,
+            !isInteractive,
+          )
           : element.sprite
             ? spriteIcon(
-                element.sprite.src,
-                element.sprite.width,
-                element.sprite.height,
-                element.sprite.rotation,
-                !isInteractive,
-              )
+              element.sprite.src,
+              element.sprite.width,
+              element.sprite.height,
+              element.sprite.rotation,
+              !isInteractive,
+            )
             : pinIcon(undefined, !isInteractive)
         const tooltip = element.name
 
@@ -120,15 +123,15 @@ function SceneCanvas({
             eventHandlers={
               isInteractive
                 ? {
-                    click: () => {
+                  click: () => {
+                    onElementActivate(element)
+                  },
+                  keydown: (event: LeafletKeyboardEvent) => {
+                    if (event.originalEvent.key === 'Enter') {
                       onElementActivate(element)
-                    },
-                    keydown: (event: LeafletKeyboardEvent) => {
-                      if (event.originalEvent.key === 'Enter') {
-                        onElementActivate(element)
-                      }
-                    },
-                  }
+                    }
+                  },
+                }
                 : undefined
             }
             keyboard={isInteractive}
@@ -136,7 +139,7 @@ function SceneCanvas({
             title={tooltip}
             aria-label={tooltip}
           >
-            <Tooltip direction="top" offset={[0, -18]} className="camp-hub__tooltip">
+            <Tooltip direction="top" permanent={isMobile} offset={[-30, -55]} className="camp-hub__tooltip">
               {tooltip}
             </Tooltip>
           </Marker>
@@ -231,9 +234,9 @@ export function CampHub({
           ...element,
           sprite: element.sprite
             ? {
-                ...element.sprite,
-                src: resolveAsset(config.assetsBaseUrl, element.sprite.src),
-              }
+              ...element.sprite,
+              src: resolveAsset(config.assetsBaseUrl, element.sprite.src),
+            }
             : undefined,
         }
       })
@@ -305,14 +308,16 @@ export function CampHub({
                 </span>
               )}
               <button type="button" className="camp-hub__drawer-close" onClick={closeDrawer}>
-                Cerrar
+                <span className="camp-hub__drawer-close-icon" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18" /><path d="M6 6L18 18" /></svg>
+                </span>
               </button>
             </div>
             <PanelContent config={config} panel={activePanel.panel} />
           </>
         )}
       </aside>
-    </div>
+    </div >
   )
 }
 
@@ -341,23 +346,31 @@ function PanelContent({ config, panel }: PanelContentProps) {
           </div>
         )}
         <div className="camp-hub__panel-text camp-hub__markdown">
-          <ReactMarkdown>{markdown}</ReactMarkdown>
+          <ReactMarkdown rehypePlugins={[rehypeRaw]}>{markdown}</ReactMarkdown>
         </div>
       </div>
     )
   }
 
   if (panel.type === 'table') {
+    const portraitUrl = panel.portrait ? resolveAsset(config.assetsBaseUrl, panel.portrait) : undefined
+
     return (
       <div className="camp-hub__panel-content">
+        {portraitUrl && (
+          <div className="camp-hub__panel-portrait">
+            <img src={portraitUrl} alt="" />
+          </div>
+        )}
         <header>
           <h3>{panel.title}</h3>
           {panel.subtitle && (
             <div className="camp-hub__markdown">
-              <ReactMarkdown>{panel.subtitle}</ReactMarkdown>
+              <ReactMarkdown rehypePlugins={[rehypeRaw]}>{panel.subtitle}</ReactMarkdown>
             </div>
           )}
         </header>
+
         <table className="camp-hub__table">
           <thead>
             <tr>
@@ -376,6 +389,7 @@ function PanelContent({ config, panel }: PanelContentProps) {
             ))}
           </tbody>
         </table>
+
       </div>
     )
   }
@@ -411,7 +425,7 @@ function renderCell(cell: TableCell) {
     const content = markdownContentToString(cell.markdown)
     return (
       <div className="camp-hub__markdown">
-        <ReactMarkdown>{content}</ReactMarkdown>
+        <ReactMarkdown rehypePlugins={[rehypeRaw]}>{content}</ReactMarkdown>
       </div>
     )
   }

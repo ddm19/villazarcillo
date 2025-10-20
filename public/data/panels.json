@@ -1,39 +1,162 @@
 {
   "panels": [
     {
-      "id": "panel:npc_marco",
-      "type": "markdown",
-      "title": "Marco el Mensajero",
-      "portrait": "portraits/tavernero.gif",
-      "content": [
-        { "type": "paragraph", "text": "Corre entre villas con rumores." },
-        {
-          "type": "list",
-          "items": [
-            "**Contacto fiable.**",
-            { "type": "paragraph", "text": "Entrega misivas discretas desde Hispania." },
-            { "type": "paragraph", "text": "Prefiere pagos en plata." }
-          ]
-        }
-      ]
-    },
+  "id": "panel:shop_regina",
+  "type": "table",
+  "subtitle": "Su mirada es algo dispersa, pero no es una mujer fácil de engañar. Compra y cambia lo básico. A Regina le encantan las **joyas y gemas** por lo que estará muy interesada en ellas si están en buen estado.",
+  "portrait": "portraits/regina.gif",
+  "columns": ["Objeto", "Coste", "Existencias", "Descripción"],
+  "rows": [
+    [
+      {"markdown": "**Antorcha**" },
+      "1 pieza de cobre",
+      "x24",
+      "1 hora de luz. Que ya es para un trozo de madera envuelto en un trapo."
+    ],
+    [
+      {"markdown": "**Barril**" },
+      "2 piezas de oro",
+      "x10",
+      "150 litros. Perfecto para almacenar agua, cerveza o lo que sea."
+    ],
+    [
+      {"markdown": "**Odre**" },
+      "1 pieza de plata",
+      "x8",
+      "Capacidad para 4 litros. Ideal para llevar líquidos en viajes cortos. Hecho de piel curtida."
+    ],
+    [
+      {"markdown": "**Cofre**" },
+      "5 piezas de oro",
+      "x6",
+      "Caja de madera reforzada con hierro. Perfecta para guardar objetos de valor. No incluye cerradura."
+    ],
+    [
+      {"markdown": "**Cerradura**" },
+      "10 piezas de oro",
+      "x3",
+      "Una cerradura de hierro sencilla. Incluye una llave. Se ve resistente."
+    ],
+    [
+      {"markdown": "**Cubo**" },
+      "5 piezas de cobre",
+      "x15",
+      "Hecho de madera y reforzado con aros de hierro. Ideal para transportar líquidos o granos."
+    ],
+    [
+      {"markdown": "**Escalera**" },
+      "1 pieza de plata",
+      "x2",
+      "10ft (3 metros) de largo. Hecha de madera y cáñamo."
+    ],
+[
+      {"markdown": "**Jabón**" },
+      "5 piezas de oro",
+      "x7",
+      "Hecho de grasa animal y aceites vegetales. Limpia lo justo, pero huele bien."
+    ],
+    [
+      {"markdown": "**Ojo de buey**" },
+      "10 piezas de oro",
+      "x9",
+      "Luz brillante en un cono de 60ft, dura 6 horas alimentada con 1 frasco de aceite."
+    ],
+    [
+      {"markdown": "**Linterna Sorda**" },
+      "5 piezas de oro",
+      "x11",
+      "30ft (9 metros) de luz tenue, dura 6 horas alimentada con 1 frasco de aceite. Como acción puedes bajar la tapa para cubrir la luz y que emita únicamente 5ft de luz tenue"
+    ],
+    [
+      {"markdown": "**Frasco de aceite**" },
+      "1 pieza de plata",
+      "x30",
+      "Pequeño frasco de vidrio con aceite inflamable. Para alimentar faroles o lanzarselo a alguien."
+    ],
+    [
+      {"markdown": "**Mochila**" },
+      "2 piezas de oro",
+      "x36",
+      {"markdown": "Equipo básico de cualquier viajero. Tiene un bordado con el símbolo del campamento y la iniciales *'RC'* en la solapa."}
+    ],
+    [
+      {"markdown": "**Flechas**" },
+      "1 pieza de oro",
+      "x14",
+      "Un paquete de 20 flechas de madera con punta de hierro y plumas atadas por un sedal de cáñamo."
+    ],
+    [
+      {"markdown": "**Virotes**" },
+      "1 pieza de oro",
+      "x9",
+      "Un paquete de 20 virotes de madera con punta de hierro atados por un sedal de cáñamo."
+    ],
+    [
+      {"markdown": "**Papel**" },
+      "2 piezas de plata",
+      "x20",
+      "1 hoja de papel hecho a mano. Aproximadamente del tamaño de una hoja de pergamino estándar. Tiene algunas manchas y es de color amarillento."
+    ],
+    [
+      {"markdown": "**Petate**" },
+      "1 pieza de oro",
+      "x26",
+      "Rollo de tela para dormir. Se ata con correas de cuero y es fácil de transportar."
+    ],
+    [
+      {"markdown": "**Ropas de campamento**" },
+      "2 piezas de oro",
+      "x6",
+      "Un conjunto de ropa resistente y cómoda, ideal para el campamento o viajar. Lleva bordados con el símbolo del campamento."
+    ],
+    [
+      {"markdown": "**Tienda de Campaña**" },
+      "2 piezas de oro",
+      "x2",
+      "Una tienda de campaña de lona resistente, fácil de montar y desmontar. Capacidad para 2 personas, con algún rasguño y parches."
+    ],
+    [
+      {"markdown": "**Poción de Curación**" },
+      "50 piezas de oro",
+      "x1",
+      "Un líquido viscoso y poco apetecible. Restaura 2d4 + 2 puntos de golpe al beberla."
+    ],
+    [
+      {"href": "https://hispania.thedm.es/article/Cristal%20de%20la%20Tía%20Regi", "text": "Cristal de la Tía Regi" },
+      "2 piezas de plata",
+      "∞",
+      "Un pequeño frágil cristal vagamente trabajado, Al romperse, liberan una descarga de energía que puede sanar… o recordarte por qué nunca deberías comprar un cristal a una anciana medio loca."
+    ]
+    
+  ]
+}
+,
     {
-      "id": "panel:shop_bristleback",
-      "type": "table",
-      "title": "Almacén Bristleback",
-      "subtitle": "**Inventario básico** — repone cada luna llena.",
-      "columns": ["Objeto", "Precio", "Notas"],
-      "rows": [
-        [
-          { "text": "Raciones (1 día)", "href": "/items/rations" },
-          "0.5 gp",
-          { "markdown": "Suficientes para una jornada completa." }
-        ],
-        [
-          { "text": "Cuerda 50 ft", "href": "/items/rope50" },
-          "1 gp",
-          { "markdown": "Ideal para exploraciones bajo tierra." }
-        ]
+      "id": "panel:npc_khaart",
+      "type": "markdown",
+      "title": "Teniente Khaart",
+      "subtitle": "**El Campamento te necesita, vuelve al trabajo.**",
+      "portrait": "portraits/khaart.gif",
+      "content": [
+        { "type": "paragraph", "text": "# Oficial al mando del campamento. \nOrganiza las patrullas y la defensa del campamento." },
+        {
+          "type": "paragraph", "text": "*En el centro del campamento se alza una tienda más ancha, reforzada con tablones y lona doble.* \n\n *Frente a ella, un espadón clavado en la tierra sirve como advertencia y juramento.* \n\n *Dentro, el Teniente —*un veterano del ejército de **Castilla** de rostro sereno y armadura desgastada*— revisa informes, escucha disputas y organiza las patrullas.*"
+        },
+        {
+          "type": "paragraph", "text": " \n\n *No necesita gritar para hacerse obedecer: su sola presencia ordena el caos.* \n\n *Acepta en su campamento a cualquiera que sepa empuñar un arma o cumplir su palabra.*"
+        },
+        {
+          "type": "paragraph", "text": " \n\n *Su código es simple: lealtad, disciplina y honor. Muchos dicen que aún conserva el tacto de un verdadero comandante; otros aseguran que solo espera la oportunidad de volver a la guerra.*"
+        },
+        {
+          "type": "paragraph","text": "# Progreso del campamento\n <span class='progressBar progressBar__0' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*Próxima Meta: 100 piezas de oro*</span>"
+        },
+        {
+          "type": "paragraph", "text": " \n\n **Teniente:** <span style='color:lightblue;'>*¿Quieres Donar a la mejora del campamento? Es un gran gesto.*</span>"
+        },
+        {
+          "type": "paragraph", "text": "<span style='font-size:0.9em;color:#888;'>*[Si quieres donar al campamento habla con tu DM]*</span>"
+        }
       ]
     },
     {

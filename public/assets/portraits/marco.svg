@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
-  <rect width="400" height="400" rx="32" fill="#202b3d" />
-  <circle cx="200" cy="150" r="90" fill="#f0cfa2" />
-  <rect x="120" y="230" width="160" height="140" rx="48" fill="#365172" />
-  <circle cx="160" cy="140" r="16" fill="#2d1c12" />
-  <circle cx="240" cy="140" r="16" fill="#2d1c12" />
-  <path d="M150 190 Q200 230 250 190" stroke="#2d1c12" stroke-width="12" fill="none" stroke-linecap="round" />
-  <text x="50%" y="360" text-anchor="middle" font-size="36" fill="#f8f6f2" font-family="Inter, system-ui">Marco</text>
-</svg>

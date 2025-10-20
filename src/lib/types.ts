@@ -119,6 +119,7 @@ export type TablePanel = {
   id: string
   type: 'table'
   title: string
+  portrait?: string
   subtitle?: string
   columns: string[]
   rows: TableCell[][]
