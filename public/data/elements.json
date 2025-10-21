@@ -43,12 +43,14 @@
       "type": "generic",
       "name": "Tablón de anuncios",
       "position": [
-        1040,
-        680
+        980,
+        1340
       ],
-      "icon": {
-        "kind": "pin",
-        "colorVar": "--pin-generic"
+      "sprite": {
+        "src": "pins/generic.png",
+        "width": 60,
+        "height": 60,
+        "rotation": 0
       },
       "navigation": {
         "sceneId": "tablon",
