@@ -205,6 +205,13 @@ body
   border-radius: var(--radius-1);
   overflow: hidden;
   border-width: 3px;
+  transition: all 0.3s ease;
+
+  &:hover
+  {
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+    transform: translate(-50%, -50%) scale(1.05) rotate(var(--sprite-rotation, 0deg));
+  }
 }
 
 .camp-hub__pin--disabled
@@ -226,6 +233,13 @@ body
   width: 100%;
   height: 100%;
   object-fit: cover;
+
+  &:hover
+  {
+    filter: brightness(1.1);
+  }
+
+
 }
 
 .camp-hub__drawer
@@ -554,10 +568,23 @@ body
   }
 }
 
-a
+a,
+svg
 {
   text-decoration: none;
   color: var(--color-primary);
+
+  path
+  {
+    fill: var(--color-primary);
+    transition: fill 0.2s ease;
+  }
+
+  display: inline-flex;
+  align-items: start;
+  justify-content: start;
+  gap: var(--space-1);
+
 
   &:hover
   {
