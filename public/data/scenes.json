@@ -33,7 +33,7 @@
     {
       "id": "tablon",
       "name": "Tablón",
-      "background": "boards/base.svg",
+      "background": "boards/bulletinBoard.png",
       "size": {
         "width": 1600,
         "height": 1100

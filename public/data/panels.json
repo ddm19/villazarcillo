@@ -166,11 +166,9 @@
       ]
     },
     {
-      "id": "panel:donate_camp",
+      "id": "panel:openCamp",
       "type": "image",
-      "title": "Donar al Campamento",
-      "image": "boards/notes/bandits_fullcard.svg",
-      "cta": { "label": "Ver detalle", "href": "/quests/bandit-camp" }
+      "image": "boards/notes/abre.png"
     }
   ]
 }

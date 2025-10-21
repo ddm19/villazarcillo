@@ -60,22 +60,21 @@
       }
     },
     {
-      "id": "quest:bandits_note",
+      "id": "note:openCamp",
       "sceneId": "tablon",
       "layerId": "posts",
       "type": "image",
-      "name": "Aviso Bandidos",
       "position": [
-        760,
-        540
+        580,
+        650
       ],
       "sprite": {
-        "src": "boards/notes/bandits.svg",
-        "width": 360,
+        "src": "boards/notes/abre.png",
+        "width": 200,
         "height": 240,
         "rotation": -6
       },
-      "panelId": "panel:quest_bandits"
+      "panelId": "panel:openCamp"
     }
   ]
 }
