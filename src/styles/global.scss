@@ -573,6 +573,10 @@ svg
 {
   text-decoration: none;
   color: var(--color-primary);
+  display: inline-flex;
+  align-items: start;
+  justify-content: start;
+  gap: var(--space-1);
 
   path
   {
@@ -580,10 +584,7 @@ svg
     transition: fill 0.2s ease;
   }
 
-  display: inline-flex;
-  align-items: start;
-  justify-content: start;
-  gap: var(--space-1);
+
 
 
   &:hover
