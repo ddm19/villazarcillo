@@ -139,9 +139,11 @@ function SceneCanvas({
             title={tooltip}
             aria-label={tooltip}
           >
-            <Tooltip direction="top" permanent={isMobile} offset={[-30, -55]} className="camp-hub__tooltip">
-              {tooltip}
-            </Tooltip>
+            {tooltip && tooltip !== '' ? (
+              <Tooltip direction="top" permanent={isMobile} offset={[-30, -55]} className="camp-hub__tooltip">
+                {tooltip}
+              </Tooltip>
+            ) : null}
           </Marker>
         )
       })}

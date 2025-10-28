@@ -75,6 +75,57 @@
         "rotation": -6
       },
       "panelId": "panel:openCamp"
+    },
+    {
+      "id": "note:wildSheep",
+      "sceneId": "tablon",
+      "layerId": "posts",
+      "type": "image",
+      "position": [
+        895,
+        470
+      ],
+      "sprite": {
+        "src": "boards/notes/wildSheep.png",
+        "width": 200,
+        "height": 240,
+        "rotation": 1
+      },
+      "panelId": "panel:wildSheep"
+    },
+    {
+      "id": "note:rats",
+      "sceneId": "tablon",
+      "layerId": "posts",
+      "type": "image",
+      "position": [
+        550,
+        300
+      ],
+      "sprite": {
+        "src": "boards/notes/ratas.png",
+        "width": 200,
+        "height": 240,
+        "rotation": -3
+      },
+      "panelId": "panel:rats"
+    },
+    {
+      "id": "note:montesse",
+      "sceneId": "tablon",
+      "layerId": "posts",
+      "type": "image",
+      "position": [
+        1200,
+        650
+      ],
+      "sprite": {
+        "src": "boards/notes/montesse.png",
+        "width": 200,
+        "height": 240,
+        "rotation": 4
+      },
+      "panelId": "panel:montesse"
     }
   ]
 }

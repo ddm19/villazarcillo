@@ -169,6 +169,22 @@
       "id": "panel:openCamp",
       "type": "image",
       "image": "boards/notes/abre.png"
+    },
+    {
+      "id": "panel:wildSheep",
+      "type": "image",
+      "image": "boards/notes/wildSheep.png"
+    },
+    {
+      "id": "panel:rats",
+      "type": "image",
+      "image": "boards/notes/ratas.png"
+    },
+    {
+      "id": "panel:montesse",
+      "type": "image",
+      "image": "boards/notes/montesse.png"
     }
+
   ]
 }
