@@ -46,10 +46,10 @@
     [
       {"markdown": "**Escalera**" },
       "1 pieza de plata",
-      "x2",
+      "x1",
       "10ft (3 metros) de largo. Hecha de madera y cáñamo."
     ],
-[
+    [
       {"markdown": "**Jabón**" },
       "5 piezas de oro",
       "x7",
@@ -100,7 +100,7 @@
     [
       {"markdown": "**Petate**" },
       "1 pieza de oro",
-      "x25",
+      "x24",
       "Rollo de tela para dormir. Se ata con correas de cuero y es fácil de transportar."
     ],
     [
@@ -112,14 +112,32 @@
     [
       {"markdown": "**Tienda de Campaña**" },
       "2 piezas de oro",
-      "x1",
+      "x0",
       "Una tienda de campaña de lona resistente, fácil de montar y desmontar. Capacidad para 2 personas, con algún rasguño y parches."
+    ],
+    [
+      {"markdown": "**Ballesta ligera**" },
+      "25 piezas de oro",
+      "x1",
+      "Una ballesta ligera de madera y metal. Tiene un mecanismo de cuerda y un gatillo simple. Tiende a encasquillarse"
+    ],
+    [
+      {"markdown": "**Espada Corta**" },
+      "10 piezas de oro",
+      "x2",
+      "Una espada de una mano, ligera y bien equilibrada. Tiene alguna mella, no le vendría mal un afilado"
     ],
     [
       {"markdown": "**Poción de Curación**" },
       "50 piezas de oro",
       "x1",
       "Un líquido viscoso y poco apetecible. Restaura 2d4 + 2 puntos de golpe al beberla."
+    ],
+    [
+      {"markdown": "**Anillo de Sello**" },
+      "5 piezas de oro",
+      "x1",
+      "Un anillo de sello de plata con un diseño simple."
     ],
     [
       {"href": "https://hispania.thedm.es/article/Cristal%20de%20la%20Tía%20Regi", "text": "Cristal de la Tía Regi" },
@@ -132,7 +150,8 @@
       "15 piezas de oro",
       "x6",
       "Una esquirla elemental perteneciente a un cristal mayor, todavía conserva algo de su poder"
-    ]
+    ],
+    
     
   ]
 }
