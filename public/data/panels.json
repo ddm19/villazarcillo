@@ -192,17 +192,37 @@
     {
       "id": "panel:wildSheep",
       "type": "image",
-      "image": "boards/notes/wildSheep.png"
+      "image": "boards/notes/wildSheep.png",
+      "cta":
+      
+{
+        "label": "Apúntate",
+        "href": "https://api.whatsapp.com/send/?phone=34653582886&text=Hola+mi+máster+querido+<3%21+Quisiera+apuntarme+a+la+misión+de+villazarcillo+%28OVEJAS%29%2C+con+el+personaje+%5BPJ%5D&type=phone_number&app_absent=0"
+      }
+      
+      
+
     },
     {
       "id": "panel:rats",
       "type": "image",
-      "image": "boards/notes/ratas.png"
+      "image": "boards/notes/ratas.png",
+      "cta":
+      
+{
+        "label": "Apúntate",
+        "href": "https://api.whatsapp.com/send/?phone=34653582886&text=Hola+mi+máster+querido+<3%21+Quisiera+apuntarme+a+la+misión+de+villazarcillo+%28RATAS%29%2C+con+el+personaje+%5BPJ%5D&type=phone_number&app_absent=0"
+      }
+      
     },
     {
       "id": "panel:montesse",
       "type": "image",
-      "image": "boards/notes/montesse.png"
+      "image": "boards/notes/montesse.png",
+      "cta": {
+        "label": "Apúntate",
+        "href": "https://api.whatsapp.com/send/?phone=34653582886&text=Hola+mi+máster+querido+<3%21+Quisiera+apuntarme+a+la+misión+de+villazarcillo+%28CENA_SOLSTICIO%29%2C+con+el+personaje+%5BPJ%5D&type=phone_number&app_absent=0"
+      }
     }
 
   ]

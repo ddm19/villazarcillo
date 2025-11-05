@@ -350,6 +350,12 @@ function PanelContent({ config, panel }: PanelContentProps) {
         <div className="camp-hub__panel-text camp-hub__markdown">
           <ReactMarkdown rehypePlugins={[rehypeRaw]}>{markdown}</ReactMarkdown>
         </div>
+        {panel.cta && (
+          <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
+            {panel.cta.label}
+          </a>
+        )}
+
       </div>
     )
   }
@@ -391,7 +397,11 @@ function PanelContent({ config, panel }: PanelContentProps) {
             ))}
           </tbody>
         </table>
-
+        {panel.cta && (
+          <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
+            {panel.cta.label}
+          </a>
+        )}
       </div>
     )
   }

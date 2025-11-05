@@ -102,6 +102,10 @@ export type MarkdownPanel = {
   title: string
   portrait?: string
   content: MarkdownContent
+  cta?: {
+    label: string
+    href: string
+  }
 }
 
 export type TableLinkCell = {
@@ -123,6 +127,10 @@ export type TablePanel = {
   subtitle?: string
   columns: string[]
   rows: TableCell[][]
+  cta?: {
+    label: string
+    href: string
+  }
 }
 
 export type ImagePanel = {
