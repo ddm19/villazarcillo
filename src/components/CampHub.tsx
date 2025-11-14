@@ -32,21 +32,38 @@ type ActivePanel = {
   panel: Panel | undefined
 }
 
-const pinIcon = (colorVar?: string, disabled?: boolean) =>
-  L.divIcon({
-    className: 'camp-hub__pin-icon',
-    html: `<div class="camp-hub__pin${disabled ? ' camp-hub__pin--disabled' : ''}" style="--pin-color: ${colorVar ?? 'var(--pin-generic)'}"></div>`,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
-  })
+const pinIcon = (colorVar?: string, disabled?: boolean, scale = 1) => {
+  const baseSize = 32 * scale
+  const radius = baseSize / 2
 
-const spriteIcon = (src: string, width: number, height: number, rotation?: number, disabled?: boolean) =>
-  L.divIcon({
-    className: 'camp-hub__sprite-icon',
-    html: `<div class="camp-hub__sprite${disabled ? ' camp-hub__sprite--disabled' : ''}" style="width:${width}px;height:${height}px;--sprite-rotation:${rotation ?? 0}deg;"><img src="${src}" alt="" /></div>`,
-    iconSize: [width, height],
-    iconAnchor: [width / 2, height / 2],
+  return L.divIcon({
+    className: 'camp-hub__pin-icon',
+    html: `<div class="camp-hub__pin${disabled ? ' camp-hub__pin--disabled' : ''}" style="--pin-color: ${colorVar ?? 'var(--pin-generic)'}; --pin-size: ${baseSize}px; --pin-radius: ${radius}px;"></div>`,
+    iconSize: [baseSize, baseSize],
+    iconAnchor: [radius, radius],
   })
+}
+
+const spriteIcon = (
+  src: string,
+  width: number,
+  height: number,
+  rotation?: number,
+  disabled?: boolean,
+  scale = 1,
+) => {
+  const scaledWidth = Math.round(width * scale)
+  const scaledHeight = Math.round(height * scale)
+
+  return L.divIcon({
+    className: 'camp-hub__sprite-icon',
+    html: `<div class="camp-hub__sprite${disabled ? ' camp-hub__sprite--disabled' : ''}" style="width:${scaledWidth}px;height:${scaledHeight}px;--sprite-rotation:${
+      rotation ?? 0
+    }deg;"><img src="${src}" alt="" /></div>`,
+    iconSize: [scaledWidth, scaledHeight],
+    iconAnchor: [scaledWidth / 2, scaledHeight / 2],
+  })
+}
 
 
 type SceneCanvasProps = {
@@ -66,16 +83,34 @@ function SceneCanvas({
   focusElementId,
   onElementActivate,
 }: SceneCanvasProps) {
+  const [viewportWidth, setViewportWidth] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth : 1024,
+  )
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+    const handleResize = () => {
+      setViewportWidth(window.innerWidth)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   const filtered = useMemo(() => {
     return elements.filter((element) => activeLayers.has(element.layerId))
   }, [elements, activeLayers])
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const isMobile = viewportWidth <= 768
+  const iconScale = isMobile ? Math.max(0.5, Math.min(1, viewportWidth / 768)) : 1
 
   return (
     <MapContainer
       center={[scene.initialView.center[1], scene.initialView.center[0]]}
       zoom={scene.initialView.zoom}
-      minZoom={isMobile ? -2 : scene.minZoom }
+      minZoom={isMobile ? -1 : scene.minZoom }
       maxZoom={isMobile ? 2 : scene.maxZoom}
       crs={CRS.Simple}
       className="camp-hub__map"
@@ -103,6 +138,7 @@ function SceneCanvas({
           ? pinIcon(
             element.icon?.colorVar ? `var(${element.icon.colorVar})` : undefined,
             !isInteractive,
+            iconScale,
           )
           : element.sprite
             ? spriteIcon(
@@ -111,8 +147,9 @@ function SceneCanvas({
               element.sprite.height,
               element.sprite.rotation,
               !isInteractive,
+              iconScale,
             )
-            : pinIcon(undefined, !isInteractive)
+            : pinIcon(undefined, !isInteractive, iconScale)
         const tooltip = element.name
 
         return (

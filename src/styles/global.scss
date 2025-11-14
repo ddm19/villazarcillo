@@ -182,10 +182,13 @@ body
 
 .camp-hub__pin
 {
-  width: 32px;
-  height: 32px;
+  width: var(--pin-size, 32px);
+  height: var(--pin-size, 32px);
   background: var(--pin-color, var(--pin-generic));
-  transform: translate(-16px, -16px);
+  transform: translate(
+    calc(-1 * var(--pin-radius, 16px)),
+    calc(-1 * var(--pin-radius, 16px))
+  );
 }
 
 .camp-hub__pin::after
@@ -212,6 +215,8 @@ body
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
     transform: translate(-50%, -50%) scale(1.05) rotate(var(--sprite-rotation, 0deg));
   }
+
+ 
 }
 
 .camp-hub__pin--disabled
