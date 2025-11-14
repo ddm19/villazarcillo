@@ -70,13 +70,14 @@ function SceneCanvas({
   const filtered = useMemo(() => {
     return elements.filter((element) => activeLayers.has(element.layerId))
   }, [elements, activeLayers])
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
   return (
     <MapContainer
       center={[scene.initialView.center[1], scene.initialView.center[0]]}
       zoom={scene.initialView.zoom}
-      minZoom={scene.minZoom}
-      maxZoom={scene.maxZoom}
+      minZoom={isMobile ? -2 : scene.minZoom }
+      maxZoom={isMobile ? 2 : scene.maxZoom}
       crs={CRS.Simple}
       className="camp-hub__map"
       maxBounds={[
