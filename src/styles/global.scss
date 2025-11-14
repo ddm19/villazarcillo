@@ -263,7 +263,7 @@ body
   display: flex;
   flex-direction: column;
   resize: horizontal;
-  overflow: hidden;
+  overflow: auto;
 
   @media (max-width: 768px)
   {
@@ -307,11 +307,13 @@ body
 .camp-hub__panel-content
 {
   padding: var(--space-4);
-  overflow-y: auto;
-  flex: 1;
+  overflow-y: visible;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  min-height: auto;
+  overflow-x: hidden
 }
 
 .camp-hub__panel-portrait
@@ -319,7 +321,8 @@ body
   width: 60%;
   border-radius: var(--radius-1);
   border: 1px solid #232c3b;
-  margin: auto;
+  margin: 0 auto;
+  flex: 0 0 auto;
 
   img
   {
