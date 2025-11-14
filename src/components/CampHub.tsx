@@ -48,7 +48,6 @@ const spriteIcon = (src: string, width: number, height: number, rotation?: numbe
     iconAnchor: [width / 2, height / 2],
   })
 
-const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
 type SceneCanvasProps = {
   scene: Scene
