@@ -96,6 +96,7 @@ export type MarkdownBlock =
 
 export type MarkdownContent = string | MarkdownBlock | MarkdownContent[]
 
+
 export type MarkdownPanel = {
   id: string
   type: 'markdown'
@@ -105,7 +106,9 @@ export type MarkdownPanel = {
   cta?: {
     label: string
     href: string
+    quest?: string
   }
+  questPlayers?: { playerId: string; playerOwner: string }[]
 }
 
 export type TableLinkCell = {
@@ -130,7 +133,9 @@ export type TablePanel = {
   cta?: {
     label: string
     href: string
+    quest?: string
   }
+  questPlayers?: { playerId: string; playerOwner: string }[]
 }
 
 export type ImagePanel = {
@@ -141,7 +146,9 @@ export type ImagePanel = {
   cta?: {
     label: string
     href: string
+    quest?: string
   }
+  questPlayers?: { playerId: string; playerOwner: string }[]
 }
 
 export type Panel = MarkdownPanel | TablePanel | ImagePanel

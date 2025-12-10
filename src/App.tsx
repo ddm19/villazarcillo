@@ -10,6 +10,8 @@ import type {
   Scene,
   SceneLayer,
 } from './lib/types'
+import { useUser } from './contexts/UserContext'
+import { supabase } from './services/supabaseClient'
 
 type RouteParams = {
   sceneId?: string
@@ -36,7 +38,7 @@ function HubExperience() {
   const location = useLocation()
   const params = useParams<RouteParams>()
 
-  useEffect(() => {
+  const load = async () => {
     loadData()
       .then((bundle) => {
         setData(bundle)
@@ -46,6 +48,11 @@ function HubExperience() {
         setError(message)
       })
       .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    load();
+
   }, [])
 
   const scenesMap = useMemo(() => {
@@ -349,6 +356,33 @@ function HubExperienceWrapper() {
 }
 
 function App() {
+  const { setSession } = useUser()
+
+  useEffect(() => {
+    const handleMessage = async (event: MessageEvent) => {
+      if (event.origin !== 'https://villazarcillo.vercel.app' /* && event.origin !== 'http://localhost:5174' */) {
+        return
+      }
+
+      const { type, session } = event.data
+      if (type === 'supabase-session') {
+        if (session) {
+          setSession(session)
+          await supabase.auth.setSession(session)
+        } else {
+          setSession(null)
+          await supabase.auth.signOut()
+        }
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+
+    return () => {
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [setSession])
+
   const element = useRoutes([
     { path: '/', element: <HubExperienceWrapper /> },
     { path: 'scene/:sceneId/*', element: <HubExperienceWrapper /> },

@@ -593,32 +593,67 @@ body
 }
 
 a,
+
 svg
+
 {
+
   text-decoration: none;
+
   color: var(--color-primary);
+
   display: inline-flex;
+
   align-items: start;
+
   justify-content: start;
+
   gap: var(--space-1);
 
+
+
   path
+
   {
+
     fill: var(--color-primary);
+
     transition: fill 0.2s ease;
+
   }
+
+
+
+
+
 
 
 
 
   &:hover
+
   {
+
     text-decoration: underline;
+
   }
+
+
 
   &:visited
+
   {
+
     color: var(--color-primary);
+
   }
 
+
+
 }
+
+
+
+@import 'components/quest';
+
+

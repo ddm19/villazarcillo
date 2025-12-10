@@ -15,6 +15,9 @@ import { markdownContentToString } from '../lib/markdown'
 import { useFocusTrap } from '../lib/useFocusTrap'
 import 'leaflet/dist/leaflet.css'
 import rehypeRaw from 'rehype-raw'
+import { useUser } from '../contexts/UserContext'
+import { supabase } from '../services/supabaseClient'
+import { QuestJoiner } from './QuestJoiner'
 
 type CampHubProps = {
   config: HubConfig
@@ -57,9 +60,8 @@ const spriteIcon = (
 
   return L.divIcon({
     className: 'camp-hub__sprite-icon',
-    html: `<div class="camp-hub__sprite${disabled ? ' camp-hub__sprite--disabled' : ''}" style="width:${scaledWidth}px;height:${scaledHeight}px;--sprite-rotation:${
-      rotation ?? 0
-    }deg;"><img src="${src}" alt="" /></div>`,
+    html: `<div class="camp-hub__sprite${disabled ? ' camp-hub__sprite--disabled' : ''}" style="width:${scaledWidth}px;height:${scaledHeight}px;--sprite-rotation:${rotation ?? 0
+      }deg;"><img src="${src}" alt="" /></div>`,
     iconSize: [scaledWidth, scaledHeight],
     iconAnchor: [scaledWidth / 2, scaledHeight / 2],
   })
@@ -110,7 +112,7 @@ function SceneCanvas({
     <MapContainer
       center={[scene.initialView.center[1], scene.initialView.center[0]]}
       zoom={scene.initialView.zoom}
-      minZoom={isMobile ? -1 : scene.minZoom }
+      minZoom={isMobile ? -1 : scene.minZoom}
       maxZoom={isMobile ? 2 : scene.maxZoom}
       crs={CRS.Simple}
       className="camp-hub__map"
@@ -248,6 +250,8 @@ export function CampHub({
   onNavigate,
 }: CampHubProps) {
   const [activePanel, setActivePanel] = useState<ActivePanel | null>(null)
+  const [showQuestJoiner, setShowQuestJoiner] = useState(false);
+  const [questToJoin, setQuestToJoin] = useState<string | null>(null);
   const drawerRef = useRef<HTMLElement | null>(null)
   const missingPanelsLogged = useRef(new Set<string>())
   useFocusTrap(Boolean(activePanel), drawerRef)
@@ -319,6 +323,39 @@ export function CampHub({
     onFocusChange(undefined)
   }
 
+  const { session } = useUser()
+
+  const handleJoinQuest = async (playerId: string) => {
+    if (!session || !questToJoin) {
+      alert('Error inesperado.');
+      return;
+    }
+
+    const { error } = await supabase
+      .from('villazarcillo_quest_players')
+      .insert({
+        quest_name: questToJoin,
+        player_id: playerId,
+        player_owner: session.user.id,
+      });
+
+    if (error) {
+      alert('Error al unirse a la misión');
+    } else {
+      setShowQuestJoiner(false);
+      setQuestToJoin(null);
+      window.location.reload();
+    }
+  };
+
+
+
+  const openQuestJoiner = (questName: string) => {
+    setQuestToJoin(questName);
+    setShowQuestJoiner(true);
+  }
+
+
   return (
     <div className="camp-hub">
       <main className="camp-hub__canvas">
@@ -337,7 +374,7 @@ export function CampHub({
         aria-hidden={!activePanel}
         ref={drawerRef}
       >
-        {activePanel && (
+        {activePanel && !showQuestJoiner && (
           <>
             <div className="camp-hub__drawer-header">
               <h2 className="camp-hub__drawer-title">{activePanel.element.name}</h2>
@@ -352,8 +389,15 @@ export function CampHub({
                 </span>
               </button>
             </div>
-            <PanelContent config={config} panel={activePanel.panel} />
+            <PanelContent config={config} panel={activePanel.panel} onJoinQuest={openQuestJoiner} />
           </>
+        )}
+        {showQuestJoiner && questToJoin && (
+          <QuestJoiner
+            questName={questToJoin}
+            onJoin={handleJoinQuest}
+            onCancel={() => setShowQuestJoiner(false)}
+          />
         )}
       </aside>
     </div >
@@ -362,10 +406,31 @@ export function CampHub({
 
 type PanelContentProps = {
   config: HubConfig
-  panel?: Panel
+  panel?: Panel,
+  onJoinQuest: (questName: string) => void
 }
 
-function PanelContent({ config, panel }: PanelContentProps) {
+function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
+  const { session } = useUser()
+
+  const handleLeaveQuest = async (playerId: string) => {
+    if (!session) {
+      alert('Error inesperado.');
+      return;
+    }
+    const { error } = await supabase
+      .from('villazarcillo_quest_players')
+      .delete()
+      .eq('player_id', playerId)
+      .eq('player_owner', session.user.id);
+
+    if (error) {
+      alert('Error al salir de la misión ');
+    } else {
+      window.location.reload();
+    }
+  };
+
   if (!panel) {
     return (
       <div className="camp-hub__panel-content">
@@ -387,7 +452,22 @@ function PanelContent({ config, panel }: PanelContentProps) {
         <div className="camp-hub__panel-text camp-hub__markdown">
           <ReactMarkdown rehypePlugins={[rehypeRaw]}>{markdown}</ReactMarkdown>
         </div>
-        {panel.cta && (
+        {panel.questPlayers && panel.questPlayers.length > 0 && (
+          <div className="camp-hub__quest-players">
+            <h4>Aventureros apuntados:</h4>
+            <ul>
+              {panel.questPlayers.map((player) => (
+                <li className="camp-hub__quest-player" key={player.playerId}>{player.playerId}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {panel.cta && panel.cta.quest && session && (
+          <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
+            Unirse a la misión
+          </button>
+        )}
+        {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}
           </a>
@@ -434,7 +514,22 @@ function PanelContent({ config, panel }: PanelContentProps) {
             ))}
           </tbody>
         </table>
-        {panel.cta && (
+        {panel.questPlayers && panel.questPlayers.length > 0 && (
+          <div className="camp-hub__quest-players">
+            <h4>Aventureros apuntados:</h4>
+            <ul>
+              {panel.questPlayers.map((player) => (
+                <li className="camp-hub__quest-player" key={player.playerId}>{player.playerId}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {panel.cta && panel.cta.quest && session && (
+          <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
+            Unirse a la misión
+          </button>
+        )}
+        {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}
           </a>
@@ -453,7 +548,32 @@ function PanelContent({ config, panel }: PanelContentProps) {
         <div className="camp-hub__panel-image">
           <img src={imageUrl} alt="" />
         </div>
-        {panel.cta && (
+        {panel.questPlayers && panel.questPlayers.length > 0 && (
+          <div className="camp-hub__quest-players">
+            <h4>Aventureros apuntados:</h4>
+            <ul>
+              {panel.questPlayers.map((player) => (
+                <li className="camp-hub__quest-player" key={player.playerId}>{player.playerId} {player.playerOwner == session?.user.id && <span className="camp-hub__quest-player-remove" onClick={() => {
+                  handleLeaveQuest(player.playerId);
+                }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" >
+                    <polyline points="40 44 40 56 8 56 8 8 40 8 40 20" />
+                    <polyline points="48 40 56 32 48 24" />
+                    <line x1="28" y1="32" x2="56" y2="32" />
+                  </svg>
+
+                </span>}</li>
+
+              ))}
+            </ul>
+          </div>
+        )}
+        {panel.cta && panel.cta.quest && session && (
+          <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
+            Unirse a la misión
+          </button>
+        )}
+        {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}
           </a>
