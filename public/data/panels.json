@@ -215,6 +215,14 @@
       "cta": {
         "quest": "CENA_SOLSTICIO"
       }
+    },
+    {
+      "id": "panel:profundo",
+      "type": "image",
+      "image": "boards/notes/profundo.png",
+      "cta": {
+        "quest": "DREAM_PROFUNDO"
+      }
     }
 
   ]

@@ -126,6 +126,23 @@
         "rotation": 4
       },
       "panelId": "panel:montesse"
+    },
+    {
+      "id": "note:profundo",
+      "sceneId": "tablon",
+      "layerId": "posts",
+      "type": "image",
+      "position": [
+        1250,
+        300
+      ],
+      "sprite": {
+        "src": "boards/notes/profundo.png",
+        "width": 200,
+        "height": 240,
+        "rotation": -5
+      },
+      "panelId": "panel:profundo"
     }
   ]
 }

@@ -22,6 +22,10 @@
     border-radius: var(--radius-1);
     border: 1px solid #232c3b;
   }
+    max-height: 20%;
+    overflow-y: auto;
+
+
 }
 
 .camp-hub__quest-player-remove {
