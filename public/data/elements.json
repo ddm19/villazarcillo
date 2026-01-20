@@ -94,23 +94,6 @@
       "panelId": "panel:wildSheep"
     },
     {
-      "id": "note:rats",
-      "sceneId": "tablon",
-      "layerId": "posts",
-      "type": "image",
-      "position": [
-        550,
-        300
-      ],
-      "sprite": {
-        "src": "boards/notes/ratas.png",
-        "width": 200,
-        "height": 240,
-        "rotation": -3
-      },
-      "panelId": "panel:rats"
-    },
-    {
       "id": "note:montesse",
       "sceneId": "tablon",
       "layerId": "posts",
@@ -125,7 +108,8 @@
         "height": 240,
         "rotation": 4
       },
-      "panelId": "panel:montesse"
+      "panelId": "panel:montesse",
+      "completed": true
     },
     {
       "id": "note:profundo",

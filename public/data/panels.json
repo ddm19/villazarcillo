@@ -198,23 +198,10 @@
       }
     },
     {
-      "id": "panel:rats", 
-      "type": "image",
-      "image": "boards/notes/ratas.png",
-      "cta":
-      {
-        "quest": "RATAS"
-        
-      }
-      
-    },
-    {
       "id": "panel:montesse",
       "type": "image",
-      "image": "boards/notes/montesse.png",
-      "cta": {
-        "quest": "CENA_SOLSTICIO"
-      }
+      "image": "boards/notes/montesse.png"
+      
     },
     {
       "id": "panel:profundo",

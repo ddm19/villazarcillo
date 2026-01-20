@@ -54,14 +54,22 @@ const spriteIcon = (
   rotation?: number,
   disabled?: boolean,
   scale = 1,
+  completed?: boolean,
 ) => {
   const scaledWidth = Math.round(width * scale)
   const scaledHeight = Math.round(height * scale)
 
+  const randomRotation = Math.floor(Math.random() * 40) - 20
+
   return L.divIcon({
     className: 'camp-hub__sprite-icon',
     html: `<div class="camp-hub__sprite${disabled ? ' camp-hub__sprite--disabled' : ''}" style="width:${scaledWidth}px;height:${scaledHeight}px;--sprite-rotation:${rotation ?? 0
-      }deg;"><img src="${src}" alt="" /></div>`,
+      }deg;">
+            ${completed ? `
+          <img src="/assets/boards/notes/complete.png" alt="Misión completada" style="position:absolute; top:3rem; width:100%; height:70%; transform: rotate(${randomRotation}deg);" />
+        ` : ''}
+          
+      <img src="${src}" alt="" /></div>`,
     iconSize: [scaledWidth, scaledHeight],
     iconAnchor: [scaledWidth / 2, scaledHeight / 2],
   })
@@ -150,6 +158,7 @@ function SceneCanvas({
               element.sprite.rotation,
               !isInteractive,
               iconScale,
+              element.completed
             )
             : pinIcon(undefined, !isInteractive, iconScale)
         const tooltip = element.name
@@ -487,14 +496,16 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             <img src={portraitUrl} alt="" />
           </div>
         )}
-        <header>
-          <h3>{panel.title}</h3>
-          {panel.subtitle && (
-            <div className="camp-hub__markdown">
-              <ReactMarkdown rehypePlugins={[rehypeRaw]}>{panel.subtitle}</ReactMarkdown>
-            </div>
-          )}
-        </header>
+        {panel.title || panel.subtitle ? (
+          <header>
+            {panel.title && <h3>{panel.title}</h3>}
+            {panel.subtitle && (
+              <div className="camp-hub__markdown">
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>{panel.subtitle}</ReactMarkdown>
+              </div>
+            )}
+          </header>
+        ) : null}
 
         <table className="camp-hub__table">
           <thead>
@@ -542,9 +553,12 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
     const imageUrl = resolveAsset(config.assetsBaseUrl, panel.image)
     return (
       <div className="camp-hub__panel-content">
-        <header>
-          <h3>{panel.title}</h3>
-        </header>
+        {panel.title && (
+          <header>
+            <h3>{panel.title}</h3>
+          </header>
+        )}
+
         <div className="camp-hub__panel-image">
           <img src={imageUrl} alt="" />
         </div>

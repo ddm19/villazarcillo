@@ -67,6 +67,7 @@ export type HubElement = {
     label: string
   }
   navigation?: HubNavigationTarget
+  completed?: boolean
 }
 
 export type MarkdownBlock =
