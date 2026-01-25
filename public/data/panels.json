@@ -192,10 +192,7 @@
     {
       "id": "panel:wildSheep",
       "type": "image",
-      "image": "boards/notes/wildSheep.png",
-      "cta": {
-        "quest": "OVEJAS"
-      }
+      "image": "boards/notes/wildSheep.png"
     },
     {
       "id": "panel:montesse",

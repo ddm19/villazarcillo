@@ -91,7 +91,9 @@
         "height": 240,
         "rotation": 1
       },
-      "panelId": "panel:wildSheep"
+      "panelId": "panel:wildSheep",
+      "completed": true
+
     },
     {
       "id": "note:montesse",
