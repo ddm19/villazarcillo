@@ -15,8 +15,7 @@ export function renderMarkdownContent(content: MarkdownContent, key?: string | n
   }
 
   if (typeof content === 'object' && content !== null) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+
     switch (content.type) {
       case 'paragraph':
         return (
@@ -27,9 +26,8 @@ export function renderMarkdownContent(content: MarkdownContent, key?: string | n
           </p>
         );
       case 'heading': {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const HeadingTag = `h${content.level || 3}` as keyof JSX.IntrinsicElements;
+
+        const HeadingTag = (`h${content.level || 3}`) as React.ElementType;
         return (
           <HeadingTag key={key}>
             <ReactMarkdown rehypePlugins={[rehypeRaw]}>
@@ -39,8 +37,7 @@ export function renderMarkdownContent(content: MarkdownContent, key?: string | n
         );
       }
       case 'list': {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+
         const ListTag = content.ordered ? 'ol' : 'ul';
         return (
           <ListTag key={key}>
@@ -58,9 +55,9 @@ export function renderMarkdownContent(content: MarkdownContent, key?: string | n
         return (
           <blockquote key={key}>
             {content.items.map((item, index) => (
-               <ReactMarkdown key={index} rehypePlugins={[rehypeRaw]}>
-                 {markdownContentToString(item)}
-               </ReactMarkdown>
+              <ReactMarkdown key={index} rehypePlugins={[rehypeRaw]}>
+                {markdownContentToString(item)}
+              </ReactMarkdown>
             ))}
           </blockquote>
         );
