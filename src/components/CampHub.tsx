@@ -1,24 +1,25 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { MapContainer, ImageOverlay, Marker, Tooltip, useMap } from 'react-leaflet'
-import L, { CRS, type LeafletKeyboardEvent } from 'leaflet'
-import classNames from 'classnames'
-import ReactMarkdown from 'react-markdown'
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { MapContainer, ImageOverlay, Marker, Tooltip, useMap } from 'react-leaflet';
+import L, { CRS, type LeafletKeyboardEvent } from 'leaflet';
+import classNames from 'classnames';
+import ReactMarkdown from 'react-markdown';
 import type {
   HubConfig,
   HubElement,
   HubNavigationTarget,
   Panel,
   Scene,
-  TableCell,
-} from '../lib/types'
-import { markdownContentToString } from '../lib/markdown'
-import { useFocusTrap } from '../lib/useFocusTrap'
-import 'leaflet/dist/leaflet.css'
-import rehypeRaw from 'rehype-raw'
-import { useUser } from '../contexts/UserContext'
-import { supabase } from '../services/supabaseClient'
-import { QuestJoiner } from './QuestJoiner'
+} from '../lib/types';
+import { useFocusTrap } from '../lib/useFocusTrap';
+import 'leaflet/dist/leaflet.css';
+import rehypeRaw from 'rehype-raw';
+import { useUser } from '../contexts/UserContext';
+import { supabase } from '../services/supabaseClient';
+import { QuestJoiner } from './QuestJoiner';
+import { TableView } from './TableView';
+import { renderMarkdownContent } from '../lib/markdownRenderer';
 
+// ... (rest of the imports and existing components like pinIcon, spriteIcon, SceneCanvas, etc. remain unchanged)
 type CampHubProps = {
   config: HubConfig
   scene: Scene
@@ -328,9 +329,24 @@ export function CampHub({
   }
 
   const closeDrawer = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
     setActivePanel(null)
     onFocusChange(undefined)
   }
+  const fullScreenModeToggle = (drawerRef: HTMLElement | null) => {
+    if (!drawerRef) return;
+    if (!document.fullscreenElement) {
+      drawerRef.requestFullscreen().catch((err) => {
+        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
+
 
   const { session } = useUser()
 
@@ -378,37 +394,50 @@ export function CampHub({
           onElementActivate={handleElementActivate}
         />
       </main>
+
       <aside
         className={classNames('camp-hub__drawer', { 'camp-hub__drawer--open': Boolean(activePanel) })}
         aria-hidden={!activePanel}
         ref={drawerRef}
       >
-        {activePanel && !showQuestJoiner && (
-          <>
-            <div className="camp-hub__drawer-header">
-              <h2 className="camp-hub__drawer-title">{activePanel.element.name}</h2>
-              {activePanel.element.badge && (
-                <span className="camp-hub__badge" aria-label={activePanel.element.badge.label}>
-                  {activePanel.element.badge.label}
-                </span>
-              )}
-              <button type="button" className="camp-hub__drawer-close" onClick={closeDrawer}>
-                <span className="camp-hub__drawer-close-icon" aria-hidden="true">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18" /><path d="M6 6L18 18" /></svg>
-                </span>
-              </button>
-            </div>
-            <PanelContent config={config} panel={activePanel.panel} onJoinQuest={openQuestJoiner} />
-          </>
-        )}
-        {showQuestJoiner && questToJoin && (
-          <QuestJoiner
-            questName={questToJoin}
-            onJoin={handleJoinQuest}
-            onCancel={() => setShowQuestJoiner(false)}
-          />
-        )}
-      </aside>
+        <div className="camp-hub__drawer__content">
+
+          {activePanel && !showQuestJoiner && (
+            <>
+              <div className="camp-hub__drawer-header">
+                <h2 className="camp-hub__drawer-title">{activePanel.element.name}</h2>
+                {activePanel.element.badge && (
+                  <span className="camp-hub__badge" aria-label={activePanel.element.badge.label}>
+                    {activePanel.element.badge.label}
+                  </span>
+                )}
+                <button type="button" className="camp-hub__drawer-close" onClick={() => fullScreenModeToggle(drawerRef.current)}>
+                  <span className="camp-hub__drawer-fullscreen-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none">
+                      <path d="M21 9V8C21 5.79086 18.9853 4 16.5 4H15.25M21 15V16C21 18.2091 18.9853 20 16.5 20H15.25M3 15V16C3 18.2091 5.01472 20 7.5 20H8.75M3 9V8C3 5.79086 5.01472 4 7.5 4H8.75" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </button>
+                <button type="button" className="camp-hub__drawer-close" onClick={closeDrawer}>
+                  <span className="camp-hub__drawer-close-icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  </span>
+                </button>
+
+              </div>
+              <PanelContent config={config} panel={activePanel.panel} onJoinQuest={openQuestJoiner} />
+            </>
+          )}
+          {showQuestJoiner && questToJoin && (
+            <QuestJoiner
+              questName={questToJoin}
+              onJoin={handleJoinQuest}
+              onCancel={() => setShowQuestJoiner(false)}
+            />
+          )}
+        </div>
+      </aside >
     </div >
   )
 }
@@ -449,8 +478,7 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
   }
 
   if (panel.type === 'markdown') {
-    const portraitUrl = panel.portrait ? resolveAsset(config.assetsBaseUrl, panel.portrait) : undefined
-    const markdown = markdownContentToString(panel.content)
+    const portraitUrl = panel.portrait ? resolveAsset(config.assetsBaseUrl, panel.portrait) : undefined;
     return (
       <div className="camp-hub__panel-content">
         {portraitUrl && (
@@ -459,7 +487,7 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
           </div>
         )}
         <div className="camp-hub__panel-text camp-hub__markdown">
-          <ReactMarkdown rehypePlugins={[rehypeRaw]}>{markdown}</ReactMarkdown>
+          {renderMarkdownContent(panel.content)}
         </div>
         {panel.questPlayers && panel.questPlayers.length > 0 && (
           <div className="camp-hub__quest-players">
@@ -481,14 +509,12 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             {panel.cta.label}
           </a>
         )}
-
       </div>
-    )
+    );
   }
 
   if (panel.type === 'table') {
-    const portraitUrl = panel.portrait ? resolveAsset(config.assetsBaseUrl, panel.portrait) : undefined
-
+    const portraitUrl = panel.portrait ? resolveAsset(config.assetsBaseUrl, panel.portrait) : undefined;
     return (
       <div className="camp-hub__panel-content">
         {portraitUrl && (
@@ -506,25 +532,7 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             )}
           </header>
         ) : null}
-
-        <table className="camp-hub__table">
-          <thead>
-            <tr>
-              {panel.columns.map((column) => (
-                <th key={column}>{column}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {panel.rows.map((row, index) => (
-              <tr key={index}>
-                {row.map((cell, cellIndex) => (
-                  <td key={cellIndex}>{renderCell(cell)}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <TableView columns={panel.columns} rows={panel.rows} />
         {panel.questPlayers && panel.questPlayers.length > 0 && (
           <div className="camp-hub__quest-players">
             <h4>Aventureros apuntados:</h4>
@@ -546,7 +554,7 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
           </a>
         )}
       </div>
-    )
+    );
   }
 
   if (panel.type === 'image') {
@@ -575,9 +583,7 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
                     <polyline points="48 40 56 32 48 24" />
                     <line x1="28" y1="32" x2="56" y2="32" />
                   </svg>
-
                 </span>}</li>
-
               ))}
             </ul>
           </div>
@@ -597,36 +603,6 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
   }
 
   return null
-}
-
-function renderCell(cell: TableCell) {
-  if (typeof cell === 'string') {
-    return cell
-  }
-
-  if ('markdown' in cell) {
-    const content = markdownContentToString(cell.markdown)
-    return (
-      <div className="camp-hub__markdown">
-        <ReactMarkdown rehypePlugins={[rehypeRaw]}
-
-        >{content}</ReactMarkdown>
-      </div>
-    )
-  }
-
-  if (cell.href) {
-    return (
-      <a href={cell.href} target="_blank" rel="noreferrer">
-        {cell.text}
-        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="1.2rem" height="1.2rem" viewBox="0 0 24 24">
-          <path d="M 5 3 C 3.9069372 3 3 3.9069372 3 5 L 3 19 C 3 20.093063 3.9069372 21 5 21 L 19 21 C 20.093063 21 21 20.093063 21 19 L 21 12 L 19 12 L 19 19 L 5 19 L 5 5 L 12 5 L 12 3 L 5 3 z M 14 3 L 14 5 L 17.585938 5 L 8.2929688 14.292969 L 9.7070312 15.707031 L 19 6.4140625 L 19 10 L 21 10 L 21 3 L 14 3 z"></path>
-        </svg>
-      </a>
-    )
-  }
-
-  return cell.text
 }
 
 function resolveAsset(base: string, assetPath?: string) {

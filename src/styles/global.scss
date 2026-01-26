@@ -185,10 +185,8 @@ body
   width: var(--pin-size, 32px);
   height: var(--pin-size, 32px);
   background: var(--pin-color, var(--pin-generic));
-  transform: translate(
-    calc(-1 * var(--pin-radius, 16px)),
-    calc(-1 * var(--pin-radius, 16px))
-  );
+  transform: translate(calc(-1 * var(--pin-radius, 16px)),
+      calc(-1 * var(--pin-radius, 16px)));
 }
 
 .camp-hub__pin::after
@@ -216,7 +214,7 @@ body
     transform: translate(-50%, -50%) scale(1.05) rotate(var(--sprite-rotation, 0deg));
   }
 
- 
+
 }
 
 .camp-hub__pin--disabled
@@ -264,11 +262,18 @@ body
   flex-direction: column;
   resize: horizontal;
   overflow: auto;
+  scrollbar-color: var(--fill-color-primary) transparent;
+  scrollbar-width: thin;
+
 
   @media (max-width: 768px)
   {
     width: 100%;
   }
+
+
+
+
 }
 
 
@@ -595,7 +600,6 @@ body
 a,
 
 svg
-
 {
 
   text-decoration: none;
@@ -613,7 +617,6 @@ svg
 
 
   path
-
   {
 
     fill: var(--color-primary);
@@ -631,7 +634,6 @@ svg
 
 
   &:hover
-
   {
 
     text-decoration: underline;
@@ -641,7 +643,6 @@ svg
 
 
   &:visited
-
   {
 
     color: var(--color-primary);
@@ -655,5 +656,3 @@ svg
 
 
 @import 'components/quest';
-
-

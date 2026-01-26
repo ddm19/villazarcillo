@@ -56,3 +56,4 @@ function formatCodeBlock(value: string, language?: string) {
   const lang = language ? language.trim() : ''
   return `${fence}${lang}\n${value}\n${fence}`
 }
+

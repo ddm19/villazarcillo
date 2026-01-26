@@ -94,6 +94,11 @@ export type MarkdownBlock =
       value: string
       language?: string
     }
+  | {
+      type: 'table'
+      columns: string[]
+      rows: TableCell[][]
+    }
 
 export type MarkdownContent = string | MarkdownBlock | MarkdownContent[]
 

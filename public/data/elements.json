@@ -30,11 +30,29 @@
       ],
       "sprite": {
         "src": "pins/shop.png",
-        "width": 60,
-        "height": 60,
+        "width": 80,
+        "height": 80,
         "rotation": 0
       },
       "panelId": "panel:shop_regina"
+    },
+    {
+      "id": "shop:lucido",
+      "sceneId": "hispania",
+      "layerId": "poi",
+      "type": "shop",
+      "name": "Lúcido umbra, aprendiz de mago",
+      "position": [
+        730,
+        1000
+      ],
+      "sprite": {
+        "src": "pins/magic.webp",
+        "width": 80,
+        "height": 80,
+        "rotation": 0
+      },
+      "panelId": "panel:shop_lucido"
     },
     {
       "id": "portal:tablon",
@@ -48,8 +66,8 @@
       ],
       "sprite": {
         "src": "pins/generic.png",
-        "width": 60,
-        "height": 60,
+        "width": 80,
+        "height": 80,
         "rotation": 0
       },
       "navigation": {

@@ -185,6 +185,124 @@
       ]
     },
     {
+      "id": "panel:shop_lucido",
+      "type": "markdown",
+      "title": "Lúcido umbra",
+      "subtitle": "**Es un placer ser de ayuda**",
+      "portrait": "portraits/lucido.gif",
+      "content": [
+        { "type": "paragraph", "text": "Lúcido es un mago aprendiz, pero muy sagaz y con grandes conocimientos sobre el zeón. Está aquí para ofrecer diferentes servicios de magia." },
+        { "type":"paragraph", "text": "## Servicios" },
+        {
+          "type":"table",
+          "columns": ["Servicio", "Coste", "Descripción"],
+          "rows": [
+            [
+              {"markdown": "**Identificar objeto mágico o poción**" },
+              "100 piezas de oro",
+              "Revela las propiedades mágicas de un objeto cómo se usa y todas sus características."
+            ],
+            [
+              {"markdown": "**Reparación de un objeto**" },
+              "50 piezas de oro",
+              "Restaura una rotura o daño de un objeto. Esto no devuelve propiedades mágicas perdidas."
+            ],
+            [
+              {"markdown": "**Traducción de textos**" },
+              "25 piezas de oro",
+              "Traduce un texto escrito a común"
+            ]
+          ]
+        },
+        { "type":"paragraph", "text": "## Pergaminos de hechizos" },
+        {
+          "type":"table",
+          "columns": ["Hechizo", "Nivel", "Coste", "Descripción"],
+          "rows": [
+            [
+              {"markdown": "**Mensaje**" },
+              "Truco",
+              "10 piezas de oro",
+              "Señalas con el dedo una criatura a 120 pies de distancia y le susurras un mensaje que solo ella puede oír."
+            ],
+            [
+              {"markdown": "**Ilusión menor**" },
+              "Truco",
+              "10 piezas de oro",
+              "Creas una ilusión visual o auditiva sencilla que dura hasta 1 minuto."
+            ],
+            [
+              {"markdown": "**Hablar con los animales**" },
+              "1",
+              "50 piezas de oro",
+              "Permite al lanzador comunicarse con bestias durante 10 minutos."
+            ],
+            [
+              {"markdown": "**Alarma**" },
+              "1",
+              "50 piezas de oro",
+              "Crea una señal mágica que avisa al lanzador cuando un intruso entra en un radio de 30 pies."
+            ],
+            [
+              {"markdown": "**Detectar magia**" },
+              "1",
+              "50 piezas de oro",
+              "Permite al lanzador detectar la presencia de magia en un radio de 30 pies durante 10 minutos."
+            ],
+            [
+              {"markdown": "**Armadura de mago**" },
+              "1",
+              "100 piezas de oro",
+              "Crea una fuerza mágica que protege al objetivo, otorgándole CA"
+            ],
+            [
+              {"markdown": "**Dormir**" },
+              "1",
+              "100 piezas de oro",
+              "Crea un efecto mágico que pone a dormir a criaturas en un radio de 20 pies durante 1 minuto."
+            ],
+            [
+              {"markdown": "**Entender idiomas**" },
+              "1",
+              "100 piezas de oro",
+              "Permite al lanzador entender cualquier idioma hablado o escrito durante 1 hora."
+            ],
+            [
+              {"markdown": "**Proyectil mágico**" },
+              "1",
+              "100 piezas de oro",
+              "Crea dardos mágicos que impactan automáticamente en una criatura a 120 pies, causando daño de fuerza."
+            ]
+          ]
+        },
+        { "type":"paragraph", "text": "## Compra de pergaminos" },
+        { "type":"paragraph", "text": "Lúcido compra pergaminos de hechizos que no conoce a cambio de oro." },
+        {
+          "type":"table",
+          "columns": [ "Nivel", "Precio"],
+          "rows": [
+            [
+              {"markdown": "**Truco**" },
+              "10 piezas de oro"
+            ],
+            [
+              {"markdown": "**Nivel 1**" },
+              "25 piezas de oro"
+            ],
+            [
+              {"markdown": "**Nivel 2**" },
+              "50 piezas de oro"
+            ],
+            [
+              {"markdown": "**Nivel 3**" },
+              "100 piezas de oro"
+            ]
+          ]
+              
+        }
+      ]
+    },
+    {
       "id": "panel:openCamp",
       "type": "image",
       "image": "boards/notes/abre.png"
