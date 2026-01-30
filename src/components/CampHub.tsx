@@ -19,7 +19,6 @@ import { QuestJoiner } from './QuestJoiner';
 import { TableView } from './TableView';
 import { renderMarkdownContent } from '../lib/markdownRenderer';
 
-// ... (rest of the imports and existing components like pinIcon, spriteIcon, SceneCanvas, etc. remain unchanged)
 type CampHubProps = {
   config: HubConfig
   scene: Scene
@@ -56,6 +55,7 @@ const spriteIcon = (
   disabled?: boolean,
   scale = 1,
   completed?: boolean,
+  isDangerous?: boolean,
 ) => {
   const scaledWidth = Math.round(width * scale)
   const scaledHeight = Math.round(height * scale)
@@ -67,7 +67,10 @@ const spriteIcon = (
     html: `<div class="camp-hub__sprite${disabled ? ' camp-hub__sprite--disabled' : ''}" style="width:${scaledWidth}px;height:${scaledHeight}px;--sprite-rotation:${rotation ?? 0
       }deg;">
             ${completed ? `
-          <img src="/assets/boards/notes/complete.png" alt="Misión completada" style="position:absolute; top:3rem; width:100%; height:70%; transform: rotate(${randomRotation}deg);" />
+          <img src="/assets/boards/notes/complete.png" alt="Misión completada" class="campHub__spriteIcon campHub__spriteIcon-completed" style="transform: rotate(${randomRotation}deg);" />
+        ` : ''}
+            ${isDangerous ? `
+          <img src="/assets/boards/notes/danger.png" alt="Peligrosa" class="campHub__spriteIcon campHub__spriteIcon-dangerous" />
         ` : ''}
           
       <img src="${src}" alt="" /></div>`,
@@ -159,7 +162,8 @@ function SceneCanvas({
               element.sprite.rotation,
               !isInteractive,
               iconScale,
-              element.completed
+              element.completed,
+              element.isDangerous,
             )
             : pinIcon(undefined, !isInteractive, iconScale)
         const tooltip = element.name
@@ -411,6 +415,7 @@ export function CampHub({
                     {activePanel.element.badge.label}
                   </span>
                 )}
+
                 <button type="button" className="camp-hub__drawer-close" onClick={() => fullScreenModeToggle(drawerRef.current)}>
                   <span className="camp-hub__drawer-fullscreen-icon" aria-hidden="true">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none">
@@ -499,11 +504,11 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             </ul>
           </div>
         )}
-        {panel.cta && panel.cta.quest && session && (
+        {panel.cta && panel.cta.quest && session ? (
           <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
             Unirse a la misión
           </button>
-        )}
+        ) : <h1>No se puede unir a la misión {session != null ? 'Hay sesión' : 'No hay sesión'}</h1>}
         {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}
@@ -543,11 +548,11 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             </ul>
           </div>
         )}
-        {panel.cta && panel.cta.quest && session && (
+        {panel.cta && panel.cta.quest && session ? (
           <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
             Unirse a la misión
           </button>
-        )}
+        ) : <h1>No se puede unir a la misión {session != null ? 'Hay sesión' : 'No hay sesión'}</h1>}
         {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}
@@ -588,11 +593,11 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             </ul>
           </div>
         )}
-        {panel.cta && panel.cta.quest && session && (
+        {panel.cta && panel.cta.quest && session ? (
           <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
             Unirse a la misión
           </button>
-        )}
+        ) : <h1>No se puede unir a la misión {session != null ? 'Hay sesión' : 'No hay sesión'}</h1>}
         {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}

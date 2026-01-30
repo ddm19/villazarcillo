@@ -68,8 +68,6 @@ export function renderMarkdownContent(content: MarkdownContent, key?: string | n
           </pre>
         );
       case 'table':
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         return <TableView key={key} columns={content.columns} rows={content.rows} />;
       default:
         return null;

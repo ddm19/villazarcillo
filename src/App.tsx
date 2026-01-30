@@ -360,11 +360,14 @@ function App() {
 
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
+      debugger
+
+      console.log(event.data)
+
       if (event.origin !== 'https://hispania.thedm.es' && event.origin !== 'http://localhost:5173') {
         console.warn('Origen de mensaje no autorizado:', event.origin)
         return
       }
-
       const { type, session } = event.data
       if (type === 'supabase-session') {
         if (session) {
@@ -379,9 +382,7 @@ function App() {
 
     window.addEventListener('message', handleMessage)
 
-    return () => {
-      window.removeEventListener('message', handleMessage)
-    }
+
   }, [setSession])
 
   const element = useRoutes([

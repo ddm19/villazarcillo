@@ -325,6 +325,22 @@
       "cta": {
         "quest": "DREAM_PROFUNDO"
       }
+    },
+    {
+      "id": "panel:reginaprovisiones",
+      "type": "image",
+      "image": "boards/notes/reginaProvisiones.png",
+      "cta": {
+        "quest": "REGINA_PROVISIONES"
+      }
+    },
+    {
+      "id": "panel:wolves",
+      "type": "image",
+      "image": "boards/notes/wolves.png",
+      "cta": {
+        "quest": "WOLVES"
+      }
     }
 
   ]

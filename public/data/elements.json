@@ -30,8 +30,8 @@
       ],
       "sprite": {
         "src": "pins/shop.png",
-        "width": 80,
-        "height": 80,
+        "width": 60,
+        "height": 60,
         "rotation": 0
       },
       "panelId": "panel:shop_regina"
@@ -48,8 +48,8 @@
       ],
       "sprite": {
         "src": "pins/magic.webp",
-        "width": 80,
-        "height": 80,
+        "width": 60,
+        "height": 60,
         "rotation": 0
       },
       "panelId": "panel:shop_lucido"
@@ -66,8 +66,8 @@
       ],
       "sprite": {
         "src": "pins/generic.png",
-        "width": 80,
-        "height": 80,
+        "width": 60,
+        "height": 60,
         "rotation": 0
       },
       "navigation": {
@@ -114,7 +114,7 @@
 
     },
     {
-      "id": "note:montesse",
+      "id": "note:wolves",
       "sceneId": "tablon",
       "layerId": "posts",
       "type": "image",
@@ -123,13 +123,13 @@
         650
       ],
       "sprite": {
-        "src": "boards/notes/montesse.png",
+        "src": "boards/notes/wolves.png",
         "width": 200,
         "height": 240,
         "rotation": 4
       },
-      "panelId": "panel:montesse",
-      "completed": true
+      "panelId": "panel:wolves",
+      "isDangerous": true
     },
     {
       "id": "note:profundo",
@@ -147,6 +147,23 @@
         "rotation": -5
       },
       "panelId": "panel:profundo"
+    },
+   {
+      "id": "note:reginaprovisiones",
+      "sceneId": "tablon",
+      "layerId": "posts",
+      "type": "image",
+      "position": [
+        500,
+        300
+      ],
+      "sprite": {
+        "src": "boards/notes/reginaProvisiones.png",
+        "width": 200,
+        "height": 240,
+        "rotation": -8
+      },
+      "panelId": "panel:reginaprovisiones"
     }
   ]
 }

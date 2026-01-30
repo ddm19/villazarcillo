@@ -68,6 +68,7 @@ export type HubElement = {
   }
   navigation?: HubNavigationTarget
   completed?: boolean
+  isDangerous?: boolean
 }
 
 export type MarkdownBlock =
