@@ -504,11 +504,12 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             </ul>
           </div>
         )}
-        {panel.cta && panel.cta.quest && session ? (
+        {panel.cta && panel.cta.quest && session && (
           <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
             Unirse a la misión
           </button>
-        ) : <h1>No se puede unir a la misión {session != null ? 'Hay sesión' : 'No hay sesión'}</h1>}
+        )}
+        {session == null ? <><span>Hay un problema con la sesión</span> <button>Intentar conectar de nuevo</button></> : null}
         {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}
@@ -548,11 +549,12 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             </ul>
           </div>
         )}
-        {panel.cta && panel.cta.quest && session ? (
+        {panel.cta && panel.cta.quest && session && (
           <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
             Unirse a la misión
           </button>
-        ) : <h1>No se puede unir a la misión {session != null ? 'Hay sesión' : 'No hay sesión'}</h1>}
+        )}
+        {session == null ? <><span>Hay un problema con la sesión</span> <button>Intentar conectar de nuevo</button></> : null}
         {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}
@@ -593,11 +595,12 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             </ul>
           </div>
         )}
-        {panel.cta && panel.cta.quest && session ? (
+        {panel.cta && panel.cta.quest && session && (
           <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
             Unirse a la misión
           </button>
-        ) : <h1>No se puede unir a la misión {session != null ? 'Hay sesión' : 'No hay sesión'}</h1>}
+        )}
+        {session == null ? <><span>Hay un problema con la sesión</span> <button>Intentar conectar de nuevo</button></> : null}
         {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}
