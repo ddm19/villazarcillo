@@ -360,9 +360,6 @@ function App() {
 
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
-      debugger
-
-      console.log(event.data)
 
       if (event.origin !== 'https://hispania.thedm.es' && event.origin !== 'http://localhost:5173') {
         console.warn('Origen de mensaje no autorizado:', event.origin)

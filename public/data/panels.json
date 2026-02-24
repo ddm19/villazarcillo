@@ -174,7 +174,7 @@
           "type": "paragraph", "text": " \n\n *Su código es simple: lealtad, disciplina y honor. Muchos dicen que aún conserva el tacto de un verdadero comandante; otros aseguran que solo espera la oportunidad de volver a la guerra.*"
         },
         {
-          "type": "paragraph","text": "# Progreso del campamento\n <span class='progressBar progressBar__0' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*Próxima Meta: 100 piezas de oro*</span>"
+          "type": "paragraph","text": "# Progreso del campamento\n <span class='progressBar progressBar__10' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*Próxima Meta: 100 piezas de oro*</span>"
         },
         {
           "type": "paragraph", "text": " \n\n **Teniente:** <span style='color:lightblue;'>*¿Quieres Donar a la mejora del campamento? Es un gran gesto.*</span>"
@@ -321,10 +321,8 @@
     {
       "id": "panel:profundo",
       "type": "image",
-      "image": "boards/notes/profundo.png",
-      "cta": {
-        "quest": "DREAM_PROFUNDO"
-      }
+      "image": "boards/notes/profundo.png"
+      
     },
     {
       "id": "panel:reginaprovisiones",

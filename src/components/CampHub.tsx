@@ -18,6 +18,7 @@ import { supabase } from '../services/supabaseClient';
 import { QuestJoiner } from './QuestJoiner';
 import { TableView } from './TableView';
 import { renderMarkdownContent } from '../lib/markdownRenderer';
+import { useNavigate } from 'react-router-dom';
 
 type CampHubProps = {
   config: HubConfig
@@ -456,6 +457,12 @@ type PanelContentProps = {
 function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
   const { session } = useUser()
 
+  const navigate = useNavigate();
+
+  function reconnect() {
+    navigate(0);
+  }
+
   const handleLeaveQuest = async (playerId: string) => {
     if (!session) {
       alert('Error inesperado.');
@@ -509,7 +516,7 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             Unirse a la misión
           </button>
         )}
-        {session == null ? <><span>Hay un problema con la sesión</span> <button>Intentar conectar de nuevo</button></> : null}
+        {session == null && panel.cta ? <><span>Hay un problema con la sesión</span> <button onClick={reconnect}>Intentar conectar de nuevo</button></> : null}
         {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}
@@ -554,7 +561,7 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             Unirse a la misión
           </button>
         )}
-        {session == null ? <><span>Hay un problema con la sesión</span> <button>Intentar conectar de nuevo</button></> : null}
+        {session == null ? <><span>Hay un problema con la sesión</span> <button onClick={reconnect}>Intentar conectar de nuevo</button></> : null}
         {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}
@@ -600,7 +607,7 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
             Unirse a la misión
           </button>
         )}
-        {session == null ? <><span>Hay un problema con la sesión</span> <button>Intentar conectar de nuevo</button></> : null}
+        {session == null ? <><span>Hay un problema con la sesión</span> <button onClick={reconnect}>Intentar conectar de nuevo</button></> : null}
         {panel.cta && !panel.questPlayers && !session && (
           <a className="camp-hub__badge" href={panel.cta.href} target="_blank" rel="noreferrer">
             {panel.cta.label}
@@ -639,3 +646,5 @@ function normalizeBase(base: string) {
   const trimmedBase = base.endsWith('/') ? base : `${base}/`
   return `${normalizedRoot}${trimmedBase}`
 }
+
+
