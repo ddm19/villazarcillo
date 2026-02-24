@@ -163,6 +163,15 @@
       "subtitle": "**El Campamento te necesita, vuelve al trabajo.**",
       "portrait": "portraits/khaart.gif",
       "content": [
+        {
+          "type": "paragraph","text": "# Progreso del campamento\n <span class='progressBar progressBar__10' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*Próxima Meta: 100 piezas de oro*</span>"
+        },
+        {
+          "type": "paragraph", "text": " \n\n **Teniente:** <span style='color:lightblue;'>*¿Quieres Donar a la mejora del campamento? Es un gran gesto.*</span>"
+        },
+        {
+          "type": "paragraph", "text": "<span style='font-size:0.9em;color:#888;'>*[Si quieres donar al campamento habla con tu DM]*</span>"
+        },
         { "type": "paragraph", "text": "# Oficial al mando del campamento. \nOrganiza las patrullas y la defensa del campamento." },
         {
           "type": "paragraph", "text": "*En el centro del campamento se alza una tienda más ancha, reforzada con tablones y lona doble.* \n\n *Frente a ella, un espadón clavado en la tierra sirve como advertencia y juramento.* \n\n *Dentro, el Teniente —*un veterano del ejército de **Castilla** de rostro sereno y armadura desgastada*— revisa informes, escucha disputas y organiza las patrullas.*"
@@ -172,16 +181,8 @@
         },
         {
           "type": "paragraph", "text": " \n\n *Su código es simple: lealtad, disciplina y honor. Muchos dicen que aún conserva el tacto de un verdadero comandante; otros aseguran que solo espera la oportunidad de volver a la guerra.*"
-        },
-        {
-          "type": "paragraph","text": "# Progreso del campamento\n <span class='progressBar progressBar__10' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*Próxima Meta: 100 piezas de oro*</span>"
-        },
-        {
-          "type": "paragraph", "text": " \n\n **Teniente:** <span style='color:lightblue;'>*¿Quieres Donar a la mejora del campamento? Es un gran gesto.*</span>"
-        },
-        {
-          "type": "paragraph", "text": "<span style='font-size:0.9em;color:#888;'>*[Si quieres donar al campamento habla con tu DM]*</span>"
         }
+        
       ]
     },
     {
