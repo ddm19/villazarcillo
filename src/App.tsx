@@ -360,27 +360,33 @@ function App() {
 
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
-
-      if (event.origin !== 'https://hispania.thedm.es' && event.origin !== 'http://localhost:5173') {
-        console.warn('Origen de mensaje no autorizado:', event.origin)
-        return
+      if (event.origin !== 'https://hispania.thedm.es' && event.origin !== 'http://localhost:5174' && event.origin !== 'http://192.168.1.137:5174') {
+        console.warn('Origen de mensaje no autorizado:', event.origin);
+        return;
       }
-      const { type, session } = event.data
+
+      const { type, session } = event.data;
+
       if (type === 'supabase-session') {
         if (session) {
-          setSession(session)
-          await supabase.auth.setSession(session)
+          setSession(session);
+          await supabase.auth.setSession(session);
         } else {
-          setSession(null)
-          await supabase.auth.signOut()
+          setSession(null);
+          await supabase.auth.signOut();
         }
       }
-    }
+    };
 
     window.addEventListener('message', handleMessage)
 
+    if (window.parent !== window)
+      window.parent.postMessage({ type: 'villazarcillo-ready' }, '*');
 
-  }, [setSession])
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [])
 
   const element = useRoutes([
     { path: '/', element: <HubExperienceWrapper /> },

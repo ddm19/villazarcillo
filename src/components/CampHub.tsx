@@ -573,6 +573,7 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
 
   if (panel.type === 'image') {
     const imageUrl = resolveAsset(config.assetsBaseUrl, panel.image)
+    const [isFullScreen, setIsFullScreen] = useState(false);
     return (
       <div className="camp-hub__panel-content">
         {panel.title && (
@@ -581,9 +582,27 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
           </header>
         )}
 
-        <div className="camp-hub__panel-image">
+        <div className="camp-hub__panel-image" onClick={() => setIsFullScreen(true)}>
           <img src={imageUrl} alt="" />
         </div>
+
+        {isFullScreen && (
+          <>
+            <div className='fullscreen_close'>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </div>
+
+            <div className="fullscreen-modal" onClick={() => setIsFullScreen(false)}>
+              <img src={imageUrl} alt="" />
+
+            </div>
+
+
+          </>
+        )}
         {panel.questPlayers && panel.questPlayers.length > 0 && (
           <div className="camp-hub__quest-players">
             <h4>Aventureros apuntados:</h4>

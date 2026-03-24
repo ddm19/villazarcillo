@@ -318,7 +318,14 @@ body
   flex-direction: column;
   gap: var(--space-4);
   min-height: auto;
-  overflow-x: hidden
+  overflow-x: hidden;
+
+  @media (max-width: 768px)
+  {
+    overflow: clip;
+    margin-bottom: var(--space-4);
+  }
+
 }
 
 .camp-hub__panel-portrait
@@ -416,10 +423,54 @@ body
 
 .camp-hub__panel-image
 {
-  width: 100%;
+  width: 90%;
+  margin: 0 auto;
   border-radius: var(--radius-1);
   overflow: hidden;
   border: 1px solid #232c3b;
+
+  @media (max-width: 768px)
+  {
+    width: 70%;
+
+  }
+}
+
+.fullscreen-modal
+{
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  cursor: zoom-out;
+}
+
+.fullscreen-modal img
+{
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+
+
+
+}
+
+.fullscreen_close
+{
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 6;
+
+  @media (max-width: 768px)
+  {
+    top: var(--space-5);
+    right: var(--space-3);
+  }
+
 }
 
 .camp-hub__panel-image img
