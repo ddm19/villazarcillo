@@ -47,6 +47,11 @@
   box-sizing: border-box;
 }
 
+input
+{
+  font-size: var(--fs-3);
+}
+
 body
 {
   margin: 0;

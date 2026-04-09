@@ -106,49 +106,49 @@ export default function QuestChatModal({ questName, open, onClose }: { questName
         }
     };
 
-    if (!open) return null;
+        if (!open) return null;
 
-    return (
-        <div className="quest-chat-modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div className="quest-chat-modal" style={{ width: '90%', maxWidth: 720, maxHeight: '80vh', background: 'var(--color-surface)', borderRadius: 'var(--radius-1)', boxShadow: '0 8px 24px rgba(0,0,0,0.6)', overflow: 'hidden', display: 'flex', flexDirection: 'column', color: 'var(--color-text)' }}>
-                <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
-                    <h3 style={{ margin: 0, color: 'var(--color-accent)' }}>Discutir Fecha — {questName}</h3>
-                    <button onClick={onClose} aria-label="Cerrar" style={{ background: 'transparent', border: 'none', fontSize: 20, cursor: 'pointer', color: 'var(--color-text)' }}>✕</button>
-                </header>
+        return (
+            <div className="quest-chat-modal-overlay">
+                <div className="quest-chat-modal">
+                    <header className="quest-chat-header">
+                        <h3 className="quest-chat-title">Discutir Fecha — {questName}</h3>
+                        <button className="quest-chat-close" onClick={onClose} aria-label="Cerrar">✕</button>
+                    </header>
 
-                <div ref={containerRef} style={{ padding: 12, overflowY: 'auto', flex: 1, background: 'transparent' }}>
-                    {messages.map((m) => (
-                        <div key={m.id} style={{ marginBottom: 10 }}>
-                            <div style={{ fontSize: 12, color: 'var(--color-text)' }}>
-                                <strong>{playersMap[m.sender_id] ?? m.sender_id}</strong>
-                                <span style={{ marginLeft: 8, fontSize: 11, color: 'var(--color-text)' }}>{new Date(m.created_at).toLocaleString()}</span>
+                    <div ref={containerRef} className="quest-chat-messages">
+                        {messages.map((m) => (
+                            <div key={m.id} className="quest-chat-message">
+                                <div className="quest-chat-meta">
+                                    <strong className="quest-chat-sender">{playersMap[m.sender_id] ?? m.sender_id}</strong>
+                                    <span className="quest-chat-time">{new Date(m.created_at).toLocaleString()}</span>
+                                </div>
+                                <div className="quest-chat-body">{m.body}</div>
                             </div>
-                            <div style={{ marginTop: 4, padding: '8px 12px', background: 'var(--color-bg)', borderRadius: 8 }}>{m.body}</div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
 
-                <footer style={{ display: 'flex', gap: 8, padding: 12, borderTop: '1px solid rgba(0,0,0,0.06)', background: 'transparent' }}>
-                    <input
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                        placeholder="Escribe un mensaje..."
-                        style={{ flex: 1, padding: '8px 10px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.12)', color: 'var(--color-text)', background: 'var(--color-surface)' }}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter' && !e.shiftKey) {
-                                e.preventDefault();
-                                handleSend();
-                            }
-                        }}
-                    />
-                    <button onClick={handleSend} style={{ background: 'var(--color-accent)', color: 'var(--color-bg)', border: 'none', padding: '8px 12px', borderRadius: 8, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        Enviar
-                    </button>
-                </footer>
+                    <footer className="quest-chat-footer">
+                        <input
+                            className="quest-chat-input"
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            placeholder="Escribe un mensaje..."
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey) {
+                                    e.preventDefault();
+                                    handleSend();
+                                }
+                            }}
+                        />
+                        <button className="quest-chat-send" onClick={handleSend} aria-label="Enviar mensaje">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <span className="quest-chat-send-label">Enviar</span>
+                        </button>
+                    </footer>
+                </div>
             </div>
-        </div>
-    );
-}
+        );
+    }
