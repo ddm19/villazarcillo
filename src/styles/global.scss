@@ -486,15 +486,14 @@ body
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-2) var(--space-4);
   background: rgba(131, 227, 119, 0.18);
   color: #b6ffb2;
   border-radius: var(--radius-1);
-  font-size: var(--fs-3);
+  font-size: var(--fs-2);
   text-decoration: none;
   transition: all 0.2s ease;
   width: fit-content;
-  padding: var(--space-1) var(--space-6-5);
   color: var(--color-text);
 
   &:hover

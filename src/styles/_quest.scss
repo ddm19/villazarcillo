@@ -1,10 +1,13 @@
-.camp-hub__quest-players {
-  h4 {
+.camp-hub__quest-players
+{
+  h4
+  {
     margin: 0 0 var(--space-2) 0;
     color: var(--color-accent);
   }
 
-  ul {
+  ul
+  {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -13,7 +16,8 @@
     gap: var(--space-2);
   }
 
-  li {
+  li
+  {
     background-color: var(--color-surface);
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-1);
@@ -21,22 +25,39 @@
   }
 }
 
-.camp-hub__quest-joiner {
+.camp-hub__cta-row
+{
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.camp-hub__badge.camp-hub__chat-button
+{
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.camp-hub__quest-joiner
+{
   padding: var(--space-4);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 
-  h4 {
+  h4
+  {
     margin: 0;
     color: var(--color-accent);
   }
 
-  p {
+  p
+  {
     margin: 0;
   }
 
-  select {
+  select
+  {
     width: 100%;
     padding: var(--space-2) var(--space-3);
     background-color: var(--color-surface);
@@ -47,12 +68,14 @@
   }
 }
 
-.camp-hub__quest-joiner-actions {
+.camp-hub__quest-joiner-actions
+{
   display: flex;
   gap: var(--space-3);
   justify-content: flex-end;
 
-  button {
+  button
+  {
     background-color: var(--color-primary);
     color: var(--color-bg);
     border: none;
@@ -62,16 +85,19 @@
     font-size: var(--fs-2);
     transition: background-color 0.2s ease;
 
-    &:hover {
+    &:hover
+    {
       background-color: #a3bfff;
     }
 
-    &:last-child {
+    &:last-child
+    {
       background-color: transparent;
       color: var(--color-text);
       border: 1px solid #232c3b;
 
-      &:hover {
+      &:hover
+      {
         background-color: var(--color-surface);
       }
     }

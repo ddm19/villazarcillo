@@ -16,9 +16,11 @@ import rehypeRaw from 'rehype-raw';
 import { useUser } from '../contexts/UserContext';
 import { supabase } from '../services/supabaseClient';
 import { QuestJoiner } from './QuestJoiner';
+import QuestChatModal from './QuestChatModal';
 import { TableView } from './TableView';
 import { renderMarkdownContent } from '../lib/markdownRenderer';
 import { useNavigate } from 'react-router-dom';
+import '../styles/_quest.scss';
 
 type CampHubProps = {
   config: HubConfig
@@ -267,6 +269,7 @@ export function CampHub({
   const [activePanel, setActivePanel] = useState<ActivePanel | null>(null)
   const [showQuestJoiner, setShowQuestJoiner] = useState(false);
   const [questToJoin, setQuestToJoin] = useState<string | null>(null);
+  const [chatQuest, setChatQuest] = useState<string | null>(null);
   const drawerRef = useRef<HTMLElement | null>(null)
   const missingPanelsLogged = useRef(new Set<string>())
   useFocusTrap(Boolean(activePanel), drawerRef)
@@ -432,7 +435,7 @@ export function CampHub({
                 </button>
 
               </div>
-              <PanelContent config={config} panel={activePanel.panel} onJoinQuest={openQuestJoiner} />
+              <PanelContent config={config} panel={activePanel.panel} onJoinQuest={openQuestJoiner} onOpenChat={(q) => setChatQuest(q)} />
             </>
           )}
           {showQuestJoiner && questToJoin && (
@@ -444,6 +447,9 @@ export function CampHub({
           )}
         </div>
       </aside >
+      {chatQuest && (
+        <QuestChatModal questName={chatQuest} open={Boolean(chatQuest)} onClose={() => setChatQuest(null)} />
+      )}
     </div >
   )
 }
@@ -452,9 +458,10 @@ type PanelContentProps = {
   config: HubConfig
   panel?: Panel,
   onJoinQuest: (questName: string) => void
+  onOpenChat: (questName: string) => void
 }
 
-function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
+function PanelContent({ config, panel, onJoinQuest, onOpenChat }: PanelContentProps) {
   const { session } = useUser()
 
   const navigate = useNavigate();
@@ -512,9 +519,19 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
           </div>
         )}
         {panel.cta && panel.cta.quest && session && (
-          <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
-            Unirse a la misión
-          </button>
+          <div className="camp-hub__cta-row">
+            <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
+              Unirse a la misión
+            </button>
+            {panel.questPlayers && session && panel.questPlayers.some((p) => p.playerOwner === session.user.id) && (
+              <button className="camp-hub__badge camp-hub__chat-button" onClick={() => onOpenChat(panel.cta!.quest!)} aria-label="Discutir Fecha">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Discutir Fecha
+              </button>
+            )}
+          </div>
         )}
         {session == null && panel.cta ? <><span>Hay un problema con la sesión</span> <button onClick={reconnect}>Intentar conectar de nuevo</button></> : null}
         {panel.cta && !panel.questPlayers && !session && (
@@ -557,9 +574,19 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
           </div>
         )}
         {panel.cta && panel.cta.quest && session && (
-          <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
-            Unirse a la misión
-          </button>
+          <div className="camp-hub__cta-row">
+            <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
+              Unirse a la misión
+            </button>
+            {panel.questPlayers && session && panel.questPlayers.some((p) => p.playerOwner === session.user.id) && (
+              <button className="camp-hub__badge camp-hub__chat-button" onClick={() => onOpenChat(panel.cta!.quest!)} aria-label="Discutir Fecha">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Discutir Fecha
+              </button>
+            )}
+          </div>
         )}
         {session == null ? <><span>Hay un problema con la sesión</span> <button onClick={reconnect}>Intentar conectar de nuevo</button></> : null}
         {panel.cta && !panel.questPlayers && !session && (
@@ -622,9 +649,19 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
           </div>
         )}
         {panel.cta && panel.cta.quest && session && (
-          <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
-            Unirse a la misión
-          </button>
+          <div className="camp-hub__cta-row">
+            <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
+              Unirse a la misión
+            </button>
+            {(panel.questPlayers && session && panel.questPlayers.some((p) => p.playerOwner === session.user.id)) || session?.user?.app_metadata?.role === 'admin' && (
+              <button className="camp-hub__badge camp-hub__chat-button" onClick={() => onOpenChat(panel.cta!.quest!)} aria-label="Discutir Fecha">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Discutir Fecha
+              </button>
+            )}
+          </div>
         )}
         {session == null ? <><span>Hay un problema con la sesión</span> <button onClick={reconnect}>Intentar conectar de nuevo</button></> : null}
         {panel.cta && !panel.questPlayers && !session && (
@@ -638,6 +675,8 @@ function PanelContent({ config, panel, onJoinQuest }: PanelContentProps) {
 
   return null
 }
+
+
 
 function resolveAsset(base: string, assetPath?: string) {
   if (!assetPath) {
