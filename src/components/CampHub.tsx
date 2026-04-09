@@ -523,7 +523,7 @@ function PanelContent({ config, panel, onJoinQuest, onOpenChat }: PanelContentPr
             <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
               Unirse a la misión
             </button>
-            {panel.questPlayers && session && panel.questPlayers.some((p) => p.playerOwner === session.user.id) && (
+            {(panel.questPlayers && session && panel.questPlayers.some((p) => p.playerOwner === session.user.id)) || session?.user?.app_metadata?.role === 'admin' && (
               <button className="camp-hub__badge camp-hub__chat-button" onClick={() => onOpenChat(panel.cta!.quest!)} aria-label="Discutir Fecha">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -578,7 +578,7 @@ function PanelContent({ config, panel, onJoinQuest, onOpenChat }: PanelContentPr
             <button className="camp-hub__badge" onClick={() => onJoinQuest(panel.cta!.quest!)}>
               Unirse a la misión
             </button>
-            {panel.questPlayers && session && panel.questPlayers.some((p) => p.playerOwner === session.user.id) && (
+            {(panel.questPlayers && session && panel.questPlayers.some((p) => p.playerOwner === session.user.id)) || session?.user?.app_metadata?.role === 'admin' && (
               <button className="camp-hub__badge camp-hub__chat-button" onClick={() => onOpenChat(panel.cta!.quest!)} aria-label="Discutir Fecha">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
