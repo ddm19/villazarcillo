@@ -446,10 +446,7 @@
     {
       "id": "panel:reginaprovisiones",
       "type": "image",
-      "image": "boards/notes/reginaProvisiones.png",
-      "cta": {
-        "quest": "REGINA_PROVISIONES"
-      }
+      "image": "boards/notes/reginaProvisiones.png"
     },
     {
       "id": "panel:wolves",
