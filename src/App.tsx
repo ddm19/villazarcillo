@@ -360,7 +360,7 @@ function App() {
 
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
-      if (event.origin !== 'https://hispania.thedm.es' && event.origin !== 'http://localhost:5174' && event.origin !== 'http://192.168.1.137:5174') {
+      if (event.origin !== 'https://hispania.thedm.es' && event.origin !== 'http://localhost:5173' && event.origin !== 'http://192.168.1.137:5173') {
         console.warn('Origen de mensaje no autorizado:', event.origin);
         return;
       }
