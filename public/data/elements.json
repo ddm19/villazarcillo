@@ -127,7 +127,8 @@
         "height": 240,
         "rotation": -8
       },
-      "panelId": "panel:reginaprovisiones"
+      "panelId": "panel:reginaprovisiones",
+      "completed": true
     },
     {
       "id": "note:pantano",
