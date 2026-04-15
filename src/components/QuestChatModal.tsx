@@ -95,9 +95,11 @@ export default function QuestChatModal({ questName, open, onClose }: { questName
     const handleSend = async () => {
         if (!session || text.trim() === '') return;
 
+        const senderName = (session.user as any).user_metadata?.name ?? session.user.email ?? session.user.id;
+
         const { data, error } = await supabase
             .from('villazarcillo_quest_chat_messages')
-            .insert({ quest_name: questName, sender_id: session.user.id, body: text.trim() })
+            .insert({ quest_name: questName, sender_id: session.user.id, sender_name: senderName, body: text.trim() })
             .select()
             .single();
 
