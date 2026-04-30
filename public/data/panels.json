@@ -3,7 +3,7 @@
     {
       "id": "panel:shop_regina",
       "type": "table",
-      "subtitle": "Su mirada es algo dispersa, pero no es una mujer fácil de engañar. Compra y cambia lo básico. A Regina le encantan las **joyas y gemas** por lo que estará muy interesada en ellas si están en buen estado.",
+      "subtitle": "# Afinidad con Regina \n <span style='--fill-color-primary: #83e377; --fill-color-secondary: #58a64b;' class='progressBar progressBar__3' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*La afinidad afecta a los productos, servicios y precios que Regina ofrece.</span><span style='color:lightgray;font-size:0.9em'> Es global al campamento e independiente a su afinidad con personajes en concreto*</span> </br> Su mirada es algo dispersa, pero no es una mujer fácil de engañar. Compra y cambia lo básico. A Regina le encantan las **joyas y gemas** por lo que estará muy interesada en ellas si están en buen estado.",
       "portrait": "portraits/regina.gif",
       "columns": [
         "Objeto",
@@ -25,7 +25,7 @@
             "markdown": "**Barril**"
           },
           "2 piezas de oro",
-          "x09",
+          "x9",
           "150 litros. Perfecto para almacenar agua, cerveza o lo que sea."
         ],
         [
@@ -49,7 +49,7 @@
             "markdown": "**Cerradura**"
           },
           "10 piezas de oro",
-          "x3",
+          "x5",
           "Una cerradura de hierro sencilla. Incluye una llave. Se ve resistente."
         ],
         [
@@ -65,7 +65,7 @@
             "markdown": "**Escalera**"
           },
           "1 pieza de plata",
-          "x1",
+          "x2",
           "10ft (3 metros) de largo. Hecha de madera y cáñamo."
         ],
         [
@@ -75,6 +75,14 @@
           "5 piezas de cobre",
           "x12",
           "Hecho de grasa animal y aceites vegetales. Limpia lo justo, pero huele bien."
+        ],
+        [
+          {
+            "markdown": "**Agua bendita**"
+          },
+          "28 piezas de oro",
+          "x1",
+          "Un frasco de vidrio con agua bendita."
         ],
         [
           {
@@ -147,7 +155,7 @@
             "markdown": "**Ropas de campamento**"
           },
           "2 piezas de oro",
-          "x6",
+          "x1",
           "Un conjunto de ropa resistente y cómoda, ideal para el campamento o viajar. Lleva bordados con el símbolo del campamento."
         ],
         [
@@ -155,7 +163,7 @@
             "markdown": "**Tienda de Campaña**"
           },
           "2 piezas de oro",
-          "x0",
+          "x1",
           "Una tienda de campaña de lona resistente, fácil de montar y desmontar. Capacidad para 2 personas, con algún rasguño y parches."
         ],
         [
@@ -179,7 +187,7 @@
             "markdown": "**Poción de Curación**"
           },
           "50 piezas de oro",
-          "x1",
+          "x2",
           "Un líquido viscoso y poco apetecible. Restaura 2d4 + 2 puntos de golpe al beberla."
         ],
         [
@@ -189,6 +197,110 @@
           "5 piezas de oro",
           "x1",
           "Un anillo de sello de plata con un diseño simple."
+        ],
+        [
+          {
+            "markdown": "**Vial de Ácido**"
+          },
+          "28 piezas de oro",
+          "x8",
+          "Un pequeño frasco de vidrio con un líquido corrosivo. Al romperse, el ácido se derrama y causa daño a cualquier criatura o objeto en contacto con él."
+        ],
+        [
+          {
+            "markdown": "**Fuego del Alquimista**"
+          },
+          "55 piezas de oro",
+          "x5",
+          "Un frasco de vidrio con un líquido inflamable. Al romperse, el fuego se extiende en un área de 5 pies de radio, causando daño a cualquier criatura o objeto en contacto con él y prendiéndole en llamas."
+        ],
+        [
+          {
+            "markdown": "**Alejandrita**"
+          },
+          "500 piezas de oro",
+          "x2",
+          "Una gema preciosa que cambia de color según la luz. Es muy valorada por su belleza y rareza. Se dice que tiene propiedades mágicas, aunque nadie ha podido demostrarlo."
+        ],
+        [
+          {
+            "markdown": "**Ámbar**"
+          },
+          "100 piezas de oro",
+          "x3",
+          "Resina fosilizada que contiene algún tipo de gema en su interior."
+        ],
+        [
+          {
+            "markdown": "**Flecha Contenedora**"
+          },
+          "50 piezas de oro (por flecha)",
+          "x10",
+          "Una flecha altamente resistente con un pequeño contenedor en la punta que puede almacenar una poción. Al impactar, el contenedor se rompe y libera la poción sobre el objetivo. El efecto de la poción se aplica al objetivo como si la hubiera ingerido o aplicado normalmente. "
+        ],
+        [
+          {
+            "markdown": "**Hacha de leñador / Pala de hierro / Pico de hierro**"
+          },
+          "2 piezas de oro",
+          "x6",
+          "Herramientas de trabajo clásicas."
+        ],
+        [
+          {
+            "markdown": "**Piedra de afilar**"
+          },
+          "5 piezas de cobre",
+          "x12",
+          "Una piedra de afilar de grano medio. Ideal para mantener tus armas y herramientas en buen estado."
+        ],
+        [
+          {
+            "markdown": "**Perfume (a base de minerales)**"
+          },
+          "10 piezas de oro",
+          "x2",
+          "Un frasco de perfume con un aroma fresco y terroso. Hecho a base de minerales y esencias naturales. Dura todo el día y es resistente al agua."
+        ],
+        [
+          {
+            "markdown": "**Raciones (Carne seca y gachas)**"
+          },
+          "7 piezas de plata",
+          "x18 (3 raciones por paquete)",
+          "Raciones de viaje que incluyen carne seca y gachas. Son compactas, nutritivas y fáciles de transportar."
+        ],
+        [
+          {
+            "markdown": "**Cuerda de cáñamo**"
+          },
+          "2 piezas de oro",
+          "x5",
+          "50 pies de cuerda de cáñamo resistente."
+        ],
+        [
+          {
+            "markdown": "**Cuerda de seda**"
+          },
+          "15 piezas de oro",
+          "x1",
+          "50 pies de cuerda de seda resistente."
+        ],
+        [
+          {
+            "markdown": "**Manta de lana**"
+          },
+          "1 piezas de oro",
+          "x3",
+          "Una manta de lana gruesa y cálida. Perfecta para las noches frías del campamento."
+        ],
+        [
+          {
+            "markdown": "**Carne de Oso lechuza de las nieves**"
+          },
+          "4 piezas de oro",
+          "x8",
+          "Carne de yeti, valiosa por su rareza para algunos alquimistas y cocineros. Está preparada vagamente por Regina, tiene un sabor fuerte. Dicen que aquellos que la comen Reciben una fuerza temporal descomunal."
         ],
         [
           {
@@ -205,8 +317,62 @@
             "text": "Esquirla de Esencia (Tierra)"
           },
           "15 piezas de oro",
-          "x6",
+          "x3",
           "Una esquirla elemental perteneciente a un cristal mayor, todavía conserva algo de su poder"
+        ],
+        [
+          {
+            "href": "https://hispania.thedm.es/article/Esquirla%20de%20Esencia",
+            "text": "Esquirla de Esencia (Agua)"
+          },
+          "15 piezas de oro",
+          "x5",
+          "Una esquirla elemental perteneciente a un cristal mayor, todavía conserva algo de su poder"
+        ],
+        [
+          {
+            "href": "https://hispania.thedm.es/article/Esquirla%20Oscura",
+            "text": "Esquirla Oscura"
+          },
+          "45 piezas de oro",
+          "x1",
+          "Una esquirla capaz de escuchar plegarias"
+        ],
+        [
+          {
+            "href": "https://hispania.thedm.es/article/Cuerno%20Silencioso",
+            "text": "Cuerno Silencioso"
+          },
+          "50 piezas de oro",
+          "x1",
+          "Algo me dice que debería sonar."
+        ],
+        [
+          {
+            "href": "https://hispania.thedm.es/article/Piedra%20floral",
+            "text": "Piedra Floral"
+          },
+          "15 piezas de oro",
+          "x3",
+          "Una piedra mineral resto de alguna mena rota y rodeada por la vegetación. Aún conserva algunas partes sin cubrir por flores."
+        ],
+        [
+          {
+            "href": "https://hispania.thedm.es/article/Guijarro%20Guía",
+            "text": "Guijarro Guía"
+          },
+          "75 piezas de oro",
+          "x2",
+          "Una roca magnética que tiene un pequeño hueco en el centro, donde un guijarro de menor tamaño reposa."
+        ],
+        [
+          {
+            "href": "https://hispania.thedm.es/article/Gema%20elemental",
+            "text": "Gema elemental (Agua)"
+          },
+          "550 piezas de oro",
+          "x2",
+          "Gema obtenida de un elemental mayor, aún conserva algo de su poder en el interior. La gema obtiene un color en función del elemental que contiene en su interior."
         ]
       ]
     },
@@ -219,7 +385,7 @@
       "content": [
         {
           "type": "paragraph",
-          "text": "# Progreso del campamento\n <span class='progressBar progressBar__10' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*Próxima Meta: 100 piezas de oro*</span>"
+          "text": "# Progreso del campamento\n <span class='progressBar progressBar__54' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*Próxima Meta: 100 piezas de oro*</span>"
         },
         {
           "type": "paragraph",
@@ -257,6 +423,10 @@
         {
           "type": "paragraph",
           "text": "Lúcido es un mago aprendiz, pero muy sagaz y con grandes conocimientos sobre el zeón. Está aquí para ofrecer diferentes servicios de magia."
+        },
+        {
+          "type": "paragraph",
+          "text": "# Afinidad con Lúcido\n <span style='--fill-color-primary: #7aa2ff; --fill-color-secondary: #4d7de0;' class='progressBar progressBar__1' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*La afinidad afecta a los productos, servicios y precios que Lúcido ofrece.</span><span style='color:lightgray;font-size:0.9em'> Es global al campamento e independiente a su afinidad con personajes en concreto*</span>"
         },
         {
           "type": "paragraph",
@@ -459,10 +629,7 @@
     {
       "id": "panel:pantano",
       "type": "image",
-      "image": "boards/notes/pantano.png",
-      "cta": {
-        "quest": "PANTANO"
-      }
+      "image": "boards/notes/pantano.png"
     },
     {
       "id": "panel:mausoleo",

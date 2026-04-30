@@ -145,7 +145,8 @@
         "height": 240,
         "rotation": 8
       },
-      "panelId": "panel:pantano"
+      "panelId": "panel:pantano",
+      "completed": true
     },
     {
       "id": "note:mausoleo",
