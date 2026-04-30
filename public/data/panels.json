@@ -638,6 +638,14 @@
       "cta": {
         "quest": "MAUSOLEO"
       }
+    },
+    {
+      "id": "panel:monteblanco",
+      "type": "image",
+      "image": "boards/notes/monteblanco.png",
+      "cta": {
+        "quest": "MONTEBLANCO"
+      }
     }
   ]
 }

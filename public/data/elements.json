@@ -113,24 +113,6 @@
       "isDangerous": true
     },
     {
-      "id": "note:reginaprovisiones",
-      "sceneId": "tablon",
-      "layerId": "posts",
-      "type": "image",
-      "position": [
-        500,
-        300
-      ],
-      "sprite": {
-        "src": "boards/notes/reginaProvisiones.png",
-        "width": 200,
-        "height": 240,
-        "rotation": -8
-      },
-      "panelId": "panel:reginaprovisiones",
-      "completed": true
-    },
-    {
       "id": "note:pantano",
       "sceneId": "tablon",
       "layerId": "posts",
@@ -164,6 +146,23 @@
         "rotation": 10
       },
       "panelId": "panel:mausoleo"
+    },
+    {
+      "id": "note:monteblanco",
+      "sceneId": "tablon",
+      "layerId": "posts",
+      "type": "image",
+      "position": [
+        580,
+        320
+      ],
+      "sprite": {
+        "src": "boards/notes/monteblanco.png",
+        "width": 200,
+        "height": 240,
+        "rotation": -15
+      },
+      "panelId": "panel:monteblanco"
     }
   ]
 }
