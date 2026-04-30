@@ -385,7 +385,7 @@
       "content": [
         {
           "type": "paragraph",
-          "text": "# Progreso del campamento\n <span class='progressBar progressBar__54' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*Próxima Meta: 100 piezas de oro*</span>"
+          "text": "# Progreso del campamento\n <span class='progressBar progressBar__70' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*Próxima Meta: 100 piezas de oro*</span>"
         },
         {
           "type": "paragraph",
