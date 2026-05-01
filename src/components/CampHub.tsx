@@ -21,7 +21,6 @@ import { TableView } from './TableView';
 import { renderMarkdownContent } from '../lib/markdownRenderer';
 import { useNavigate } from 'react-router-dom';
 import '../styles/_quest.scss';
-import { sassNull } from 'sass';
 
 type CampHubProps = {
   config: HubConfig
