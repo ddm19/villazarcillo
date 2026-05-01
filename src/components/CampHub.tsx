@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { MapContainer, ImageOverlay, Marker, Tooltip, useMap } from 'react-leaflet';
+import { MapContainer, ImageOverlay, Marker, Tooltip, useMap, VideoOverlay } from 'react-leaflet';
 import L, { CRS, type LeafletKeyboardEvent } from 'leaflet';
 import classNames from 'classnames';
 import ReactMarkdown from 'react-markdown';
@@ -21,6 +21,7 @@ import { TableView } from './TableView';
 import { renderMarkdownContent } from '../lib/markdownRenderer';
 import { useNavigate } from 'react-router-dom';
 import '../styles/_quest.scss';
+import { sassNull } from 'sass';
 
 type CampHubProps = {
   config: HubConfig
@@ -122,7 +123,6 @@ function SceneCanvas({
   }, [elements, activeLayers])
   const isMobile = viewportWidth <= 768
   const iconScale = isMobile ? Math.max(0.5, Math.min(1, viewportWidth / 768)) : 1
-
   return (
     <MapContainer
       center={[scene.initialView.center[1], scene.initialView.center[0]]}
@@ -137,13 +137,26 @@ function SceneCanvas({
       ]}
       maxBoundsViscosity={1}
     >
-      <ImageOverlay
-        url={scene.background}
-        bounds={[
-          [0, 0],
-          [scene.size.height, scene.size.width],
-        ]}
-      />
+      {!scene.backgroundVideo ?
+        <ImageOverlay
+          url={scene.background}
+          bounds={[
+            [0, 0],
+            [scene.size.height, scene.size.width],
+          ]}
+        />
+        :
+        <VideoOverlay
+          url={scene.backgroundVideo}
+          bounds={[
+            [0, 0],
+            [scene.size.height, scene.size.width],
+          ]}
+          autoplay
+          loop
+          muted
+        />
+      }
       <SizeInvalidator width={scene.size.width} height={scene.size.height} />
       <FocusController focusElementId={focusElementId} elements={filtered} />
       {filtered.map((element) => {
@@ -280,6 +293,7 @@ export function CampHub({
     return {
       ...scene,
       background: resolveAsset(config.assetsBaseUrl, scene.background),
+      backgroundVideo: resolveAsset(config.assetsBaseUrl, scene.backgroundVideo),
     }
   }, [scene, config.assetsBaseUrl])
 

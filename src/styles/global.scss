@@ -10,6 +10,15 @@
   --pin-shop: #83e377;
   --pin-generic: #f87171;
   --radius-1: 12px;
+  --radius-2: 16px;
+  --radius-3: 20px;
+  --radius-4: 24px;
+  --radius-5: 28px;
+  --radius-6: 32px;
+  --radius-7: 36px;
+  --radius-8: 40px;
+  --radius-9: 44px;
+  --radius-10: 48px;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -181,8 +190,8 @@ body
   border-radius: 50%;
   color: #10141c;
   font-weight: 600;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-  border: 2px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 0 12px 24px rgba(255, 0, 0, 0.4);
+  border: 2px solid rgba(0, 0, 0, 0.5);
 }
 
 .camp-hub__pin
@@ -208,7 +217,7 @@ body
 {
   transform-origin: center;
   transform: translate(-50%, -50%) rotate(var(--sprite-rotation, 0deg));
-  border-radius: var(--radius-1);
+  border-radius: var(--radius-2);
   overflow: hidden;
   border-width: 3px;
   transition: all 0.3s ease;

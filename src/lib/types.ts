@@ -19,6 +19,7 @@ export type Scene = {
   id: string
   name: string
   background: string
+  backgroundVideo?: string
   size: {
     width: number
     height: number

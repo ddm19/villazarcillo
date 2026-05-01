@@ -3,20 +3,21 @@
     {
       "id": "hispania",
       "name": "Hispania",
-      "background": "maps/villazarcillo.png",
+      "background": "maps/villazarcillo2.png",
+      "backgroundVideo": "maps/villazarcillo.mp4",
       "size": {
-        "width": 2048,
-        "height": 2048
+        "width": 3440,
+        "height": 1440
       },
       "initialView": {
         "center": [
-          720,
-          2048
+          1720,
+          720
         ],
-        "zoom": -1
+        "zoom": -4
       },
-      "minZoom": -2,
-      "maxZoom": 2,
+      "minZoom": -1,
+      "maxZoom": 1,
       "layers": [
         {
           "id": "poi",

@@ -7,13 +7,13 @@
       "type": "npc",
       "name": "Teniente Khaart",
       "position": [
-        630,
-        1350
+        1390,
+        630
       ],
       "sprite": {
         "src": "pins/npc.png",
-        "width": 60,
-        "height": 60,
+        "width": 80,
+        "height": 80,
         "rotation": 0
       },
       "panelId": "panel:npc_khaart"
@@ -25,13 +25,13 @@
       "type": "shop",
       "name": "Regina, la Comerciante",
       "position": [
-        530,
-        1050
+        2200,
+        450
       ],
       "sprite": {
         "src": "pins/shop.png",
-        "width": 60,
-        "height": 60,
+        "width": 80,
+        "height": 80,
         "rotation": 0
       },
       "panelId": "panel:shop_regina"
@@ -43,13 +43,13 @@
       "type": "shop",
       "name": "Lúcido umbra, aprendiz de mago",
       "position": [
-        730,
-        1000
+        2300,
+        650
       ],
       "sprite": {
         "src": "pins/magic.webp",
-        "width": 60,
-        "height": 60,
+        "width": 80,
+        "height": 80,
         "rotation": 0
       },
       "panelId": "panel:shop_lucido"
@@ -61,8 +61,8 @@
       "type": "generic",
       "name": "Tablón de anuncios",
       "position": [
-        980,
-        1340
+        1750,
+        1150
       ],
       "sprite": {
         "src": "pins/generic.png",
