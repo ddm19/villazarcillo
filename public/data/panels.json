@@ -385,7 +385,7 @@
       "content": [
         {
           "type": "paragraph",
-          "text": "# Progreso del campamento\n <span class='progressBar progressBar__70' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*Próxima Meta: 100 piezas de oro*</span>"
+          "text": "# Progreso del campamento\n <span class='progressBar progressBar__30' role='progressbar'></span> \n <span style='color:lightgray;font-size:0.9em'>*Próxima Meta: 300 piezas de oro*</span>"
         },
         {
           "type": "paragraph",
@@ -594,6 +594,159 @@
       ]
     },
     {
+      "id": "panel:shop_tents",
+      "type": "markdown",
+      "title": "Tiendas de campaña personales",
+      "subtitle": "**Alquila tu propia parcela dentro del campamento**",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Alquila tu propia parcela dentro del campamento, esta parcela contiene un hueco personal y privado donde puedes descansar y almacenar objetos que no quieras llevarte de misión (almacenamiento no incluido)."
+        },
+        {
+          "type": "paragraph",
+          "text": "# Ocupadas\n <span style='--fill-color-primary: #7aa2ff; --fill-color-secondary: #4d7de0;' class='progressBar progressBar__0' role='progressbar'></span></span>"
+        },
+        {
+          "type": "paragraph",
+          "text": "## Tipos y costes de parcelas"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Parcela",
+            "Imagen",
+            "Coste (por semana)",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              {
+                "markdown": "**Parcela pequeña**"
+              },
+              {
+                "markdown": "<img src='/assets/portraits/small_tent.jpg' alt='Parcela pequeña' style='width: 100%; max-width: 100%; margin-top: 10px;border-radius: 5%;' />"
+              },
+              "1 piezas de plata",
+              "Podrás dormir sobre un petate y guardar una pequeña mochila con tus cosas."
+            ],
+            [
+              {
+                "markdown": "**Parcela mediana**"
+              },
+              {
+                "markdown": "<img src='/assets/portraits/medium_tent.jpg' alt='Parcela mediana' style='width: 100%; max-width: 100%; margin-top: 10px;border-radius: 5%;' />"
+              },
+              "5 piezas de plata",
+              "Esta parcela tiene espacio para una tienda de campaña personal, además podrás guardar un cofre pequeño o barril con tus cosas."
+            ],
+            [
+              {
+                "markdown": "**Parcela grande**"
+              },
+              {
+                "markdown": "<img src='/assets/portraits/large_tent.jpg' alt='Parcela grande' style='width: 100%; max-width: 100%; margin-top: 10px;border-radius: 5%;' />"
+              },
+              "1 pieza de oro",
+              "Esta parcela tiene espacio suficiente para una tienda de campaña grande, además de espacio suficiente para guardar un cofre grande e instrumentos de cocina o cualquier otro tipo de herramientas como alquimia."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "panel:shop_barn",
+      "type": "markdown",
+      "title": "Establo",
+      "subtitle": "**Alquila un caballo para una misión**",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Alquila un caballo para una misión, por el precio estipulado. Todos los caballos están bien cuidados y son de confianza. Para alquilar un caballo deber abonar una fianza de 10 piezas de oro que se devolverán al devolver el caballo en buen estado."
+        },
+        {
+          "type": "paragraph",
+          "text": "## Tipos y costes de caballos"
+        },
+        {
+          "type": "table",
+          "columns": [
+            "Caballo",
+            "Imagen",
+            "Coste",
+            "Descripción",
+            "Disponibles"
+          ],
+          "rows": [
+            [
+              {
+                "markdown": "**Burro**"
+              },
+              {
+                "markdown": "<img src='/assets/portraits/donkey.jpg' alt='Burro' style='width: 100%; max-width: 100%; margin-top: 10px;border-radius: 5%;' />"
+              },
+              "5 piezas de plata",
+              "Pequeño burro de carga, ideal para transportar objetos pesados o voluminosos. No es muy rápido ni resistente, pero es confiable y fácil de manejar. No requiere montura",
+              "x4"
+            ],
+            [
+              {
+                "markdown": "**Caballo de tiro**"
+              },
+              {
+                "markdown": "<img src='/assets/portraits/draft_horse.jpg' alt='Caballo de tiro' style='width: 100%; max-width: 100%; margin-top: 10px;border-radius: 5%;' />"
+              },
+              "5 piezas de oro",
+              "Caballo de tiro, bueno como transporte común y para tirar de un carro, no es muy rápido. Requiere montura y riendas que vienen incluidas.",
+              "x3"
+            ],
+            [
+              {
+                "markdown": "**Caballo de montura**"
+              },
+              {
+                "markdown": "<img src='/assets/portraits/riding_horse.jpg' alt='Caballo de montura' style='width: 100%; max-width: 100%; margin-top: 10px;border-radius: 5%;' />"
+              },
+              "7 piezas de oro",
+              "Caballo de montura, ideal para viajes rápidos y urgencias. Requiere montura que viene incluida. Es bastante rápido pero no demasiado fuerte. No puede tirar de un carro.",
+              "x2"
+            ],
+            [
+              {
+                "markdown": "**Caballo de guerra**"
+              },
+              {
+                "markdown": "<img src='/assets/portraits/war_horse.jpg' alt='Caballo de guerra' style='width: 100%; max-width: 100%; margin-top: 10px;border-radius: 5%;' />"
+              },
+              "40 piezas de oro",
+              "Caballo de guerra, ideal para combates y misiones peligrosas. Requiere montura que viene incluida. Es muy rápido y fuerte, especializado en combate y con una armadura de cuero y hierro incorporada.",
+              "x0"
+            ],
+            [
+              {
+                "markdown": "**Carro**"
+              },
+              {
+                "markdown": "<img src='/assets/portraits/cart.jpg' alt='Carro' style='width: 100%; max-width: 100%; margin-top: 10px;border-radius: 5%;' />"
+              },
+              "1 piezas de oro",
+              "Carro de madera con ruedas de hierro, ideal para transportar objetos pesados o voluminosos. Requiere de un caballo de tiro o dos burros para moverse. Requiere riendas y montura. Su velocidad depende de los animales que lo tiren y de la carga que lleve.",
+              "x1"
+            ],
+            [
+              {
+                "markdown": "**Cuidado de caballo**"
+              },
+              "",
+              "5 piezas de plata (por semana)",
+              "Cuidado de tu propio caballo, alimentación cepillado y atención médica incluida.",
+              "5 huecos disponibles"
+            ]
+          ]
+        }
+      ]
+    },
+    {
       "id": "panel:openCamp",
       "type": "image",
       "image": "boards/notes/abre.png"
@@ -634,10 +787,7 @@
     {
       "id": "panel:mausoleo",
       "type": "image",
-      "image": "boards/notes/mausoleo.png",
-      "cta": {
-        "quest": "MAUSOLEO"
-      }
+      "image": "boards/notes/mausoleo.png"
     },
     {
       "id": "panel:monteblanco",
@@ -645,6 +795,14 @@
       "image": "boards/notes/monteblanco.png",
       "cta": {
         "quest": "MONTEBLANCO"
+      }
+    },
+    {
+      "id": "panel:berra_maps",
+      "type": "image",
+      "image": "boards/notes/berra_maps.png",
+      "cta": {
+        "quest": "BERRA_MAPS"
       }
     }
   ]

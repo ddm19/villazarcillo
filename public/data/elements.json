@@ -7,8 +7,8 @@
       "type": "npc",
       "name": "Teniente Khaart",
       "position": [
-        1390,
-        630
+        1050,
+        790
       ],
       "sprite": {
         "src": "pins/npc.png",
@@ -25,13 +25,13 @@
       "type": "shop",
       "name": "Regina, la Comerciante",
       "position": [
-        2200,
-        450
+        2030,
+        500
       ],
       "sprite": {
         "src": "pins/shop.png",
-        "width": 80,
-        "height": 80,
+        "width": 70,
+        "height": 70,
         "rotation": 0
       },
       "panelId": "panel:shop_regina"
@@ -43,16 +43,52 @@
       "type": "shop",
       "name": "Lúcido umbra, aprendiz de mago",
       "position": [
-        2300,
-        650
+        2150,
+        800
       ],
       "sprite": {
         "src": "pins/magic.webp",
-        "width": 80,
-        "height": 80,
+        "width": 70,
+        "height": 70,
         "rotation": 0
       },
       "panelId": "panel:shop_lucido"
+    },
+    {
+      "id": "shop:barn",
+      "sceneId": "hispania",
+      "layerId": "poi",
+      "type": "shop",
+      "name": "Establo de caballos",
+      "position": [
+        1900,
+        1450
+      ],
+      "sprite": {
+        "src": "pins/barn.png",
+        "width": 70,
+        "height": 70,
+        "rotation": 0
+      },
+      "panelId": "panel:shop_barn"
+    },
+    {
+      "id": "shop:tents",
+      "sceneId": "hispania",
+      "layerId": "poi",
+      "type": "shop",
+      "name": "Tiendas de campaña personales",
+      "position": [
+        2800,
+        1050
+      ],
+      "sprite": {
+        "src": "pins/tents.png",
+        "width": 70,
+        "height": 70,
+        "rotation": 0
+      },
+      "panelId": "panel:shop_tents"
     },
     {
       "id": "portal:tablon",
@@ -61,8 +97,8 @@
       "type": "generic",
       "name": "Tablón de anuncios",
       "position": [
-        1750,
-        1150
+        1700,
+        1350
       ],
       "sprite": {
         "src": "pins/generic.png",
@@ -145,7 +181,8 @@
         "height": 240,
         "rotation": 10
       },
-      "panelId": "panel:mausoleo"
+      "panelId": "panel:mausoleo",
+      "completed": true
     },
     {
       "id": "note:monteblanco",
@@ -163,6 +200,23 @@
         "rotation": -15
       },
       "panelId": "panel:monteblanco"
+    },
+    {
+      "id": "note:berra_maps",
+      "sceneId": "tablon",
+      "layerId": "posts",
+      "type": "image",
+      "position": [
+        1280,
+        300
+      ],
+      "sprite": {
+        "src": "boards/notes/berra_maps.png",
+        "width": 200,
+        "height": 240,
+        "rotation": -5
+      },
+      "panelId": "panel:berra_maps"
     }
   ]
 }

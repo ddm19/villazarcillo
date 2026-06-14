@@ -6,15 +6,15 @@
       "background": "maps/villazarcillo2.png",
       "backgroundVideo": "maps/villazarcillo.mp4",
       "size": {
-        "width": 3440,
-        "height": 1440
+        "width": 3840,
+        "height": 2160
       },
       "initialView": {
         "center": [
-          1720,
-          720
+          1920,
+          1080
         ],
-        "zoom": -4
+        "zoom": -1
       },
       "minZoom": -1,
       "maxZoom": 1,
