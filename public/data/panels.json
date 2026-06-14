@@ -719,7 +719,7 @@
                 "markdown": "<img src='/assets/portraits/war_horse.jpg' alt='Caballo de guerra' style='width: 100%; max-width: 100%; margin-top: 10px;border-radius: 5%;' />"
               },
               "40 piezas de oro",
-              "Caballo de guerra, ideal para combates y misiones peligrosas. Requiere montura que viene incluida. Es muy rápido y fuerte, especializado en combate y con una armadura de cuero y hierro incorporada.",
+              "Caballo de guerra, ideal para combates y misiones peligrosas. Requiere montura que viene incluida. Es muy rápido y fuerte, especializado en combate y con una armadura de cuero y hierro incorporada. Requiere aprendizaje especial para montar y controlar. No quiere tirar de un carro.",
               "x0"
             ],
             [
@@ -741,6 +741,15 @@
               "5 piezas de plata (por semana)",
               "Cuidado de tu propio caballo, alimentación cepillado y atención médica incluida.",
               "5 huecos disponibles"
+            ],
+            [
+              {
+                "markdown": "**Clases de equitación**"
+              },
+              "",
+              "25 monedas de oro (por semana)",
+              "Clases de equitación para aprender a montar.",
+              "6 semanas necesarias para aprender a montar correctamente"
             ]
           ]
         }
