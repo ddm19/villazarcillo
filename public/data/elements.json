@@ -149,42 +149,6 @@
       "isDangerous": true
     },
     {
-      "id": "note:pantano",
-      "sceneId": "tablon",
-      "layerId": "posts",
-      "type": "image",
-      "position": [
-        900,
-        600
-      ],
-      "sprite": {
-        "src": "boards/notes/pantano.png",
-        "width": 200,
-        "height": 240,
-        "rotation": 8
-      },
-      "panelId": "panel:pantano",
-      "completed": true
-    },
-    {
-      "id": "note:mausoleo",
-      "sceneId": "tablon",
-      "layerId": "posts",
-      "type": "image",
-      "position": [
-        1000,
-        300
-      ],
-      "sprite": {
-        "src": "boards/notes/mausoleo.png",
-        "width": 200,
-        "height": 240,
-        "rotation": 10
-      },
-      "panelId": "panel:mausoleo",
-      "completed": true
-    },
-    {
       "id": "note:monteblanco",
       "sceneId": "tablon",
       "layerId": "posts",
@@ -216,7 +180,42 @@
         "height": 240,
         "rotation": -5
       },
-      "panelId": "panel:berra_maps"
+      "panelId": "panel:berra_maps",
+      "completed": true
+    },
+    {
+      "id": "note:insurance",
+      "sceneId": "tablon",
+      "layerId": "posts",
+      "type": "image",
+      "position": [
+        880,
+        600
+      ],
+      "sprite": {
+        "src": "boards/notes/insurance.png",
+        "width": 200,
+        "height": 240,
+        "rotation": 8
+      },
+      "panelId": "panel:insurance"
+    },
+    {
+      "id": "note:missinglucido",
+      "sceneId": "tablon",
+      "layerId": "posts",
+      "type": "image",
+      "position": [
+        880,
+        300
+      ],
+      "sprite": {
+        "src": "boards/notes/missinglucido.png",
+        "width": 200,
+        "height": 240,
+        "rotation": -4
+      },
+      "panelId": "panel:missinglucido"
     }
   ]
 }

@@ -809,10 +809,20 @@
     {
       "id": "panel:berra_maps",
       "type": "image",
-      "image": "boards/notes/berra_maps.png",
+      "image": "boards/notes/berra_maps.png"
+    },
+    {
+      "id": "panel:insurance",
+      "type": "image",
+      "image": "boards/notes/insurance.png",
       "cta": {
-        "quest": "BERRA_MAPS"
+        "quest": "INSURANCE"
       }
+    },
+    {
+      "id": "panel:missinglucido",
+      "type": "image",
+      "image": "boards/notes/missinglucido.png"
     }
   ]
 }
