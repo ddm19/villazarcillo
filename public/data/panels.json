@@ -41,7 +41,7 @@
             "markdown": "**Cofre**"
           },
           "5 piezas de oro",
-          "x6",
+          "x5",
           "Caja de madera reforzada con hierro. Perfecta para guardar objetos de valor. No incluye cerradura."
         ],
         [
@@ -49,7 +49,7 @@
             "markdown": "**Cerradura**"
           },
           "10 piezas de oro",
-          "x5",
+          "x4",
           "Una cerradura de hierro sencilla. Incluye una llave. Se ve resistente."
         ],
         [
@@ -317,7 +317,7 @@
             "text": "Esquirla de Esencia (Tierra)"
           },
           "15 piezas de oro",
-          "x3",
+          "x2",
           "Una esquirla elemental perteneciente a un cristal mayor, todavía conserva algo de su poder"
         ],
         [
@@ -326,7 +326,7 @@
             "text": "Esquirla de Esencia (Agua)"
           },
           "15 piezas de oro",
-          "x5",
+          "x4",
           "Una esquirla elemental perteneciente a un cristal mayor, todavía conserva algo de su poder"
         ],
         [
@@ -605,7 +605,7 @@
         },
         {
           "type": "paragraph",
-          "text": "# Ocupadas\n <span style='--fill-color-primary: #7aa2ff; --fill-color-secondary: #4d7de0;' class='progressBar progressBar__0' role='progressbar'></span></span>"
+          "text": "# Ocupadas\n <span style='--fill-color-primary: #7aa2ff; --fill-color-secondary: #4d7de0;' class='progressBar progressBar__20' role='progressbar'></span></span>"
         },
         {
           "type": "paragraph",
