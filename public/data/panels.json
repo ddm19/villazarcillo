@@ -17,7 +17,7 @@
             "markdown": "**Antorcha**"
           },
           "1 pieza de cobre",
-          "x24",
+          "x16",
           "1 hora de luz. Que ya es para un trozo de madera envuelto en un trapo."
         ],
         [
@@ -41,7 +41,7 @@
             "markdown": "**Cofre**"
           },
           "5 piezas de oro",
-          "x5",
+          "x4",
           "Caja de madera reforzada con hierro. Perfecta para guardar objetos de valor. No incluye cerradura."
         ],
         [
@@ -49,7 +49,7 @@
             "markdown": "**Cerradura**"
           },
           "10 piezas de oro",
-          "x4",
+          "x3",
           "Una cerradura de hierro sencilla. Incluye una llave. Se ve resistente."
         ],
         [
@@ -251,7 +251,7 @@
             "markdown": "**Piedra de afilar**"
           },
           "5 piezas de cobre",
-          "x12",
+          "x11",
           "Una piedra de afilar de grano medio. Ideal para mantener tus armas y herramientas en buen estado."
         ],
         [
@@ -299,7 +299,7 @@
             "markdown": "**Carne de Oso lechuza de las nieves**"
           },
           "4 piezas de oro",
-          "x8",
+          "x6",
           "Carne de yeti, valiosa por su rareza para algunos alquimistas y cocineros. Está preparada vagamente por Regina, tiene un sabor fuerte. Dicen que aquellos que la comen Reciben una fuerza temporal descomunal."
         ],
         [
@@ -601,11 +601,11 @@
       "content": [
         {
           "type": "paragraph",
-          "text": "Alquila tu propia parcela dentro del campamento, esta parcela contiene un hueco personal y privado donde puedes descansar y almacenar objetos que no quieras llevarte de misión (almacenamiento no incluido)."
+          "text": "Alquila tu propia parcela dentro del campamento, esta parcela contiene un hueco personal y privado donde puedes descansar y almacenar objetos que no quieras llevarte de misión (almacenamiento no incluido). Se debe pagar 1 mes por adelantado"
         },
         {
           "type": "paragraph",
-          "text": "# Ocupadas\n <span style='--fill-color-primary: #7aa2ff; --fill-color-secondary: #4d7de0;' class='progressBar progressBar__20' role='progressbar'></span></span>"
+          "text": "# Ocupadas\n <span style='--fill-color-primary: #7aa2ff; --fill-color-secondary: #4d7de0;' class='progressBar progressBar__40' role='progressbar'></span></span>"
         },
         {
           "type": "paragraph",
