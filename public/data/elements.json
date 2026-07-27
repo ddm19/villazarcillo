@@ -7,7 +7,7 @@
       "type": "npc",
       "name": "Teniente Khaart",
       "position": [
-        1050,
+        1350,
         790
       ],
       "sprite": {
@@ -25,7 +25,7 @@
       "type": "shop",
       "name": "Regina, la Comerciante",
       "position": [
-        2030,
+        2430,
         500
       ],
       "sprite": {
@@ -43,8 +43,8 @@
       "type": "shop",
       "name": "Lúcido umbra, aprendiz de mago",
       "position": [
-        2150,
-        800
+        2550,
+        900
       ],
       "sprite": {
         "src": "pins/magic.webp",
@@ -61,7 +61,7 @@
       "type": "shop",
       "name": "Establo de caballos",
       "position": [
-        1900,
+        2250,
         1450
       ],
       "sprite": {
@@ -79,7 +79,7 @@
       "type": "shop",
       "name": "Tiendas de campaña personales",
       "position": [
-        2800,
+        3100,
         1050
       ],
       "sprite": {
@@ -97,8 +97,8 @@
       "type": "generic",
       "name": "Tablón de anuncios",
       "position": [
-        1700,
-        1350
+        1950,
+        1450
       ],
       "sprite": {
         "src": "pins/generic.png",
