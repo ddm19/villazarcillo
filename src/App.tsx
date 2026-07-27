@@ -187,6 +187,7 @@ function HubExperience() {
       scene={viewState.scene}
       elements={sceneElements}
       panels={data.panels}
+      resources={data.resources}
       activeLayers={viewState.layerState.set}
       focusElementId={viewState.focusElement?.id}
       onFocusChange={handleFocusChange}

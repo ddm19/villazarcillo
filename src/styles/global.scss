@@ -3,8 +3,9 @@
   --color-bg: #0b0d10;
   --color-surface: #14181f;
   --color-text: #e6e6e6;
-  --color-primary: #7aa2ff;
+  --color-primary: #d8b869;
   --color-accent: #f5c453;
+
   --pin-npc: #7aa2ff;
   --pin-quest: #f5c453;
   --pin-shop: #83e377;
@@ -349,6 +350,7 @@ body
   border: 1px solid #232c3b;
   margin: 0 auto;
   flex: 0 0 auto;
+  cursor: zoom-in;
 
   img
   {
@@ -442,6 +444,7 @@ body
   border-radius: var(--radius-1);
   overflow: hidden;
   border: 1px solid #232c3b;
+  cursor: zoom-in;
 
   @media (max-width: 768px)
   {
@@ -726,3 +729,4 @@ svg
 
 @import 'components/quest';
 @import 'components/campHub';
+@import 'components/resourceHud';

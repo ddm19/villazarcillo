@@ -1,0 +1,54 @@
+{
+  "resources": [
+    {
+      "id": "resource:mapas",
+      "type": "markdown",
+      "title": "Mapa del Norte",
+      "icon": "pins/map.png",
+      "amount": "x2",
+      "pinned": false,
+      "portrait": "resources/mapanorte.png",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "# Mapa del Norte de Hispania\nUn mapa detallado de las tierras del norte, con sus ciudades, aldeas y lugares de interés marcados."
+        },
+        {
+          "type": "paragraph",
+          "text": "Incluye la ubicación de minas y yacimientos conocidos, así como las principales sierras y cadenas montañosas de la región."
+        },
+        {
+          "type": "paragraph",
+          "text": "<span style='color:lightgray;font-size:0.9em'>*Una copia fiable, útil para planear rutas y expediciones.*</span>"
+        }
+      ]
+    },
+    {
+      "id": "resource:mapasAuto",
+      "type": "markdown",
+      "title": "Mapa Arcano del Norte",
+      "icon": "pins/map.png",
+      "amount": "x1",
+      "pinned": false,
+      "portrait": "resources/mapanortemistico.png",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "# Mapa Arcano del Norte\nUna versión Arcana del mapa del norte, trazada con tinta hecha a partir de excrementos de mephit de hielo."
+        },
+        {
+          "type": "paragraph",
+          "text": "El mapa detecta su ubicación en el lugar que representa, actualizándose con el movimiento."
+        },
+        {
+          "type": "paragraph",
+          "text": "<span style='color:lightgray;font-size:0.9em'>*Gracias a él ningún aventurero se perderá dentro de sus confines.*</span>"
+        },
+        {
+          "type": "paragraph",
+          "text": "<span style='color:lightgray;font-size:0.9em'>*Permite que cualquier tirada de supervivencia relacionada con el mapa de dificultad 18 o menor sea un éxito automático.*</span>"
+        }
+      ]
+    }
+  ]
+}

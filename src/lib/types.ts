@@ -161,9 +161,16 @@ export type ImagePanel = {
 
 export type Panel = MarkdownPanel | TablePanel | ImagePanel
 
+export type ResourcePanel = Panel & {
+  icon?: string
+  amount?: string
+  pinned?: boolean
+}
+
 export type DataBundle = {
   config: HubConfig
   scenes: Scene[]
   elements: HubElement[]
   panels: Panel[]
+  resources: ResourcePanel[]
 }
