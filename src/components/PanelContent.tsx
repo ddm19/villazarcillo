@@ -52,7 +52,8 @@ export function PanelContent({ config, panel, onJoinQuest, onOpenChat }: PanelCo
       .from('villazarcillo_quest_players')
       .delete()
       .eq('player_id', playerId)
-      .eq('player_owner', session.user.id);
+      .eq('player_owner', session.user.id)
+      .eq('quest_name', panel?.cta?.quest)
 
     if (error) {
       alert('Error al salir de la misión ');
