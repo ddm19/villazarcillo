@@ -123,6 +123,16 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
 
   const scene = useMemo(() => scenes.find((s) => s.id === sceneId), [scenes, sceneId])
 
+  // "Completada"/"Peligrosa" solo tienen sentido en misiones (un aviso del tablón con un
+  // panel que lleva a una quest) — no tiene significado en un NPC o una tienda, así que
+  // solo se muestran cuando el panel asociado es realmente una misión.
+  const selectedPanel = useMemo(() => {
+    if (panelMode === 'existing') return panels.find((p) => p.id === editing?.panelId)
+    if (panelMode === 'new') return newPanelDraft ?? undefined
+    return undefined
+  }, [panelMode, panels, editing?.panelId, newPanelDraft])
+  const isMission = Boolean(selectedPanel?.cta?.quest)
+
   const handlePick = (x: number, y: number) => {
     if (!scene) return
     setAddMode(false)
@@ -284,6 +294,26 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
                 </select>
               </label>
 
+              <div className="admin-field-row">
+                <label className="admin-field">
+                  <span>Posición X</span>
+                  <input
+                    type="number"
+                    value={editing.position[0]}
+                    onChange={(e) => setEditing({ ...editing, position: [Number(e.target.value), editing.position[1]] })}
+                  />
+                </label>
+                <label className="admin-field">
+                  <span>Posición Y</span>
+                  <input
+                    type="number"
+                    value={editing.position[1]}
+                    onChange={(e) => setEditing({ ...editing, position: [editing.position[0], Number(e.target.value)] })}
+                  />
+                </label>
+                <span className="admin-field__hint">También puedes arrastrar el pin en el mapa.</span>
+              </div>
+
               <div className="admin-field">
                 <span>Icono</span>
                 <div className="admin-icon-choice">
@@ -336,9 +366,6 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
                 )}
               </div>
 
-              <ToggleSwitch label="Misión completada" checked={Boolean(editing.completed)} onChange={(completed) => setEditing({ ...editing, completed })} />
-              <ToggleSwitch label="Peligrosa" checked={Boolean(editing.isDangerous)} onChange={(isDangerous) => setEditing({ ...editing, isDangerous })} />
-
               <div className="admin-field">
                 <span>Panel asociado</span>
                 <div className="admin-icon-choice">
@@ -362,6 +389,13 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
                   </select>
                 )}
               </div>
+
+              {isMission && (
+                <>
+                  <ToggleSwitch label="Misión completada" checked={Boolean(editing.completed)} onChange={(completed) => setEditing({ ...editing, completed })} />
+                  <ToggleSwitch label="Peligrosa" checked={Boolean(editing.isDangerous)} onChange={(isDangerous) => setEditing({ ...editing, isDangerous })} />
+                </>
+              )}
 
               {panelMode === 'none' && (
                 <div className="admin-field">

@@ -25,6 +25,22 @@ function unwrap<T>({ data, error }: { data: T | null; error: { message: string }
 }
 
 // ---------------------------------------------------------------------------
+// Admin check
+// ---------------------------------------------------------------------------
+
+/**
+ * Checked live against villazarcillo_admins (auth.uid()) rather than the JWT's
+ * app_metadata claim: that claim is baked into the token at login time and does NOT
+ * refresh just because raw_app_meta_data changed afterwards, which used to leave the
+ * write RLS policies rejecting saves for a user the UI still showed as admin.
+ */
+export async function checkIsAdmin(userId: string): Promise<boolean> {
+  const { data, error } = await supabase.from('villazarcillo_admins').select('user_id').eq('user_id', userId).maybeSingle()
+  if (error) throw new Error(error.message)
+  return data !== null
+}
+
+// ---------------------------------------------------------------------------
 // Config
 // ---------------------------------------------------------------------------
 

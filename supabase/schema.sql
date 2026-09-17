@@ -99,6 +99,30 @@ create index if not exists idx_villazarcillo_elements_scene on villazarcillo_ele
 create index if not exists idx_villazarcillo_elements_panel on villazarcillo_elements(panel_id);
 
 -- ---------------------------------------------------------
+-- Admins: quién puede escribir. Se comprueba contra esta tabla (auth.uid() en vivo) en
+-- vez de contra un claim del JWT (auth.jwt() -> app_metadata ->> role): ese claim se graba
+-- en el token en el momento del login y NO se actualiza solo si luego cambias
+-- raw_app_meta_data en el Dashboard — el usuario se queda con un token "admin" a medias
+-- (pasa el check del front, pero el RLS del backend sigue viendo el token viejo) hasta que
+-- vuelve a iniciar sesión. Una tabla evita esa clase de bug por completo.
+-- ---------------------------------------------------------
+create table if not exists villazarcillo_admins (
+  user_id uuid primary key references auth.users(id) on delete cascade
+);
+
+alter table villazarcillo_admins enable row level security;
+
+drop policy if exists "villazarcillo_admins_self_read" on villazarcillo_admins;
+create policy "villazarcillo_admins_self_read"
+on villazarcillo_admins for select
+using (user_id = auth.uid());
+
+-- Añade aquí a tu(s) usuario(s) admin (una vez, sustituye el email):
+-- insert into villazarcillo_admins (user_id)
+-- select id from auth.users where email = 'tu-email@dominio.com'
+-- on conflict do nothing;
+
+-- ---------------------------------------------------------
 -- RLS: lectura pública, escritura solo admin
 -- ---------------------------------------------------------
 alter table villazarcillo_config enable row level security;
@@ -112,8 +136,10 @@ create or replace function villazarcillo_is_admin()
 returns boolean
 language sql
 stable
+security definer
+set search_path = public
 as $$
-  select coalesce((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin', false);
+  select exists (select 1 from villazarcillo_admins where user_id = auth.uid());
 $$;
 
 do $$

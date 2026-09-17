@@ -10,7 +10,7 @@ import { ResourcesPage } from './pages/ResourcesPage'
 import { AssetsPage } from './pages/AssetsPage'
 import { ConfigPage } from './pages/ConfigPage'
 import { AdvancedPage } from './pages/AdvancedPage'
-import { fetchConfig } from './api/adminApi'
+import { checkIsAdmin, fetchConfig } from './api/adminApi'
 import { ConfirmProvider } from './components/ConfirmDialog'
 import './admin.scss'
 
@@ -62,7 +62,29 @@ function AdminApp() {
 
 export function AdminRoot() {
   const { session } = useUser()
-  const isAdmin = session?.user.app_metadata?.role === 'admin'
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    if (!session) {
+      setIsAdmin(false)
+      return
+    }
+    let cancelled = false
+    checkIsAdmin(session.user.id)
+      .then((result) => {
+        if (!cancelled) setIsAdmin(result)
+      })
+      .catch(() => {
+        if (!cancelled) setIsAdmin(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [session])
+
+  if (isAdmin === null) {
+    return null
+  }
 
   if (!isAdmin) {
     return <AdminDenied />
