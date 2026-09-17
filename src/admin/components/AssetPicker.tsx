@@ -18,6 +18,7 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
   const [entries, setEntries] = useState<AssetEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [filter, setFilter] = useState('')
@@ -47,10 +48,11 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
     setUploading(true)
     setError(null)
     setNotice(null)
+    setUploadProgress(null)
     try {
       const notes: string[] = []
       for (const file of Array.from(files)) {
-        const entry = await uploadAsset(folder, file)
+        const entry = await uploadAsset(folder, file, setUploadProgress)
         if (entry.conversionNote) notes.push(entry.conversionNote)
       }
       if (notes.length > 0) setNotice(notes.join(' '))
@@ -60,6 +62,7 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
       setError(err instanceof Error ? err.message : 'Error al subir el archivo')
     } finally {
       setUploading(false)
+      setUploadProgress(null)
     }
   }
 
@@ -94,7 +97,11 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
             className="admin-asset-picker__search"
           />
           <label className="admin-button admin-button--primary admin-asset-picker__upload">
-            {uploading ? 'Subiendo...' : '+ Subir'}
+            {uploading
+              ? uploadProgress !== null
+                ? `Comprimiendo vídeo... ${Math.round(uploadProgress * 100)}%`
+                : 'Subiendo...'
+              : '+ Subir'}
             <input
               type="file"
               accept="image/*,video/mp4,video/webm"

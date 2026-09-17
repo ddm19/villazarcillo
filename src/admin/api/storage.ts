@@ -1,4 +1,5 @@
 import { supabase } from '../../services/supabaseClient'
+import { compressVideoToFit } from './videoCompress'
 
 const BUCKET = 'villazarcillo-assets'
 
@@ -85,7 +86,11 @@ async function reencodeImageToFit(
   }
 }
 
-export async function uploadAsset(folder: string, file: File): Promise<AssetEntry> {
+export async function uploadAsset(
+  folder: string,
+  file: File,
+  onProgress?: (ratio: number) => void,
+): Promise<AssetEntry> {
   let uploadBody: File | Blob = file
   let uploadName = file.name.replace(/\s+/g, '_')
   let conversionNote: string | undefined
@@ -100,6 +105,16 @@ export async function uploadAsset(folder: string, file: File): Promise<AssetEntr
     uploadBody = result.blob
     uploadName = uploadName.replace(/\.\w+$/, '') + '.webp'
     conversionNote = `Convertida automáticamente a WebP para caber en el límite de 50 MB del plan gratuito de Supabase: ${formatMB(file.size)} → ${formatMB(result.blob.size)} (se mantiene la resolución original, ${result.width}×${result.height}).`
+  } else if (file.type.startsWith('video/') && file.size > FREE_TIER_HARD_LIMIT) {
+    const result = await compressVideoToFit(file, FREE_TIER_HARD_LIMIT, onProgress)
+    if (!result) {
+      throw new Error(
+        `"${file.name}" pesa ${formatMB(file.size)}. El plan gratuito de Supabase limita cada archivo a 50 MB y no se ha podido bajar de ahí ni reduciendo el bitrate al mínimo razonable. Recorta la duración o la resolución del vídeo de origen e inténtalo de nuevo.`,
+      )
+    }
+    uploadBody = result.blob
+    uploadName = uploadName.replace(/\.\w+$/, '') + '.mp4'
+    conversionNote = `Recomprimida automáticamente a ~${result.bitrateKbps} kbps para caber en el límite de 50 MB del plan gratuito de Supabase: ${formatMB(file.size)} → ${formatMB(result.blob.size)}. Se eliminó el audio (los vídeos de fondo se reproducen siempre en silencio).`
   } else if (file.size > MAX_UPLOAD_BYTES) {
     throw new Error(
       `"${file.name}" pesa ${formatMB(file.size)}, supera el límite configurado de ${formatMB(MAX_UPLOAD_BYTES)}. Sube el límite del bucket en supabase/schema.sql (file_size_limit) y en Supabase Dashboard → Storage → Settings.`,
@@ -114,7 +129,7 @@ export async function uploadAsset(folder: string, file: File): Promise<AssetEntr
   if (error) {
     if (/exceeded the maximum allowed size|too large/i.test(error.message)) {
       throw new Error(
-        `Supabase rechazó "${file.name}" por tamaño (${formatMB(uploadBody.size)}). Si es una imagen debería haberse convertido automáticamente a WebP; si es un vídeo u otro archivo, reduce su tamaño manualmente o sube el límite del plan de Supabase.`,
+        `Supabase rechazó "${file.name}" por tamaño (${formatMB(uploadBody.size)}) aunque ya se había reducido automáticamente. Sube el límite del plan de Supabase o reduce el archivo de origen manualmente.`,
       )
     }
     throw new Error(error.message)
