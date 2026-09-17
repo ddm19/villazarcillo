@@ -1,7 +1,6 @@
 import { supabase } from '../../services/supabaseClient'
 import { compressVideoToFit } from './videoCompress'
-
-const BUCKET = 'villazarcillo-assets'
+import { ASSETS_BUCKET as BUCKET } from '../../lib/assets'
 
 export const ASSET_FOLDERS = ['maps', 'pins', 'portraits', 'boards/notes', 'resources', 'misc'] as const
 

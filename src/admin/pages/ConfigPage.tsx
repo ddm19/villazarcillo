@@ -53,8 +53,8 @@ export function ConfigPage() {
         <details className="admin-advanced-field">
           <summary>Avanzado: URL base de assets</summary>
           <label className="admin-field">
-            <span>Assets base URL</span>
-            <input value={config.assetsBaseUrl} onChange={(e) => setConfig({ ...config, assetsBaseUrl: e.target.value })} />
+            <span>Assets base URL (calculada automáticamente, no editable)</span>
+            <input value={config.assetsBaseUrl} readOnly disabled />
           </label>
         </details>
 

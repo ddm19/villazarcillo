@@ -99,6 +99,19 @@ create index if not exists idx_villazarcillo_elements_scene on villazarcillo_ele
 create index if not exists idx_villazarcillo_elements_panel on villazarcillo_elements(panel_id);
 
 -- ---------------------------------------------------------
+-- Quests: tabla externa que ya usa el resto del ecosistema (calendario, web padre) —
+-- cta.quest en paneles/recursos referencia texto libre contra villazarcillo_quests.name.
+-- Este create es solo un fallback por si el proyecto no la tuviera todavía; si ya existe
+-- (tu caso) es un no-op. NO se tocan sus políticas RLS aquí porque ya las gestiona el
+-- sistema que la creó — si el admin no puede insertar quests nuevas, añade ahí una policy
+-- que permita insert a villazarcillo_is_admin().
+-- ---------------------------------------------------------
+create table if not exists villazarcillo_quests (
+  name text primary key,
+  created_at timestamptz not null default now()
+);
+
+-- ---------------------------------------------------------
 -- Admins: quién puede escribir. Se comprueba contra esta tabla (auth.uid() en vivo) en
 -- vez de contra un claim del JWT (auth.jwt() -> app_metadata ->> role): ese claim se graba
 -- en el token en el momento del login y NO se actualiza solo si luego cambias

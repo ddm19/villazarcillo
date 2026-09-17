@@ -15,6 +15,7 @@ import type {
   TablePanel,
   ImagePanel,
 } from './types'
+import { getSupabaseAssetsBaseUrl } from './assets'
 
 // ---------------------------------------------------------------------------
 // Row shapes as they come back from Supabase (snake_case, flat columns)
@@ -99,7 +100,8 @@ export function rowToConfig(row: ConfigRow): HubConfig {
   return {
     title: row.title,
     defaultScene: row.default_scene_id,
-    assetsBaseUrl: row.assets_base_url,
+    // Ignores row.assets_base_url on purpose — see getSupabaseAssetsBaseUrl's doc comment.
+    assetsBaseUrl: getSupabaseAssetsBaseUrl(),
     featureFlags: (row.feature_flags ?? undefined) as HubConfig['featureFlags'],
   }
 }

@@ -14,7 +14,8 @@ Hub del campamento. Todo el contenido (escenas, elementos del mapa, paneles, rec
    ```
    SUPABASE_URL=https://xxxx.supabase.co SUPABASE_SERVICE_ROLE_KEY=xxxx npm run migrate:assets
    ```
-5. Copia la "Public base URL" que imprime el script anterior y pégala en `/admin > Config > Avanzado > Assets base URL`.
+
+La URL pública de los assets se calcula sola a partir del cliente de Supabase (`src/lib/assets.ts`) — no hay que copiar ni pegar nada en Config, y no puede quedar desincronizada.
 
 La `SUPABASE_SERVICE_ROLE_KEY` solo se usa en estos scripts locales, nunca en el cliente — no la pongas en `.env` ni la commitees.
 

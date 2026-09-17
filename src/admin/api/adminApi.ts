@@ -112,6 +112,26 @@ export async function deleteElement(id: string): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// Quests — villazarcillo_quests(name) is an external table other parts of the ecosystem
+// (calendar, parent site) key off. Whenever a panel/resource is saved with a cta.quest, we
+// register that name there so creating a mission here is enough — no manual step elsewhere.
+// Best-effort: a failure here must not make the panel/resource save look like it failed,
+// since that row already committed successfully by the time this runs.
+// ---------------------------------------------------------------------------
+
+async function ensureQuestExists(questName: string): Promise<void> {
+  try {
+    const { data, error } = await supabase.from('villazarcillo_quests').select('name').eq('name', questName).maybeSingle()
+    if (error) throw error
+    if (data) return
+    const { error: insertError } = await supabase.from('villazarcillo_quests').insert({ name: questName })
+    if (insertError) throw insertError
+  } catch (err) {
+    console.warn(`No se pudo registrar la quest "${questName}" en villazarcillo_quests:`, err)
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Panels
 // ---------------------------------------------------------------------------
 
@@ -124,6 +144,7 @@ export async function fetchPanels(): Promise<Panel[]> {
 export async function savePanel(panel: Panel): Promise<void> {
   const res = await supabase.from('villazarcillo_panels').upsert(panelToRow(panel))
   if (res.error) throw new Error(res.error.message)
+  if (panel.cta?.quest) await ensureQuestExists(panel.cta.quest)
 }
 
 export async function deletePanel(id: string): Promise<void> {
@@ -144,6 +165,7 @@ export async function fetchResources(): Promise<ResourcePanel[]> {
 export async function saveResource(resource: ResourcePanel): Promise<void> {
   const res = await supabase.from('villazarcillo_resources').upsert(resourceToRow(resource))
   if (res.error) throw new Error(res.error.message)
+  if (resource.cta?.quest) await ensureQuestExists(resource.cta.quest)
 }
 
 export async function deleteResource(id: string): Promise<void> {
