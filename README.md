@@ -1,3 +1,25 @@
+# Villazarcillo
+
+Hub del campamento. Todo el contenido (escenas, elementos del mapa, paneles, recursos) vive en Supabase y se edita desde `/admin` (ruta oculta, sin enlaces visibles — accesible visitándola directamente o dando 10 clics rápidos al botón "−" del zoom del mapa).
+
+## Puesta en marcha (una sola vez)
+
+1. En el proyecto de Supabase, ejecuta `supabase/schema.sql` en el SQL Editor (crea las tablas, RLS y el bucket de assets).
+2. En Authentication → Users, crea (o edita) el usuario admin y ponle `role: "admin"` en `raw_app_meta_data`.
+3. Migra el contenido actual desde los JSON de `public/data`:
+   ```
+   SUPABASE_URL=https://xxxx.supabase.co SUPABASE_SERVICE_ROLE_KEY=xxxx npm run migrate:data
+   ```
+4. Migra las imágenes de `public/assets` al bucket de Storage:
+   ```
+   SUPABASE_URL=https://xxxx.supabase.co SUPABASE_SERVICE_ROLE_KEY=xxxx npm run migrate:assets
+   ```
+5. Copia la "Public base URL" que imprime el script anterior y pégala en `/admin > Config > Avanzado > Assets base URL`.
+
+La `SUPABASE_SERVICE_ROLE_KEY` solo se usa en estos scripts locales, nunca en el cliente — no la pongas en `.env` ni la commitees.
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

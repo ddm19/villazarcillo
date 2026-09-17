@@ -110,6 +110,7 @@ export type MarkdownPanel = {
   type: 'markdown'
   title: string
   portrait?: string
+  subtitle?: string
   content: MarkdownContent
   cta?: {
     label: string

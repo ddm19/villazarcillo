@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MapContainer, ImageOverlay, Marker, Tooltip, useMap, VideoOverlay } from 'react-leaflet';
 import L, { CRS, type LeafletKeyboardEvent } from 'leaflet';
 import classNames from 'classnames';
@@ -19,6 +20,7 @@ import QuestChatModal from './QuestChatModal';
 import { PanelContent } from './PanelContent';
 import { ResourceHUD } from './ResourceHUD';
 import { resolveAsset } from '../lib/assets';
+import { useSecretGesture } from '../admin/useSecretGesture';
 import '../styles/_quest.scss';
 
 type CampHubProps = {
@@ -286,6 +288,14 @@ export function CampHub({
   const drawerRef = useRef<HTMLElement | null>(null)
   const missingPanelsLogged = useRef(new Set<string>())
   useFocusTrap(Boolean(activePanel), drawerRef)
+
+  const navigate = useNavigate()
+  useSecretGesture({
+    selector: '.leaflet-control-zoom-out',
+    clicksRequired: 10,
+    windowMs: 4000,
+    onTrigger: () => navigate('/admin'),
+  })
 
   const panelsMap = useMemo(() => new Map(panels.map((panel) => [panel.id, panel])), [panels])
 

@@ -1,13 +1,17 @@
-import axios from 'axios'
-import type { DataBundle, HubElement, HubConfig, Panel, ResourcePanel, Scene } from './types'
+import type { DataBundle, Scene } from './types'
 import { supabase } from '../services/supabaseClient'
-
-const BASE_URL = normalizeBase(import.meta.env.BASE_URL ?? '/')
-const CONFIG_URL = `${BASE_URL}data/config.json`
-const SCENES_URL = `${BASE_URL}data/scenes.json`
-const ELEMENTS_URL = `${BASE_URL}data/elements.json`
-const PANELS_URL = `${BASE_URL}data/panels.json`
-const RESOURCES_URL = `${BASE_URL}data/resources.json`
+import {
+  rowToConfig,
+  rowToElement,
+  rowToPanel,
+  rowToResource,
+  rowToScene,
+  type ConfigRow,
+  type ElementRow,
+  type PanelRow,
+  type ResourceRow,
+  type SceneRow,
+} from './mappers'
 
 async function getQuestPlayers(questName: string): Promise<{ playerId: string; playerOwner: string }[]> {
   const { data, error } = await supabase
@@ -31,18 +35,27 @@ async function getQuestPlayers(questName: string): Promise<{ playerId: string; p
 
 export async function loadData(): Promise<DataBundle> {
   const [configRes, scenesRes, elementsRes, panelsRes, resourcesRes] = await Promise.all([
-    axios.get<HubConfig>(CONFIG_URL),
-    axios.get<{ scenes: Scene[] }>(SCENES_URL),
-    axios.get<{ elements: HubElement[] }>(ELEMENTS_URL),
-    axios.get<{ panels: Panel[] }>(PANELS_URL),
-    axios.get<{ resources: ResourcePanel[] }>(RESOURCES_URL).catch(() => ({ data: { resources: [] } })),
+    supabase.from('villazarcillo_config').select('*').eq('id', 1).single(),
+    supabase
+      .from('villazarcillo_scenes')
+      .select('*, villazarcillo_scene_layers(*)')
+      .order('sort_order', { ascending: true }),
+    supabase.from('villazarcillo_elements').select('*').order('sort_order', { ascending: true }),
+    supabase.from('villazarcillo_panels').select('*'),
+    supabase.from('villazarcillo_resources').select('*'),
   ])
 
-  const config = configRes.data
-  const scenes = scenesRes.data.scenes ?? []
-  const elements = elementsRes.data.elements ?? []
-  const panels = panelsRes.data.panels ?? []
-  const resources = resourcesRes.data.resources ?? []
+  if (configRes.error) throw configRes.error
+  if (scenesRes.error) throw scenesRes.error
+  if (elementsRes.error) throw elementsRes.error
+  if (panelsRes.error) throw panelsRes.error
+  if (resourcesRes.error) throw resourcesRes.error
+
+  const config = rowToConfig(configRes.data as ConfigRow)
+  const scenes = ((scenesRes.data ?? []) as SceneRow[]).map(rowToScene)
+  const elements = ((elementsRes.data ?? []) as ElementRow[]).map(rowToElement)
+  const panels = ((panelsRes.data ?? []) as PanelRow[]).map(rowToPanel)
+  const resources = ((resourcesRes.data ?? []) as ResourceRow[]).map(rowToResource)
 
   await attachQuestPlayers(panels)
   await attachQuestPlayers(resources)
@@ -60,13 +73,6 @@ async function attachQuestPlayers<
       item.questPlayers = await getQuestPlayers(item.cta.quest)
     }
   }
-}
-
-function normalizeBase(base: string) {
-  if (!base.endsWith('/')) {
-    return `${base}/`
-  }
-  return base
 }
 
 function validateScenes(scenes: Scene[]) {

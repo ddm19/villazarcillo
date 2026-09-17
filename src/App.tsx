@@ -12,6 +12,7 @@ import type {
 } from './lib/types'
 import { useUser } from './contexts/UserContext'
 import { supabase } from './services/supabaseClient'
+import { AdminRoot } from './admin/AdminRoot'
 
 type RouteParams = {
   sceneId?: string
@@ -392,6 +393,7 @@ function App() {
   const element = useRoutes([
     { path: '/', element: <HubExperienceWrapper /> },
     { path: 'scene/:sceneId/*', element: <HubExperienceWrapper /> },
+    { path: 'admin/*', element: <AdminRoot /> },
     { path: '*', element: <Navigate to="/" replace /> },
   ])
 
