@@ -1,16 +1,18 @@
-import { useEffect, useMemo, useState } from 'react'
-import { MapContainer, ImageOverlay, Marker, useMapEvents } from 'react-leaflet'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { MapContainer, ImageOverlay, Marker, useMap, useMapEvents } from 'react-leaflet'
 import L, { CRS } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { HubElement, Panel, PinIcon, Scene, SpriteIcon } from '../../lib/types'
 import { deleteElement, fetchElements, fetchPanels, fetchQuestNames, fetchScenes, saveElement, savePanel } from '../api/adminApi'
 import { resolveAsset } from '../../lib/assets'
+import { useFocusTrap } from '../../lib/useFocusTrap'
 import { AssetField } from '../components/AssetPicker'
 import { ColorSwatchPicker } from '../components/ColorSwatchPicker'
 import { RotationDial } from '../components/RotationDial'
 import { ToggleSwitch } from '../components/ToggleSwitch'
 import { JsonEscapeHatch } from '../components/JsonEscapeHatch'
 import { PanelEditor, type PanelFormValue } from '../components/PanelEditor'
+import { useConfirm } from '../components/useConfirm'
 
 const ELEMENT_TYPES: HubElement['type'][] = ['npc', 'shop', 'quest', 'image', 'note', 'generic']
 
@@ -52,6 +54,17 @@ function ClickCatcher({ active, onPick }: ClickCatcherProps) {
   return null
 }
 
+function SizeInvalidator() {
+  const map = useMap()
+  useEffect(() => {
+    map.whenReady(() => map.invalidateSize())
+    const handleResize = () => map.invalidateSize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [map])
+  return null
+}
+
 function emptyElement(sceneId: string, layerId: string, position: [number, number]): HubElement {
   return {
     id: '',
@@ -75,6 +88,9 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
   const [panelMode, setPanelMode] = useState<'none' | 'existing' | 'new'>('none')
   const [newPanelDraft, setNewPanelDraft] = useState<PanelFormValue | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const drawerRef = useRef<HTMLDivElement | null>(null)
+  const confirmDialog = useConfirm()
+  useFocusTrap(Boolean(editing), drawerRef)
 
   const refreshAll = async () => {
     const [sceneList, questList] = await Promise.all([fetchScenes(), fetchQuestNames()])
@@ -159,7 +175,13 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
 
   const handleDeleteElement = async () => {
     if (!editing?.id) return
-    if (!confirm('¿Eliminar este elemento del mapa?')) return
+    const ok = await confirmDialog({
+      title: 'Eliminar elemento',
+      message: `¿Eliminar "${editing.name || editing.id}" del mapa?`,
+      confirmLabel: 'Eliminar',
+      danger: true,
+    })
+    if (!ok) return
     await deleteElement(editing.id)
     setEditing(null)
     await refreshSceneData()
@@ -194,13 +216,14 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
             minZoom={scene.minZoom}
             maxZoom={scene.maxZoom}
             crs={CRS.Simple}
-            className="camp-hub__map"
+            className="admin-map-canvas__leaflet"
             maxBounds={[[0, 0], [scene.size.height, scene.size.width]]}
           >
             <ImageOverlay
               url={resolveAsset(assetsBaseUrl, scene.background)}
               bounds={[[0, 0], [scene.size.height, scene.size.width]]}
             />
+            <SizeInvalidator />
             <ClickCatcher active={addMode} onPick={handlePick} />
             {elements.map((element) => (
               <Marker
@@ -218,7 +241,7 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
         </div>
 
         {editing && (
-          <div className="admin-drawer admin-drawer--map">
+          <div className="admin-drawer admin-drawer--map" ref={drawerRef}>
             <div className="admin-drawer__header">
               <h2>{editing.id || 'Nuevo elemento'}</h2>
               <JsonEscapeHatch value={editing} onApply={setEditing} />

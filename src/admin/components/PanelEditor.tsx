@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { HubElement, MarkdownBlock, Panel, ResourcePanel, TableCell } from '../../lib/types'
 import { MarkdownBlockEditor } from './MarkdownBlockEditor'
 import { TableGridEditor } from './TableGridEditor'
@@ -6,6 +6,7 @@ import { AssetField } from './AssetPicker'
 import { ToggleSwitch } from './ToggleSwitch'
 import { JsonEscapeHatch } from './JsonEscapeHatch'
 import { renderMarkdownContent } from '../../lib/markdownRenderer'
+import { useFocusTrap } from '../../lib/useFocusTrap'
 
 export type PanelFormValue = Panel & Partial<Pick<ResourcePanel, 'icon' | 'amount' | 'pinned'>>
 
@@ -42,6 +43,8 @@ export function PanelEditor({ variant, value, assetsBaseUrl, questNames, usedBy,
   const [hasCta, setHasCta] = useState(Boolean(value.cta))
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const drawerRef = useRef<HTMLDivElement | null>(null)
+  useFocusTrap(true, drawerRef)
 
   const update = (patch: Partial<PanelFormValue>) => setForm((prev) => ({ ...prev, ...patch } as PanelFormValue))
 
@@ -62,7 +65,7 @@ export function PanelEditor({ variant, value, assetsBaseUrl, questNames, usedBy,
   }
 
   return (
-    <div className="admin-drawer">
+    <div className="admin-drawer" ref={drawerRef}>
       <div className="admin-drawer__header">
         <h2>{variant === 'resource' ? 'Recurso' : 'Panel'}: {form.id || '(nuevo)'}</h2>
         <JsonEscapeHatch

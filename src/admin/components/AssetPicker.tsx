@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ASSET_FOLDERS, listAssets, uploadAsset, type AssetEntry } from '../api/storage'
 import { resolveAsset } from '../../lib/assets'
+import { useFocusTrap } from '../../lib/useFocusTrap'
 
 type AssetPickerModalProps = {
   initialFolder?: string
@@ -19,6 +20,8 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState('')
+  const modalRef = useRef<HTMLDivElement | null>(null)
+  useFocusTrap(true, modalRef)
 
   useEffect(() => {
     let cancelled = false
@@ -59,7 +62,7 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
 
   return (
     <div className="admin-modal-overlay" onClick={onClose}>
-      <div className="admin-modal admin-asset-picker" onClick={(e) => e.stopPropagation()}>
+      <div className="admin-modal admin-asset-picker" ref={modalRef} role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
         <header className="admin-modal__header">
           <h2>Seleccionar imagen</h2>
           <button type="button" onClick={onClose} aria-label="Cerrar">✕</button>
@@ -89,7 +92,7 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
             {uploading ? 'Subiendo...' : '+ Subir'}
             <input
               type="file"
-              accept="image/*,video/mp4"
+              accept="image/*,video/mp4,video/webm"
               multiple
               hidden
               disabled={uploading}

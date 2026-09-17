@@ -34,14 +34,30 @@ export async function listAssets(folder: string): Promise<AssetEntry[]> {
     })
 }
 
+// Matches the bucket's file_size_limit in supabase/schema.sql. Keep both in sync.
+const MAX_UPLOAD_BYTES = 500 * 1024 * 1024
+
 export async function uploadAsset(folder: string, file: File): Promise<AssetEntry> {
+  if (file.size > MAX_UPLOAD_BYTES) {
+    throw new Error(
+      `"${file.name}" pesa ${(file.size / (1024 * 1024)).toFixed(1)} MB, supera el límite configurado de ${MAX_UPLOAD_BYTES / (1024 * 1024)} MB. Sube el límite del bucket en supabase/schema.sql (file_size_limit) y en Supabase Dashboard → Storage → Settings.`,
+    )
+  }
+
   const cleanName = file.name.replace(/\s+/g, '_')
   const fullPath = folder ? `${folder}/${cleanName}` : cleanName
   const { error } = await supabase.storage.from(BUCKET).upload(fullPath, file, {
     upsert: true,
     contentType: file.type || undefined,
   })
-  if (error) throw new Error(error.message)
+  if (error) {
+    if (/exceeded the maximum allowed size|too large/i.test(error.message)) {
+      throw new Error(
+        `Supabase rechazó "${file.name}" por tamaño. Sube el límite global del proyecto en Supabase Dashboard → Storage → Settings (debe ser ≥ ${MAX_UPLOAD_BYTES / (1024 * 1024)} MB).`,
+      )
+    }
+    throw new Error(error.message)
+  }
 
   return {
     path: fullPath,

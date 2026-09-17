@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import type { ResourcePanel } from '../../lib/types'
 import { deleteResource, fetchQuestNames, fetchResources, saveResource } from '../api/adminApi'
 import { PanelEditor, type PanelFormValue } from '../components/PanelEditor'
+import { DataTable } from '../components/DataTable'
+import { useConfirm } from '../components/useConfirm'
 
 function emptyResource(): PanelFormValue {
   return { id: '', type: 'markdown', title: '', content: [], pinned: true }
@@ -12,6 +14,7 @@ export function ResourcesPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
   const [questNames, setQuestNames] = useState<string[]>([])
   const [editing, setEditing] = useState<PanelFormValue | null>(null)
   const [loading, setLoading] = useState(true)
+  const confirmDialog = useConfirm()
 
   const refresh = async () => {
     setLoading(true)
@@ -33,7 +36,13 @@ export function ResourcesPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
 
   const handleDelete = async () => {
     if (!editing?.id) return
-    if (!confirm('¿Eliminar este recurso?')) return
+    const ok = await confirmDialog({
+      title: 'Eliminar recurso',
+      message: `¿Eliminar "${editing.id}"?`,
+      confirmLabel: 'Eliminar',
+      danger: true,
+    })
+    if (!ok) return
     await deleteResource(editing.id)
     setEditing(null)
     await refresh()
@@ -51,24 +60,18 @@ export function ResourcesPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
       {loading ? (
         <p>Cargando...</p>
       ) : (
-        <table className="admin-table">
-          <thead>
-            <tr><th>Id</th><th>Título</th><th>Cantidad</th><th>Fijado</th><th /></tr>
-          </thead>
-          <tbody>
-            {resources.map((resource) => (
-              <tr key={resource.id}>
-                <td>{resource.id}</td>
-                <td>{resource.title ?? '—'}</td>
-                <td>{resource.amount ?? '—'}</td>
-                <td>{resource.pinned !== false ? 'Sí' : 'No'}</td>
-                <td>
-                  <button type="button" className="admin-button" onClick={() => setEditing(resource)}>Editar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <DataTable
+          rows={resources}
+          getRowKey={(resource) => resource.id}
+          onRowClick={setEditing}
+          emptyMessage="No hay recursos todavía."
+          columns={[
+            { key: 'id', header: 'Id', render: (resource) => resource.id },
+            { key: 'title', header: 'Título', render: (resource) => resource.title ?? '—' },
+            { key: 'amount', header: 'Cantidad', render: (resource) => resource.amount ?? '—' },
+            { key: 'pinned', header: 'Fijado', render: (resource) => (resource.pinned !== false ? 'Sí' : 'No') },
+          ]}
+        />
       )}
 
       {editing && (

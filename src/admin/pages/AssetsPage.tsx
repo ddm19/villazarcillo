@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ASSET_FOLDERS, deleteAsset, listAssets, uploadAsset, type AssetEntry } from '../api/storage'
+import { useConfirm } from '../components/useConfirm'
 
 export function AssetsPage() {
   const [folder, setFolder] = useState<string>(ASSET_FOLDERS[0])
@@ -7,6 +8,7 @@ export function AssetsPage() {
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const confirmDialog = useConfirm()
 
   const refresh = async () => {
     setLoading(true)
@@ -41,7 +43,13 @@ export function AssetsPage() {
   }
 
   const handleDelete = async (path: string) => {
-    if (!confirm(`¿Borrar "${path}"? Comprueba antes que ningún panel, elemento o escena lo esté usando.`)) return
+    const ok = await confirmDialog({
+      title: 'Eliminar archivo',
+      message: `¿Borrar "${path}"? Comprueba antes que ningún panel, elemento o escena lo esté usando.`,
+      confirmLabel: 'Eliminar',
+      danger: true,
+    })
+    if (!ok) return
     await deleteAsset(path)
     await refresh()
   }
@@ -72,7 +80,7 @@ export function AssetsPage() {
         </div>
         <label className="admin-button admin-button--primary">
           {uploading ? 'Subiendo...' : '+ Subir'}
-          <input type="file" accept="image/*,video/mp4" multiple hidden disabled={uploading} onChange={(e) => handleUpload(e.target.files)} />
+          <input type="file" accept="image/*,video/mp4,video/webm" multiple hidden disabled={uploading} onChange={(e) => handleUpload(e.target.files)} />
         </label>
       </div>
 

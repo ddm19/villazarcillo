@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import type { Panel } from '../../lib/types'
 import { deletePanel, fetchElementsUsingPanel, fetchPanels, fetchQuestNames, savePanel } from '../api/adminApi'
 import { PanelEditor, type PanelFormValue } from '../components/PanelEditor'
+import { DataTable } from '../components/DataTable'
+import { useConfirm } from '../components/useConfirm'
 
 function emptyPanel(): PanelFormValue {
   return { id: '', type: 'markdown', title: '', content: [] }
@@ -14,6 +16,7 @@ export function PanelsPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
   const [editing, setEditing] = useState<PanelFormValue | null>(null)
   const [usedBy, setUsedBy] = useState<Awaited<ReturnType<typeof fetchElementsUsingPanel>>>([])
   const [loading, setLoading] = useState(true)
+  const confirmDialog = useConfirm()
 
   const refresh = async () => {
     setLoading(true)
@@ -47,7 +50,13 @@ export function PanelsPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
 
   const handleDelete = async () => {
     if (!editing?.id) return
-    if (!confirm('¿Eliminar este panel? Los elementos que lo usen dejarán de tener panel asociado.')) return
+    const ok = await confirmDialog({
+      title: 'Eliminar panel',
+      message: `¿Eliminar "${editing.id}"? Los elementos que lo usen dejarán de tener panel asociado.`,
+      confirmLabel: 'Eliminar',
+      danger: true,
+    })
+    if (!ok) return
     await deletePanel(editing.id)
     setEditing(null)
     await refresh()
@@ -70,24 +79,27 @@ export function PanelsPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
       {loading ? (
         <p>Cargando...</p>
       ) : (
-        <table className="admin-table">
-          <thead>
-            <tr><th>Id</th><th>Tipo</th><th>Título</th><th /></tr>
-          </thead>
-          <tbody>
-            {filtered.map((panel) => (
-              <tr key={panel.id}>
-                <td>{panel.id}</td>
-                <td>{panel.type}</td>
-                <td>{panel.title ?? '—'}</td>
-                <td>
-                  <button type="button" className="admin-button" onClick={() => openEditor(panel)}>Editar</button>
-                  <button type="button" className="admin-button" onClick={() => handleDuplicate(panel)}>Duplicar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <DataTable
+          rows={filtered}
+          getRowKey={(panel) => panel.id}
+          onRowClick={openEditor}
+          emptyMessage="No hay paneles todavía."
+          columns={[
+            { key: 'id', header: 'Id', render: (panel) => panel.id },
+            { key: 'type', header: 'Tipo', render: (panel) => panel.type },
+            { key: 'title', header: 'Título', render: (panel) => panel.title ?? '—' },
+            {
+              key: 'actions',
+              header: '',
+              isActions: true,
+              render: (panel) => (
+                <button type="button" className="admin-button" onClick={() => handleDuplicate(panel)}>
+                  Duplicar
+                </button>
+              ),
+            },
+          ]}
+        />
       )}
 
       {editing && (

@@ -1,6 +1,8 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
 import { useUser } from '../contexts/UserContext'
+import { forgetAdminPath, rememberAdminPath } from './adminRouteMemory'
 
 const NAV_ITEMS = [
   { to: '/admin/scenes', label: 'Escenas' },
@@ -15,8 +17,14 @@ const NAV_ITEMS = [
 export function AdminLayout() {
   const { session, setSession } = useUser()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    rememberAdminPath(location.pathname + location.search)
+  }, [location.pathname, location.search])
 
   const handleLogout = async () => {
+    forgetAdminPath()
     await supabase.auth.signOut()
     setSession(null)
     navigate('/')

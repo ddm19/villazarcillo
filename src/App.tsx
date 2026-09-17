@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { Navigate, useLocation, useNavigate, useParams, useRoutes } from 'react-router-dom'
 import type { NavigateFunction } from 'react-router-dom'
 import { CampHub } from './components/CampHub'
@@ -12,7 +12,9 @@ import type {
 } from './lib/types'
 import { useUser } from './contexts/UserContext'
 import { supabase } from './services/supabaseClient'
-import { AdminRoot } from './admin/AdminRoot'
+import { getRememberedAdminPath } from './admin/adminRouteMemory'
+
+const AdminRoot = lazy(() => import('./admin/AdminRoot').then((m) => ({ default: m.AdminRoot })))
 
 type RouteParams = {
   sceneId?: string
@@ -358,7 +360,9 @@ function HubExperienceWrapper() {
 }
 
 function App() {
-  const { setSession } = useUser()
+  const { session, setSession } = useUser()
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
@@ -390,10 +394,32 @@ function App() {
     };
   }, [])
 
+  // The parent page always points this iframe's `src` at the normal game entry — /admin
+  // only exists via client-side navigation (the secret gesture). If the document reloads
+  // (F5, or the parent recreating the iframe), that history is lost. Once an admin session
+  // comes back, restore whatever /admin path was remembered before the reload.
+  useEffect(() => {
+    const isAdmin = session?.user.app_metadata?.role === 'admin'
+    if (!isAdmin || location.pathname.startsWith('/admin')) {
+      return
+    }
+    const remembered = getRememberedAdminPath()
+    if (remembered) {
+      navigate(remembered, { replace: true })
+    }
+  }, [session, location.pathname, navigate])
+
   const element = useRoutes([
     { path: '/', element: <HubExperienceWrapper /> },
     { path: 'scene/:sceneId/*', element: <HubExperienceWrapper /> },
-    { path: 'admin/*', element: <AdminRoot /> },
+    {
+      path: 'admin/*',
+      element: (
+        <Suspense fallback={<div className="camp-hub__empty-state">Cargando panel...</div>}>
+          <AdminRoot />
+        </Suspense>
+      ),
+    },
     { path: '*', element: <Navigate to="/" replace /> },
   ])
 

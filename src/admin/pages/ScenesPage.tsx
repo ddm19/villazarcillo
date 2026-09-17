@@ -3,7 +3,10 @@ import type { Scene, SceneLayer } from '../../lib/types'
 import { deleteScene, fetchScenes, saveScene } from '../api/adminApi'
 import { AssetField } from '../components/AssetPicker'
 import { JsonEscapeHatch } from '../components/JsonEscapeHatch'
+import { DataTable } from '../components/DataTable'
+import { useConfirm } from '../components/useConfirm'
 import { resolveAsset } from '../../lib/assets'
+import { useFocusTrap } from '../../lib/useFocusTrap'
 
 const EMPTY_SCENE = (): Scene => ({
   id: '',
@@ -20,6 +23,9 @@ export function ScenesPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
   const [editing, setEditing] = useState<Scene | null>(null)
   const [error, setError] = useState<string | null>(null)
   const imgRef = useRef<HTMLImageElement | null>(null)
+  const drawerRef = useRef<HTMLDivElement | null>(null)
+  const confirmDialog = useConfirm()
+  useFocusTrap(Boolean(editing), drawerRef)
 
   const refresh = async () => {
     setLoading(true)
@@ -49,7 +55,13 @@ export function ScenesPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('¿Eliminar esta escena? Los elementos que la usen quedarán huérfanos.')) return
+    const ok = await confirmDialog({
+      title: 'Eliminar escena',
+      message: `¿Eliminar "${id}"? Los elementos que la usen quedarán huérfanos.`,
+      confirmLabel: 'Eliminar',
+      danger: true,
+    })
+    if (!ok) return
     await deleteScene(id)
     await refresh()
   }
@@ -95,29 +107,36 @@ export function ScenesPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
       {loading ? (
         <p>Cargando...</p>
       ) : (
-        <table className="admin-table">
-          <thead>
-            <tr><th>Id</th><th>Nombre</th><th>Tamaño</th><th>Capas</th><th /></tr>
-          </thead>
-          <tbody>
-            {scenes.map((scene) => (
-              <tr key={scene.id}>
-                <td>{scene.id}</td>
-                <td>{scene.name}</td>
-                <td>{scene.size.width}×{scene.size.height}</td>
-                <td>{scene.layers.map((l) => l.name).join(', ')}</td>
-                <td>
-                  <button type="button" className="admin-button" onClick={() => setEditing(scene)}>Editar</button>
-                  <button type="button" className="admin-button admin-button--danger" onClick={() => handleDelete(scene.id)}>Eliminar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <DataTable
+          rows={scenes}
+          getRowKey={(scene) => scene.id}
+          onRowClick={setEditing}
+          emptyMessage="No hay escenas todavía."
+          columns={[
+            { key: 'id', header: 'Id', render: (scene) => scene.id },
+            { key: 'name', header: 'Nombre', render: (scene) => scene.name },
+            { key: 'size', header: 'Tamaño', render: (scene) => `${scene.size.width}×${scene.size.height}` },
+            { key: 'layers', header: 'Capas', render: (scene) => scene.layers.map((l) => l.name).join(', ') },
+            {
+              key: 'actions',
+              header: '',
+              isActions: true,
+              render: (scene) => (
+                <button
+                  type="button"
+                  className="admin-button admin-button--danger"
+                  onClick={() => handleDelete(scene.id)}
+                >
+                  Eliminar
+                </button>
+              ),
+            },
+          ]}
+        />
       )}
 
       {editing && (
-        <div className="admin-drawer">
+        <div className="admin-drawer" ref={drawerRef}>
           <div className="admin-drawer__header">
             <h2>Escena: {editing.id || '(nueva)'}</h2>
             <JsonEscapeHatch value={editing} onApply={setEditing} />

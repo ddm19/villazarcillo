@@ -142,9 +142,9 @@ end $$;
 -- ---------------------------------------------------------
 -- Storage: bucket público para assets, escritura solo admin
 -- ---------------------------------------------------------
-insert into storage.buckets (id, name, public)
-values ('villazarcillo-assets', 'villazarcillo-assets', true)
-on conflict (id) do nothing;
+insert into storage.buckets (id, name, public, file_size_limit)
+values ('villazarcillo-assets', 'villazarcillo-assets', true, 524288000) -- 500 MB per file; raise further here (and the project-wide limit in Dashboard > Storage > Settings) if you need bigger source files
+on conflict (id) do update set file_size_limit = excluded.file_size_limit;
 
 drop policy if exists "villazarcillo_assets_public_read" on storage.objects;
 drop policy if exists "villazarcillo_assets_admin_write" on storage.objects;
