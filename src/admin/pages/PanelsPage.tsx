@@ -104,6 +104,7 @@ export function PanelsPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
 
       {editing && (
         <PanelEditor
+          key={editing.id || 'new'}
           variant="panel"
           value={editing}
           assetsBaseUrl={assetsBaseUrl}

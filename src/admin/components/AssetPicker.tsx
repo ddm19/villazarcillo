@@ -19,6 +19,7 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
   const [filter, setFilter] = useState('')
   const modalRef = useRef<HTMLDivElement | null>(null)
   useFocusTrap(true, modalRef)
@@ -45,10 +46,14 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
     if (!files || files.length === 0) return
     setUploading(true)
     setError(null)
+    setNotice(null)
     try {
+      const notes: string[] = []
       for (const file of Array.from(files)) {
-        await uploadAsset(folder, file)
+        const entry = await uploadAsset(folder, file)
+        if (entry.conversionNote) notes.push(entry.conversionNote)
       }
+      if (notes.length > 0) setNotice(notes.join(' '))
       const refreshed = await listAssets(folder)
       setEntries(refreshed)
     } catch (err) {
@@ -102,6 +107,7 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
         </div>
 
         {error && <p className="admin-form__error">{error}</p>}
+        {notice && <p className="admin-form__success">{notice}</p>}
 
         <div className="admin-asset-picker__grid">
           {loading && <p>Cargando...</p>}

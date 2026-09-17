@@ -8,6 +8,7 @@ export function AssetsPage() {
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
   const confirmDialog = useConfirm()
 
   const refresh = async () => {
@@ -30,10 +31,14 @@ export function AssetsPage() {
     if (!files || files.length === 0) return
     setUploading(true)
     setError(null)
+    setNotice(null)
     try {
+      const notes: string[] = []
       for (const file of Array.from(files)) {
-        await uploadAsset(folder, file)
+        const entry = await uploadAsset(folder, file)
+        if (entry.conversionNote) notes.push(entry.conversionNote)
       }
+      if (notes.length > 0) setNotice(notes.join(' '))
       await refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al subir')
@@ -85,6 +90,7 @@ export function AssetsPage() {
       </div>
 
       {error && <p className="admin-form__error">{error}</p>}
+      {notice && <p className="admin-form__success">{notice}</p>}
 
       {loading ? (
         <p>Cargando...</p>

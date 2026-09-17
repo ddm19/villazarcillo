@@ -1,5 +1,7 @@
+import { useRef } from 'react'
 import type { MarkdownBlock, MarkdownContent } from '../../lib/types'
 import { TableGridEditor } from './TableGridEditor'
+import { MarkdownToolbar } from './MarkdownToolbar'
 import { renderMarkdownContent } from '../../lib/markdownRenderer'
 
 type MarkdownBlockEditorProps = {
@@ -47,6 +49,30 @@ function newBlock(type: MarkdownBlock['type']): MarkdownBlock {
     case 'table':
       return { type: 'table', columns: ['Columna 1'], rows: [['']] }
   }
+}
+
+type TextBlockBodyProps = {
+  text: MarkdownContent
+  onChange: (text: string) => void
+}
+
+function TextBlockBody({ text, onChange }: TextBlockBodyProps) {
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+  const stringValue = textToString(text)
+
+  return (
+    <>
+      <MarkdownToolbar textareaRef={textareaRef} value={stringValue} onChange={onChange} />
+      <textarea
+        ref={textareaRef}
+        rows={3}
+        value={stringValue}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Admite markdown y HTML simple (<span style='...'>)"
+      />
+      <div className="admin-markdown-editor__preview">{renderMarkdownContent(text)}</div>
+    </>
+  )
 }
 
 export function MarkdownBlockEditor({ blocks, assetsBaseUrl, onChange }: MarkdownBlockEditorProps) {
@@ -97,13 +123,7 @@ export function MarkdownBlockEditor({ blocks, assetsBaseUrl, onChange }: Markdow
                   ))}
                 </select>
               )}
-              <textarea
-                rows={3}
-                value={textToString(block.text)}
-                onChange={(e) => updateBlock(index, { ...block, text: e.target.value })}
-                placeholder="Admite markdown y HTML simple (<span style='...'>)"
-              />
-              <div className="admin-markdown-editor__preview">{renderMarkdownContent(block.text)}</div>
+              <TextBlockBody text={block.text} onChange={(text) => updateBlock(index, { ...block, text })} />
             </div>
           )}
 

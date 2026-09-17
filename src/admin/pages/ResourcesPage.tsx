@@ -76,6 +76,7 @@ export function ResourcesPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
 
       {editing && (
         <PanelEditor
+          key={editing.id || 'new'}
           variant="resource"
           value={editing}
           assetsBaseUrl={assetsBaseUrl}

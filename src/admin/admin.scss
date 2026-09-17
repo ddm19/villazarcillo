@@ -684,6 +684,35 @@ $admin-desktop: 1024px;
   }
 }
 
+.admin-md-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  &__btn {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-1);
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  &__popover {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-1);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+}
+
 .admin-markdown-editor {
   display: flex;
   flex-direction: column;

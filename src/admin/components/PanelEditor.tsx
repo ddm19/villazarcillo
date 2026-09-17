@@ -5,6 +5,7 @@ import { TableGridEditor } from './TableGridEditor'
 import { AssetField } from './AssetPicker'
 import { ToggleSwitch } from './ToggleSwitch'
 import { JsonEscapeHatch } from './JsonEscapeHatch'
+import { MarkdownToolbar } from './MarkdownToolbar'
 import { renderMarkdownContent } from '../../lib/markdownRenderer'
 import { useFocusTrap } from '../../lib/useFocusTrap'
 
@@ -44,6 +45,7 @@ export function PanelEditor({ variant, value, assetsBaseUrl, questNames, usedBy,
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const drawerRef = useRef<HTMLDivElement | null>(null)
+  const subtitleRef = useRef<HTMLTextAreaElement | null>(null)
   useFocusTrap(true, drawerRef)
 
   const update = (patch: Partial<PanelFormValue>) => setForm((prev) => ({ ...prev, ...patch } as PanelFormValue))
@@ -112,7 +114,8 @@ export function PanelEditor({ variant, value, assetsBaseUrl, questNames, usedBy,
             />
             <label className="admin-field">
               <span>Subtítulo (markdown/HTML corto)</span>
-              <textarea rows={3} value={form.subtitle ?? ''} onChange={(e) => update({ subtitle: e.target.value })} />
+              <MarkdownToolbar textareaRef={subtitleRef} value={form.subtitle ?? ''} onChange={(subtitle) => update({ subtitle })} />
+              <textarea ref={subtitleRef} rows={3} value={form.subtitle ?? ''} onChange={(e) => update({ subtitle: e.target.value })} />
               {form.subtitle && <div className="admin-markdown-editor__preview">{renderMarkdownContent(form.subtitle)}</div>}
             </label>
           </>

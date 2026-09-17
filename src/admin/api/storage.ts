@@ -9,6 +9,8 @@ export type AssetEntry = {
   publicUrl: string
   size: number
   updatedAt: string
+  /** Set when uploadAsset had to re-encode the file to fit under Supabase's size limit. */
+  conversionNote?: string
 }
 
 export function getPublicUrl(assetPath: string): string {
@@ -34,26 +36,85 @@ export async function listAssets(folder: string): Promise<AssetEntry[]> {
     })
 }
 
-// Matches the bucket's file_size_limit in supabase/schema.sql. Keep both in sync.
+// Matches the bucket's file_size_limit in supabase/schema.sql. Relevant if/when the
+// project moves off the free plan; raise both together.
 const MAX_UPLOAD_BYTES = 500 * 1024 * 1024
 
+// Supabase's free-tier plan hard-caps every uploaded file at 50 MB, regardless of the
+// bucket's own file_size_limit — this cannot be raised from the client or from schema.sql.
+const FREE_TIER_HARD_LIMIT = 50 * 1024 * 1024
+
+function formatMB(bytes: number) {
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+/**
+ * Re-encodes an oversized image as WebP, reducing quality first and only shrinking
+ * resolution as a last resort, so we lose as little visual quality as possible while
+ * getting under `maxBytes`. Returns null if it still doesn't fit after every attempt.
+ */
+async function reencodeImageToFit(
+  file: File,
+  maxBytes: number,
+): Promise<{ blob: Blob; width: number; height: number } | null> {
+  const bitmap = await createImageBitmap(file)
+  const qualitySteps = [0.92, 0.85, 0.75, 0.65, 0.5]
+  const scaleSteps = [1, 0.75, 0.55, 0.4]
+
+  try {
+    for (const scale of scaleSteps) {
+      const width = Math.max(1, Math.round(bitmap.width * scale))
+      const height = Math.max(1, Math.round(bitmap.height * scale))
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = height
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return null
+      ctx.drawImage(bitmap, 0, 0, width, height)
+
+      for (const quality of qualitySteps) {
+        const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/webp', quality))
+        if (blob && blob.size <= maxBytes) {
+          return { blob, width, height }
+        }
+      }
+    }
+    return null
+  } finally {
+    bitmap.close()
+  }
+}
+
 export async function uploadAsset(folder: string, file: File): Promise<AssetEntry> {
-  if (file.size > MAX_UPLOAD_BYTES) {
+  let uploadBody: File | Blob = file
+  let uploadName = file.name.replace(/\s+/g, '_')
+  let conversionNote: string | undefined
+
+  if (file.type.startsWith('image/') && file.size > FREE_TIER_HARD_LIMIT) {
+    const result = await reencodeImageToFit(file, FREE_TIER_HARD_LIMIT)
+    if (!result) {
+      throw new Error(
+        `"${file.name}" pesa ${formatMB(file.size)}. El plan gratuito de Supabase limita cada archivo a 50 MB y no se ha podido bajar de ahí conservando una calidad razonable. Reduce la resolución de origen e inténtalo de nuevo.`,
+      )
+    }
+    uploadBody = result.blob
+    uploadName = uploadName.replace(/\.\w+$/, '') + '.webp'
+    conversionNote = `Convertida automáticamente a WebP para caber en el límite de 50 MB del plan gratuito de Supabase: ${formatMB(file.size)} → ${formatMB(result.blob.size)} (se mantiene la resolución original, ${result.width}×${result.height}).`
+  } else if (file.size > MAX_UPLOAD_BYTES) {
     throw new Error(
-      `"${file.name}" pesa ${(file.size / (1024 * 1024)).toFixed(1)} MB, supera el límite configurado de ${MAX_UPLOAD_BYTES / (1024 * 1024)} MB. Sube el límite del bucket en supabase/schema.sql (file_size_limit) y en Supabase Dashboard → Storage → Settings.`,
+      `"${file.name}" pesa ${formatMB(file.size)}, supera el límite configurado de ${formatMB(MAX_UPLOAD_BYTES)}. Sube el límite del bucket en supabase/schema.sql (file_size_limit) y en Supabase Dashboard → Storage → Settings.`,
     )
   }
 
-  const cleanName = file.name.replace(/\s+/g, '_')
-  const fullPath = folder ? `${folder}/${cleanName}` : cleanName
-  const { error } = await supabase.storage.from(BUCKET).upload(fullPath, file, {
+  const fullPath = folder ? `${folder}/${uploadName}` : uploadName
+  const { error } = await supabase.storage.from(BUCKET).upload(fullPath, uploadBody, {
     upsert: true,
-    contentType: file.type || undefined,
+    contentType: uploadBody instanceof Blob && uploadBody.type ? uploadBody.type : file.type || undefined,
   })
   if (error) {
     if (/exceeded the maximum allowed size|too large/i.test(error.message)) {
       throw new Error(
-        `Supabase rechazó "${file.name}" por tamaño. Sube el límite global del proyecto en Supabase Dashboard → Storage → Settings (debe ser ≥ ${MAX_UPLOAD_BYTES / (1024 * 1024)} MB).`,
+        `Supabase rechazó "${file.name}" por tamaño (${formatMB(uploadBody.size)}). Si es una imagen debería haberse convertido automáticamente a WebP; si es un vídeo u otro archivo, reduce su tamaño manualmente o sube el límite del plan de Supabase.`,
       )
     }
     throw new Error(error.message)
@@ -62,8 +123,9 @@ export async function uploadAsset(folder: string, file: File): Promise<AssetEntr
   return {
     path: fullPath,
     publicUrl: getPublicUrl(fullPath),
-    size: file.size,
+    size: uploadBody.size,
     updatedAt: new Date().toISOString(),
+    conversionNote,
   }
 }
 

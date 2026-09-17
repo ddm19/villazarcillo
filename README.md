@@ -18,6 +18,8 @@ Hub del campamento. Todo el contenido (escenas, elementos del mapa, paneles, rec
 
 La `SUPABASE_SERVICE_ROLE_KEY` solo se usa en estos scripts locales, nunca en el cliente — no la pongas en `.env` ni la commitees.
 
+**Límite de 50 MB del plan gratuito de Supabase:** cualquier archivo por encima de eso lo rechaza el propio Supabase, sin excepción posible desde código. Si `migrate:assets` falla para algún PNG/JPG de más de 50 MB (p. ej. un fondo de escena grande), sube esa imagen concreta a mano desde `/admin > Assets` en lugar del script: el admin la reconvierte automáticamente a WebP a la misma resolución antes de subirla, así que normalmente cabe sin pérdida de calidad perceptible. Para vídeos de más de 50 MB no hay recompresión automática — reduce el vídeo con otra herramienta (HandBrake, ffmpeg) antes de subirlo.
+
 ---
 
 # React + TypeScript + Vite

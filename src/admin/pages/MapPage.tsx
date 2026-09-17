@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { MapContainer, ImageOverlay, Marker, useMap, useMapEvents } from 'react-leaflet'
-import L, { CRS } from 'leaflet'
+import { MapContainer, ImageOverlay, Marker, VideoOverlay, useMap, useMapEvents } from 'react-leaflet'
+import L, { CRS, type LatLngBoundsExpression } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { HubElement, Panel, PinIcon, Scene, SpriteIcon } from '../../lib/types'
 import { deleteElement, fetchElements, fetchPanels, fetchQuestNames, fetchScenes, saveElement, savePanel } from '../api/adminApi'
@@ -54,14 +54,20 @@ function ClickCatcher({ active, onPick }: ClickCatcherProps) {
   return null
 }
 
-function SizeInvalidator() {
+// Fits the whole scene inside whatever box the admin canvas happens to have, instead of
+// trusting the scene's player-facing center/zoom — those are tuned for a full-viewport
+// game map and misrender ("descuadrado") in the smaller, variable-size admin canvas.
+function FitBoundsOnReady({ bounds }: { bounds: LatLngBoundsExpression }) {
   const map = useMap()
   useEffect(() => {
-    map.whenReady(() => map.invalidateSize())
-    const handleResize = () => map.invalidateSize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [map])
+    const fit = () => {
+      map.invalidateSize()
+      map.fitBounds(bounds, { animate: false })
+    }
+    map.whenReady(fit)
+    window.addEventListener('resize', fit)
+    return () => window.removeEventListener('resize', fit)
+  }, [map, bounds])
   return null
 }
 
@@ -213,17 +219,27 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
             key={scene.id}
             center={[scene.initialView.center[1], scene.initialView.center[0]]}
             zoom={scene.initialView.zoom}
-            minZoom={scene.minZoom}
-            maxZoom={scene.maxZoom}
+            minZoom={Math.min(scene.minZoom ?? 0, -5)}
+            maxZoom={Math.max(scene.maxZoom ?? 0, 3)}
             crs={CRS.Simple}
             className="admin-map-canvas__leaflet"
             maxBounds={[[0, 0], [scene.size.height, scene.size.width]]}
           >
-            <ImageOverlay
-              url={resolveAsset(assetsBaseUrl, scene.background)}
-              bounds={[[0, 0], [scene.size.height, scene.size.width]]}
-            />
-            <SizeInvalidator />
+            {scene.backgroundVideo ? (
+              <VideoOverlay
+                url={resolveAsset(assetsBaseUrl, scene.backgroundVideo)}
+                bounds={[[0, 0], [scene.size.height, scene.size.width]]}
+                autoplay
+                loop
+                muted
+              />
+            ) : (
+              <ImageOverlay
+                url={resolveAsset(assetsBaseUrl, scene.background)}
+                bounds={[[0, 0], [scene.size.height, scene.size.width]]}
+              />
+            )}
+            <FitBoundsOnReady bounds={[[0, 0], [scene.size.height, scene.size.width]]} />
             <ClickCatcher active={addMode} onPick={handlePick} />
             {elements.map((element) => (
               <Marker
@@ -378,6 +394,7 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
 
             {panelMode === 'new' && newPanelDraft && (
               <PanelEditor
+                key={editing.id || 'new'}
                 variant="panel"
                 value={newPanelDraft}
                 assetsBaseUrl={assetsBaseUrl}

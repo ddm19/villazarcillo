@@ -281,14 +281,11 @@ body
   scrollbar-width: thin;
 
 
-  @media (max-width: 768px)
+  @media (max-width: 1024px)
   {
     width: 100%;
+    resize: none;
   }
-
-
-
-
 }
 
 
@@ -455,13 +452,13 @@ body
 
 .fullscreen-modal
 {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 5;
+  z-index: 1200;
   cursor: zoom-out;
 }
 
@@ -477,10 +474,10 @@ body
 
 .fullscreen_close
 {
-  position: absolute;
+  position: fixed;
   top: var(--space-3);
   right: var(--space-3);
-  z-index: 6;
+  z-index: 1210;
 
   @media (max-width: 768px)
   {
