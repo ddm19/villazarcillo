@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { MapContainer, ImageOverlay, Marker, VideoOverlay, useMap, useMapEvents } from 'react-leaflet'
+import { MapContainer, ImageOverlay, Marker, useMap, useMapEvents } from 'react-leaflet'
 import L, { CRS, type LatLngBoundsExpression } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { HubElement, Panel, PinIcon, Scene, SpriteIcon } from '../../lib/types'
@@ -222,20 +222,15 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
             className="admin-map-canvas__leaflet"
             maxBounds={[[0, 0], [scene.size.height, scene.size.width]]}
           >
-            {scene.backgroundVideo ? (
-              <VideoOverlay
-                url={resolveAsset(assetsBaseUrl, scene.backgroundVideo)}
-                bounds={[[0, 0], [scene.size.height, scene.size.width]]}
-                autoplay
-                loop
-                muted
-              />
-            ) : (
-              <ImageOverlay
-                url={resolveAsset(assetsBaseUrl, scene.background)}
-                bounds={[[0, 0], [scene.size.height, scene.size.width]]}
-              />
-            )}
+            {/* Siempre la imagen estática, nunca el vídeo: el juego prioriza el vídeo como
+                fondo, pero un fondo animado no sirve de referencia fija para colocar pines
+                — un punto que hoy coincide con "la puerta del establo" puede no coincidir
+                mañana si el vídeo tiene cámara en movimiento, y por eso el mapa del editor
+                y el del juego no cuadraban entre sí. */}
+            <ImageOverlay
+              url={resolveAsset(assetsBaseUrl, scene.background)}
+              bounds={[[0, 0], [scene.size.height, scene.size.width]]}
+            />
             <FitBoundsOnReady bounds={[[0, 0], [scene.size.height, scene.size.width]]} />
             <ClickCatcher active={addMode} onPick={handlePick} />
             {elements.map((element) => (
@@ -251,6 +246,13 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
               />
             ))}
           </MapContainer>
+          {scene.backgroundVideo && !scene.background && (
+            <div className="admin-map-canvas__warning">
+              Esta escena solo tiene vídeo de fondo, sin imagen estática — sube una imagen en
+              la escena para poder colocar elementos con precisión (un fondo animado no sirve
+              de referencia fija).
+            </div>
+          )}
         </div>
 
         {editing && (
