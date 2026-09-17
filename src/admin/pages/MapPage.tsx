@@ -124,14 +124,10 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
   const scene = useMemo(() => scenes.find((s) => s.id === sceneId), [scenes, sceneId])
 
   // "Completada"/"Peligrosa" solo tienen sentido en misiones (un aviso del tablón con un
-  // panel que lleva a una quest) — no tiene significado en un NPC o una tienda, así que
-  // solo se muestran cuando el panel asociado es realmente una misión.
-  const selectedPanel = useMemo(() => {
-    if (panelMode === 'existing') return panels.find((p) => p.id === editing?.panelId)
-    if (panelMode === 'new') return newPanelDraft ?? undefined
-    return undefined
-  }, [panelMode, panels, editing?.panelId, newPanelDraft])
-  const isMission = Boolean(selectedPanel?.cta?.quest)
+  // panel enlazado) — no tiene significado en un NPC o una tienda sin panel, así que solo
+  // se muestran cuando hay un panel asociado. (También editables desde el propio panel,
+  // en /admin/panels — ahí aparecen aunque no se pase por el mapa.)
+  const isMission = panelMode !== 'none'
 
   const handlePick = (x: number, y: number) => {
     if (!scene) return

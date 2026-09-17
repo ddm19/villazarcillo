@@ -880,6 +880,27 @@ $admin-desktop: 1024px;
   opacity: 0.8;
 }
 
+.admin-mission-status {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: var(--radius-1);
+
+    .admin-toggle { flex: 0 0 auto; width: auto; gap: var(--space-2); }
+  }
+}
+
 .admin-form__error { color: #f87171; font-size: var(--fs-1); }
 .admin-form__success { color: #86efac; font-size: var(--fs-1); }
 

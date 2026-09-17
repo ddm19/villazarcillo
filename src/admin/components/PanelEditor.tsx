@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { HubElement, MarkdownBlock, Panel, ResourcePanel, TableCell } from '../../lib/types'
 import { MarkdownBlockEditor } from './MarkdownBlockEditor'
 import { TableGridEditor } from './TableGridEditor'
@@ -8,6 +8,7 @@ import { JsonEscapeHatch } from './JsonEscapeHatch'
 import { MarkdownToolbar } from './MarkdownToolbar'
 import { renderMarkdownContent } from '../../lib/markdownRenderer'
 import { useFocusTrap } from '../../lib/useFocusTrap'
+import { saveElement } from '../api/adminApi'
 
 export type PanelFormValue = Panel & Partial<Pick<ResourcePanel, 'icon' | 'amount' | 'pinned'>>
 
@@ -44,11 +45,24 @@ export function PanelEditor({ variant, value, assetsBaseUrl, questNames, usedBy,
   const [hasCta, setHasCta] = useState(Boolean(value.cta))
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [elements, setElements] = useState<HubElement[]>(usedBy ?? [])
   const drawerRef = useRef<HTMLDivElement | null>(null)
   const subtitleRef = useRef<HTMLTextAreaElement | null>(null)
   useFocusTrap(true, drawerRef)
 
+  // `usedBy` arrives asynchronously from the parent (fetched after this component already
+  // mounted with the panel), so it must be synced via effect rather than read once at init.
+  useEffect(() => {
+    setElements(usedBy ?? [])
+  }, [usedBy])
+
   const update = (patch: Partial<PanelFormValue>) => setForm((prev) => ({ ...prev, ...patch } as PanelFormValue))
+
+  const toggleElementFlag = async (element: HubElement, patch: Partial<Pick<HubElement, 'completed' | 'isDangerous'>>) => {
+    const updated = { ...element, ...patch }
+    setElements((prev) => prev.map((el) => (el.id === element.id ? updated : el)))
+    await saveElement(updated)
+  }
 
   const handleSave = async () => {
     setError(null)
@@ -202,12 +216,30 @@ export function PanelEditor({ variant, value, assetsBaseUrl, questNames, usedBy,
           </div>
         )}
 
-        {usedBy && usedBy.length > 0 && (
+        {elements.length > 0 && (
           <div className="admin-field">
-            <span>Usado por estos elementos del mapa</span>
-            <ul className="admin-used-by">
-              {usedBy.map((el) => (
-                <li key={el.id}>{el.name} ({el.id})</li>
+            <span>{hasCta && form.cta?.quest ? 'Estado de la misión en el mapa' : 'Usado por estos elementos del mapa'}</span>
+            <ul className="admin-mission-status">
+              {elements.map((element) => (
+                <li key={element.id} className="admin-mission-status__row">
+                  <span className="admin-tag">{element.name || element.id}</span>
+                  {hasCta && form.cta?.quest ? (
+                    <>
+                      <ToggleSwitch
+                        label="Completada"
+                        checked={Boolean(element.completed)}
+                        onChange={(completed) => toggleElementFlag(element, { completed })}
+                      />
+                      <ToggleSwitch
+                        label="Peligrosa"
+                        checked={Boolean(element.isDangerous)}
+                        onChange={(isDangerous) => toggleElementFlag(element, { isDangerous })}
+                      />
+                    </>
+                  ) : (
+                    <span className="admin-field__hint">({element.id})</span>
+                  )}
+                </li>
               ))}
             </ul>
           </div>
