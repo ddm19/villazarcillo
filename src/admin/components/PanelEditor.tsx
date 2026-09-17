@@ -9,6 +9,7 @@ import { MarkdownToolbar } from './MarkdownToolbar'
 import { renderMarkdownContent } from '../../lib/markdownRenderer'
 import { useFocusTrap } from '../../lib/useFocusTrap'
 import { saveElement } from '../api/adminApi'
+import { slug } from '../slug'
 
 export type PanelFormValue = Panel & Partial<Pick<ResourcePanel, 'icon' | 'amount' | 'pinned'>>
 
@@ -66,13 +67,17 @@ export function PanelEditor({ variant, value, assetsBaseUrl, questNames, usedBy,
 
   const handleSave = async () => {
     setError(null)
-    if (!form.id.trim()) {
-      setError('El id es obligatorio.')
-      return
+    let finalForm = form
+    if (!finalForm.id.trim()) {
+      // Sin id no hay nada de lo que partir para uno "limpio" — usamos el título si lo
+      // hay, y si no un sufijo único, para no chocar con otro panel también sin id.
+      const base = slug(finalForm.title ?? '')
+      const prefix = variant === 'resource' ? 'resource' : 'panel'
+      finalForm = { ...finalForm, id: base ? `${prefix}:${base}` : `${prefix}:sin_id_${Date.now().toString(36)}` }
     }
     setSaving(true)
     try {
-      await onSave(hasCta ? form : { ...form, cta: undefined })
+      await onSave(hasCta ? finalForm : { ...finalForm, cta: undefined })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al guardar')
     } finally {

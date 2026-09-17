@@ -13,17 +13,9 @@ import { ToggleSwitch } from '../components/ToggleSwitch'
 import { JsonEscapeHatch } from '../components/JsonEscapeHatch'
 import { PanelEditor, type PanelFormValue } from '../components/PanelEditor'
 import { useConfirm } from '../components/useConfirm'
+import { slug } from '../slug'
 
 const ELEMENT_TYPES: HubElement['type'][] = ['npc', 'shop', 'quest', 'image', 'note', 'generic']
-
-function slug(name: string) {
-  return name
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '')
-}
 
 function markerIcon(element: HubElement, assetsBaseUrl: string) {
   if (element.sprite) {
@@ -159,13 +151,12 @@ export function MapPage({ assetsBaseUrl }: { assetsBaseUrl: string }) {
   const handleSaveElement = async () => {
     if (!editing) return
     setError(null)
-    if (!editing.name.trim()) {
-      setError('El nombre es obligatorio.')
-      return
-    }
     let finalId = editing.id
     if (!finalId) {
-      finalId = `${editing.type}:${slug(editing.name)}`
+      const base = slug(editing.name)
+      // Sin nombre no hay slug del que partir — usamos un sufijo único para no chocar
+      // con otro elemento igualmente sin nombre, no porque el nombre sea obligatorio.
+      finalId = base ? `${editing.type}:${base}` : `${editing.type}:elemento_${Date.now().toString(36)}`
     }
     let panelId = editing.panelId
     try {

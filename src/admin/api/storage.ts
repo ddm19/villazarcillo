@@ -48,6 +48,30 @@ function formatMB(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
+// Storage object keys are picky about anything beyond ASCII letters/digits/._- (accents,
+// ñ, parentheses, emoji in a phone-camera filename, etc. can make Supabase reject the
+// upload outright with a bare 400 and no useful body) — strip it all before it gets there.
+function sanitizeFileName(name: string): string {
+  const dotIndex = name.lastIndexOf('.')
+  const base = dotIndex > 0 ? name.slice(0, dotIndex) : name
+  const ext = dotIndex > 0 ? name.slice(dotIndex) : ''
+  const cleanBase =
+    base
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-zA-Z0-9._-]+/g, '_')
+      .replace(/^_+|_+$/g, '') || 'archivo'
+  const cleanExt = ext.toLowerCase().replace(/[^a-z0-9.]/g, '')
+  return `${cleanBase}${cleanExt}`
+}
+
+function describeStorageError(error: { message?: string; name?: string; status?: number; statusCode?: string | number }): string {
+  const parts = [error.message, error.statusCode ? `código ${error.statusCode}` : null, error.status ? `HTTP ${error.status}` : null]
+    .filter(Boolean)
+    .join(' — ')
+  return parts || 'Supabase devolvió un error sin detalles (revisa la consola, se ha volcado el objeto completo).'
+}
+
 /**
  * Re-encodes an oversized image as WebP, reducing quality first and only shrinking
  * resolution as a last resort, so we lose as little visual quality as possible while
@@ -91,7 +115,7 @@ export async function uploadAsset(
   onProgress?: (ratio: number) => void,
 ): Promise<AssetEntry> {
   let uploadBody: File | Blob = file
-  let uploadName = file.name.replace(/\s+/g, '_')
+  let uploadName = sanitizeFileName(file.name)
   let conversionNote: string | undefined
 
   if (file.type.startsWith('image/') && file.size > FREE_TIER_HARD_LIMIT) {
@@ -121,17 +145,26 @@ export async function uploadAsset(
   }
 
   const fullPath = folder ? `${folder}/${uploadName}` : uploadName
-  const { error } = await supabase.storage.from(BUCKET).upload(fullPath, uploadBody, {
-    upsert: true,
-    contentType: uploadBody instanceof Blob && uploadBody.type ? uploadBody.type : file.type || undefined,
-  })
-  if (error) {
-    if (/exceeded the maximum allowed size|too large/i.test(error.message)) {
+  let uploadError: { message?: string; name?: string; status?: number; statusCode?: string | number } | null = null
+  try {
+    const { error } = await supabase.storage.from(BUCKET).upload(fullPath, uploadBody, {
+      upsert: true,
+      contentType: uploadBody instanceof Blob && uploadBody.type ? uploadBody.type : file.type || undefined,
+    })
+    uploadError = error
+  } catch (err) {
+    // A network/CORS-level failure can reject instead of resolving with { error } — treat it the same way.
+    uploadError = err as typeof uploadError
+  }
+
+  if (uploadError) {
+    console.error('Fallo al subir a Supabase Storage:', { fullPath, contentType: uploadBody.type, size: uploadBody.size, error: uploadError })
+    if (/exceeded the maximum allowed size|too large/i.test(uploadError.message ?? '')) {
       throw new Error(
         `Supabase rechazó "${file.name}" por tamaño (${formatMB(uploadBody.size)}) aunque ya se había reducido automáticamente. Sube el límite del plan de Supabase o reduce el archivo de origen manualmente.`,
       )
     }
-    throw new Error(error.message)
+    throw new Error(`No se pudo subir "${file.name}": ${describeStorageError(uploadError)}`)
   }
 
   return {
