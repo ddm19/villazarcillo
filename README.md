@@ -19,11 +19,7 @@ La URL pública de los assets se calcula sola a partir del cliente de Supabase (
 
 La `SUPABASE_SERVICE_ROLE_KEY` solo se usa en estos scripts locales, nunca en el cliente — no la pongas en `.env` ni la commitees.
 
-**Límite de 50 MB del plan gratuito de Supabase:** cualquier archivo por encima de eso lo rechaza el propio Supabase, sin excepción posible desde código. Si `migrate:assets` falla para algún archivo de más de 50 MB (fondo de escena grande, vídeo de escena), súbelo a mano desde `/admin > Assets` en lugar del script: el admin lo reconvierte automáticamente antes de subirlo —
-- **Imágenes:** a WebP, misma resolución, bajando calidad solo lo justo para caber.
-- **Vídeos:** recomprime el vídeo (h.264/mp4) bajando el bitrate solo lo necesario, y elimina el audio (los vídeos de fondo del hub siempre se reproducen en silencio, así que no hay pérdida real ahí). Tarda más que una imagen — el navegador descarga un códec de vídeo (ffmpeg.wasm) la primera vez y lo ejecuta localmente, verás el progreso en el propio botón de subida.
-
-Si un archivo sigue sin caber tras la recompresión automática (por ejemplo un vídeo muy largo o una imagen ya muy comprimida), el admin te lo dice explícitamente en vez de fallar en silencio; en ese caso reduce la duración/resolución de origen.
+**Límite de 50 MB del plan gratuito de Supabase:** cualquier archivo por encima de eso lo rechaza el propio Supabase, sin excepción posible desde código ni desde `/admin`. No hay recompresión automática — si un archivo pesa más de 50 MB, redúcelo tú antes de subirlo (recorta resolución/duración, cambia de formato, etc.) e inténtalo de nuevo.
 
 ---
 

@@ -18,9 +18,7 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
   const [entries, setEntries] = useState<AssetEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [notice, setNotice] = useState<string | null>(null)
   const [filter, setFilter] = useState('')
   const modalRef = useRef<HTMLDivElement | null>(null)
   useFocusTrap(true, modalRef)
@@ -47,22 +45,16 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
     if (!files || files.length === 0) return
     setUploading(true)
     setError(null)
-    setNotice(null)
-    setUploadProgress(null)
     try {
-      const notes: string[] = []
       for (const file of Array.from(files)) {
-        const entry = await uploadAsset(folder, file, setUploadProgress)
-        if (entry.conversionNote) notes.push(entry.conversionNote)
+        await uploadAsset(folder, file)
       }
-      if (notes.length > 0) setNotice(notes.join(' '))
       const refreshed = await listAssets(folder)
       setEntries(refreshed)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al subir el archivo')
     } finally {
       setUploading(false)
-      setUploadProgress(null)
     }
   }
 
@@ -97,11 +89,7 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
             className="admin-asset-picker__search"
           />
           <label className="admin-button admin-button--primary admin-asset-picker__upload">
-            {uploading
-              ? uploadProgress !== null
-                ? `Comprimiendo vídeo... ${Math.round(uploadProgress * 100)}%`
-                : 'Subiendo...'
-              : '+ Subir'}
+            {uploading ? 'Subiendo...' : '+ Subir'}
             <input
               type="file"
               accept="image/*,video/mp4,video/webm"
@@ -114,7 +102,6 @@ function AssetPickerModal({ initialFolder, onSelect, onClose }: AssetPickerModal
         </div>
 
         {error && <p className="admin-form__error">{error}</p>}
-        {notice && <p className="admin-form__success">{notice}</p>}
 
         <div className="admin-asset-picker__grid">
           {loading && <p>Cargando...</p>}

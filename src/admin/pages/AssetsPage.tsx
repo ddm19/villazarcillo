@@ -7,9 +7,7 @@ export function AssetsPage() {
   const [entries, setEntries] = useState<AssetEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [notice, setNotice] = useState<string | null>(null)
   const confirmDialog = useConfirm()
 
   const refresh = async () => {
@@ -32,21 +30,15 @@ export function AssetsPage() {
     if (!files || files.length === 0) return
     setUploading(true)
     setError(null)
-    setNotice(null)
-    setUploadProgress(null)
     try {
-      const notes: string[] = []
       for (const file of Array.from(files)) {
-        const entry = await uploadAsset(folder, file, setUploadProgress)
-        if (entry.conversionNote) notes.push(entry.conversionNote)
+        await uploadAsset(folder, file)
       }
-      if (notes.length > 0) setNotice(notes.join(' '))
       await refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al subir')
     } finally {
       setUploading(false)
-      setUploadProgress(null)
     }
   }
 
@@ -87,17 +79,12 @@ export function AssetsPage() {
           ))}
         </div>
         <label className="admin-button admin-button--primary">
-          {uploading
-            ? uploadProgress !== null
-              ? `Comprimiendo vídeo... ${Math.round(uploadProgress * 100)}%`
-              : 'Subiendo...'
-            : '+ Subir'}
+          {uploading ? 'Subiendo...' : '+ Subir'}
           <input type="file" accept="image/*,video/mp4,video/webm" multiple hidden disabled={uploading} onChange={(e) => handleUpload(e.target.files)} />
         </label>
       </div>
 
       {error && <p className="admin-form__error">{error}</p>}
-      {notice && <p className="admin-form__success">{notice}</p>}
 
       {loading ? (
         <p>Cargando...</p>
